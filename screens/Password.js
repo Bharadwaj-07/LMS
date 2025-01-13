@@ -1,15 +1,31 @@
 
 import React, { useState } from "react";
 import { StyleSheet, Text, View, Image, ImageBackground, TextInput, TouchableOpacity, } from 'react-native';
-
-export default function Password({ navigation }) {
+import axios from 'axios';
+export default function Password({ route,navigation }) {
+    const UserDetails=route.params;
     const [password, setPassword] = useState("");
     const [passwordInput, setPasswordInput] = useState("");
     const [visible, setVisible] = useState(false);
     const [visible1, setVisible1] = useState(false);
     const [match, setMatch] = useState(true);
     const [Loading, setLoading] = useState(false);
-    const Switching = () => {
+    const [status,setStatus] = useState("");
+    const Switching =async () => {
+        const User={...UserDetails,password};
+        try {
+            // Send the POST request to the backend API
+            const response = await axios.post('http://10.25.75.67:5000/api/Users/store', { User });
+      
+            // Handle success response
+            setStatus('Data saved successfully!');
+            console.log(response.data);
+          } catch (error) {
+            // Handle error
+            setStatus('Error saving data');
+            console.error('Error:', error);
+          }
+        console.log(User)
         navigation.navigate("Login");
 
     }

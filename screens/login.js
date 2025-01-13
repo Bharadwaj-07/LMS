@@ -1,25 +1,25 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, Image,ImageBackground, TextInput, TouchableOpacity, Alert,Form} from 'react-native';
+import { StyleSheet, Text, View, Image, ImageBackground, TextInput, TouchableOpacity, Alert, Form } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
-export default function LoginPage({navigation}) {
-  const [UserName,setUname] = useState('');
+export default function LoginPage({ navigation }) {
+  const [UserName, setUname] = useState('');
   const [password, setPassword] = useState('');
 
   const ForgotPassword = () => {
     Alert.alert("Please contact the concerned TA");
   };
-  HandleLogin=()=>{
+  HandleLogin = () => {
 
   }
   return (
-      
-      <ImageBackground source={require("../assets/IIT_Admin_Block.png")}
+
+    <ImageBackground source={require("../assets/IIT_Admin_Block.png")}
       style={styles.container}>
-        
+
       <View style={styles.rectangle}>
         <Image source={require("../assets/hat_icon.png")}
-        style={styles.medium_icon}
+          style={styles.medium_icon}
         />
 
         {/* Roll Number Input */}
@@ -45,10 +45,10 @@ export default function LoginPage({navigation}) {
           <Text style={styles.buttonText}>Login</Text>
         </TouchableOpacity>
         {/* New User */}
-        <TouchableOpacity style={styles.small_button} onPress={()=>navigation.navigate("Signup")}><Text style={styles.small_text}>New User? Sign Up</Text></TouchableOpacity>
+        <TouchableOpacity style={styles.small_button} onPress={() => navigation.navigate("Signup")}><Text style={styles.small_text}>New User? Sign Up</Text></TouchableOpacity>
 
       </View>
-      
+
     </ImageBackground>
   );
 }
@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#f3f2',
-    
+
   },
   medium_icon: {
     opacity: 1,
@@ -99,8 +99,8 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     paddingHorizontal: 10,
     width: '85%',
-    backgroundColor:'white',
-    opacity:0.6,
+    backgroundColor: 'white',
+    opacity: 0.6,
   },
   button: {
     backgroundColor: '#007bff',

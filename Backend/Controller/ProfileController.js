@@ -1,8 +1,8 @@
 const res = require("express/lib/response")
-const Persons = require("../Models/Profile")
+const Person = require("../Models/Profile")
 
 exports.availability = async (req, res) => {
-    console.log("hello");
+    
     let { Uname } = req.body;
     try {
         const Person =await Persons.findOne({ Uname });
@@ -33,4 +33,23 @@ exports.login = async (req, res) => {
         return res.json({ verified: false });
     }
     catch (e) { console.log(e); }
+}
+exports.store=async (req, res) => {
+    console.log("reached");
+    const newUser=mongoose.model('Persons',Person);
+    const{Uname,password,Number,email,Age,College}=req.body;
+    const User=new newUser({
+       Uname,
+       password,
+       Number,
+       email,
+       Age,
+       College, 
+    });
+    try {
+        await User.save();
+        res.status(200).send({ message: 'User details saved successfully' });
+      } catch (error) {
+        res.status(500).send({ message: 'Error saving user details' });
+      }
 }

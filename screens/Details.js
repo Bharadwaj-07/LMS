@@ -2,14 +2,24 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, View, Image, ImageBackground, TextInput, TouchableOpacity, } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import SubjectToAvailability from '../components/SubjectToAvailability';
-export default function Details({ navigation }) {
+import { newUser,setUserDetails } from './signup'; 
+export default function Details({ route,navigation }) {
+  const{Uname}=route.params;
   const [email, setEmail] = useState('');
   const [Name, setName] = useState("");
   const [Age, setAge] = useState();
-  const [College,setCollege] = useState("");
-  const [Number,setNumber] = useState("");
-  const handleDetails=() => {
-    navigation.navigate("Password");
+  const [College, setCollege] = useState("");
+  const [Number, setNumber] = useState("");
+  const handleDetails = () => {
+    const UserDetails={
+      Uname,
+      email,
+      Age,
+      College,
+      Number, 
+    }
+    console.log(UserDetails);
+    navigation.navigate("Password",UserDetails);
   }
   return (
 
@@ -43,8 +53,8 @@ export default function Details({ navigation }) {
           placeholder='College'
           value={College}
           onChangeText={setCollege}></TextInput>
-          <TouchableOpacity style={styles.button} 
-            onPress={handleDetails}><Text style={styles.buttonText}>Next</Text></TouchableOpacity>
+        <TouchableOpacity style={styles.button}
+          onPress={handleDetails}><Text style={styles.buttonText}>Next</Text></TouchableOpacity>
       </View>
 
     </ImageBackground>

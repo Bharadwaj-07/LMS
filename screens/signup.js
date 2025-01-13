@@ -4,16 +4,18 @@ import axios from 'axios'
 import { useNavigation } from '@react-navigation/native';
 import { StyleSheet, View, ImageBackground, Text, TouchableOpacity, TextInput, } from 'react-native';
 import debounce from 'lodash.debounce';
-{/**arguments must be passed in paranthesis else it will not recognise */ }
-export default function Signup({ navigation }) {
+
+{/**arguments must be passed in parenthesis else it will not recognize */ }
+export default function Signup({ route,navigation }) {
     const [Uname, setUname] = useState("");
     var [Status, setStatus] = useState("");
     const [available, setAvailable] = useState(false);
+    
     const handlePress = () => {
         if (available) {
-            navigation.navigate("Details");
+            navigation.navigate("Details",{Uname});
         }
-        else{
+        else {
             setStatus("Please Pick a User Name");
         }
     }
