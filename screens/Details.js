@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, Image, ImageBackground, TextInput, TouchableOpacity, Alert, Form } from 'react-native';
+import { StyleSheet, Text, View, Image, ImageBackground, TextInput, TouchableOpacity, } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import SubjectToAvailability from '../components/SubjectToAvailability';
 export default function Details({ navigation }) {
@@ -8,7 +8,9 @@ export default function Details({ navigation }) {
   const [Age, setAge] = useState();
   const [College,setCollege] = useState("");
   const [Number,setNumber] = useState("");
-  const handleDetails=() => {}
+  const handleDetails=() => {
+    navigation.navigate("Password");
+  }
   return (
 
     <ImageBackground source={require("../assets/IIT_Admin_Block.png")}
