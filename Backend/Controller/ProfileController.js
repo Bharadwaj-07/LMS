@@ -1,6 +1,6 @@
 const res = require("express/lib/response")
-const Person = require("../Models/Profile")
-
+const Persons = require("../Models/Profile")
+mongoose=require("mongoose");
 exports.availability = async (req, res) => {
     
     let { Uname } = req.body;
@@ -36,9 +36,8 @@ exports.login = async (req, res) => {
 }
 exports.store=async (req, res) => {
     console.log("reached");
-    const newUser=mongoose.model('Persons',Person);
     const{Uname,password,Number,email,Age,College}=req.body;
-    const User=new newUser({
+    const User=new Persons({
        Uname,
        password,
        Number,
