@@ -3,13 +3,14 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import LoginPage from './screens/login'; // Adjust paths to your screens
 import Signup from './screens/signup';
-import sign from './screens/sign';
+import Details from './screens/Details';
 const Stack = createStackNavigator();
 const App=()=>{
   return (<NavigationContainer>
     <Stack.Navigator initialRouteName='Login'>
       <Stack.Screen name='Login' component={LoginPage}/>
       <Stack.Screen name='Signup' component={Signup}/>
+      <Stack.Screen name='Details' component={Details}/>
     </Stack.Navigator>
   </NavigationContainer>)
 }

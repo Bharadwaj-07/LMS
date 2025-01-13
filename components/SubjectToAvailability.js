@@ -7,11 +7,13 @@ export default function SubjectToAvailability({Name,setName,fieldName}) {
     const handlePress = () => {
 
     }
+    const [Status,setStatus]=useState("");
+    const [available,setAvailable] = useState(false);
     const availability = async (Name) => {
         try {
             // Sending a POST request to check username availability
             console.log(Name);
-            const response = await axios.post('http://10.23.77.195:5000/api/Users/check', { Name });
+            const response = await axios.post('http://10.25.75.67:5000/api/Users/check', { Name });
 
             // Log the full response for debugging (optional)
             console.log('Server Response:', response);
@@ -37,20 +39,15 @@ export default function SubjectToAvailability({Name,setName,fieldName}) {
     const checkName = (text) => {
         {
             setName(text);
-
-
-            if (!available) {
-                setStatus('');
-            }
-            else {
-                availability(text);
+            if(Name!=''){
+                availability(Name);
             }
         }
     }
 
     return (
         <View style={{
-            width: "80%",
+            width: "90%",
             alignItems: "center",
         }}>
             <TextInput style={styles.input}
@@ -99,9 +96,9 @@ const styles = StyleSheet.create({
         borderColor: '#ccc',
         borderWidth: 1,
         borderRadius: 5,
-        marginBottom: 0,
+        marginBottom:5,
         paddingHorizontal: 10,
-        width: '85%',
+        width: '99%',
         backgroundColor: 'white',
         opacity: 0.6,
     },

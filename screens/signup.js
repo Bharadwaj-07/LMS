@@ -1,20 +1,27 @@
 
 import React, { use, useState } from 'react';
 import axios from 'axios'
+import { useNavigation } from '@react-navigation/native';
 import { StyleSheet, View, ImageBackground, Text, TouchableOpacity, TextInput, } from 'react-native';
 import debounce from 'lodash.debounce';
-export default function Signup() {
+{/**arguments must be passed in paranthesis else it will not recognise */ }
+export default function Signup({ navigation }) {
     const [Uname, setUname] = useState("");
     var [Status, setStatus] = useState("");
-    const [available, setAvailable] = useState("");
+    const [available, setAvailable] = useState(false);
     const handlePress = () => {
-
+        if (available) {
+            navigation.navigate("Details");
+        }
+        else{
+            setStatus("Please Pick a User Name");
+        }
     }
     const availability = async (Uname) => {
         try {
             // Sending a POST request to check username availability
             console.log(Uname);
-            const response = await axios.post('http://10.23.77.195:5000/api/Users/check', { Uname });
+            const response = await axios.post('http://10.25.75.67:5000/api/Users/check', { Uname });
 
             // Log the full response for debugging (optional)
             console.log('Server Response:', response);
@@ -37,7 +44,7 @@ export default function Signup() {
     }
     const delayCheckAvailability = debounce((Uname) => {
         availability(Uname);
-    }, 500);
+    }, 0);
     const checkUname = (text) => {
         {
             setUname(text);
@@ -45,9 +52,10 @@ export default function Signup() {
 
             if (text == "") {
                 setStatus('');
+                setAvailable(false);
             }
             else {
-                delayCheckAvailability(text);
+                availability(text);
             }
         }
     }
@@ -66,7 +74,7 @@ export default function Signup() {
             {(Status != '') &&
                 <Text style={[styles.text, { color: available ? "green" : "red" }]}>{Status}</Text>}
         </View>
-        <TouchableOpacity style={[styles.button]} onPress={() => handlePress()}><Text style={styles.title}>Continue</Text></TouchableOpacity>
+        <TouchableOpacity style={[styles.button]} onPress={() => handlePress(available)}><Text style={styles.title}>Continue</Text></TouchableOpacity>
     </ImageBackground>
     );
 }
