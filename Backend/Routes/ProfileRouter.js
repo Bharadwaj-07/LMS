@@ -4,4 +4,5 @@ const router=express.Router()
 
 router.post("/check",availability);
 router.post("/login",login);
-router.post("/store",store);u
+router.post("/store",store);
+module.exports = router
