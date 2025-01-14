@@ -12,6 +12,7 @@ export default function SubjectToAvailability({Name,setName,fieldName}) {
     const availability = async (Name) => {
         try {
             // Sending a POST request to check username availability
+            setAvailable(false);
             console.log(Name);
             const response = await axios.post('http://10.25.75.67:5000/api/Users/check', { Name });
 
@@ -21,6 +22,8 @@ export default function SubjectToAvailability({Name,setName,fieldName}) {
             // Handle response based on the data received
             if (response.data.available) {
                 setAvailable(true);
+                // setStatus(`${fieldName} is available`);
+
             } else {
                 setStatus(`${fieldName} is unavailable`);
                 setAvailable(false);
@@ -39,8 +42,8 @@ export default function SubjectToAvailability({Name,setName,fieldName}) {
     const checkName = (text) => {
         {
             setName(text);
-            if(Name!=''){
-                availability(Name);
+            if(text!=""){
+                availability(text);
             }
         }
     }

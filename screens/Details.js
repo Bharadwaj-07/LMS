@@ -17,6 +17,7 @@ export default function Details({ route,navigation }) {
       Age,
       College,
       Number, 
+      Name
     }
     console.log(UserDetails);
     navigation.navigate("Password",UserDetails);

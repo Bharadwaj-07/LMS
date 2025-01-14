@@ -1,11 +1,11 @@
 const mongoose=require('mongoose')
 const SchemaProfile = new mongoose.Schema({
-    Uname: {
+    usingname: {
         type: String,
         required: [true, "Name is required"],
         unique: true,  // Custom error message for validation
     },
-    Name:{
+    name:{
         type: String,
         required:[true, ""],
     },
