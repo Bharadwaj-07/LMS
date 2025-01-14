@@ -1,12 +1,12 @@
-import React,{useState,useEffect,useRef,} from "react";
-import { StyleSheet,View,Text } from "react-native";
-export default function Home({navigation}){
+import React, { useState, useEffect, useRef, } from "react";
+import { StyleSheet, View, Text } from "react-native";
+export default function Home({ navigation }) {
 
-    return(<View style={styles.container}>
-        <View style={styles.rectangle}>
-            <Text style={styles.title}>Home.</Text>
-        </View>
-    </View>)
+  return (<View style={styles.container}>
+    <View style={styles.rectangle}>
+      <Text style={styles.title}>Home.</Text>
+    </View>
+  </View>)
 }
 const styles = StyleSheet.create({
   small_button: {
@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'white',
-    opacity:0.8,
+    opacity: 0.8,
 
   },
   medium_icon: {

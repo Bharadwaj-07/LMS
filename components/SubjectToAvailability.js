@@ -3,23 +3,23 @@ import React, { use, useState } from 'react';
 import axios from 'axios'
 import { StyleSheet, View, ImageBackground, Text, TouchableOpacity, TextInput, } from 'react-native';
 import debounce from 'lodash.debounce';
-export default function SubjectToAvailability({Name,setName,fieldName,Color}) {
+export default function SubjectToAvailability({ Name, setName, fieldName, Color }) {
     const handlePress = () => {
 
     }
-    const [Status,setStatus]=useState("");
-    const [available,setAvailable] = useState(false);
-    
+    const [Status, setStatus] = useState("");
+    const [available, setAvailable] = useState(false);
+
     const availability = async (Name) => {
-        
+
         try {
             // Sending a POST request to check username availability
             setAvailable(false);
-            
-            const response = await axios.post('http://10.25.75.67:5000/api/Users/check', { Name,fieldName });
+
+            const response = await axios.post('http://10.25.75.67:5000/api/Users/check', { Name, fieldName });
 
             // Log the full response for debugging (optional)
-            
+
 
             // Handle response based on the data received
             if (response.data.available) {
@@ -38,11 +38,11 @@ export default function SubjectToAvailability({Name,setName,fieldName,Color}) {
         }
 
     }
-    const checkName = (text,Color) => {
+    const checkName = (text, Color) => {
         {
-            Color=true;
+            Color = true;
             setName(text);
-            if(text!=""){
+            if (text != "") {
                 availability(text);
             }
         }
@@ -52,16 +52,16 @@ export default function SubjectToAvailability({Name,setName,fieldName,Color}) {
         <View style={{
             width: "90%",
             alignItems: "center",
-            borderColor:Color?'white':'red',
+            borderColor: Color ? 'white' : 'red',
         }}>
-            <TextInput style={[styles.input,{borderColor:Color?'white':'red'},]}
+            <TextInput style={[styles.input, { borderColor: Color ? 'white' : 'red' },]}
                 placeholder={fieldName}
                 value={Name}
                 onChangeText={checkName}></TextInput>
             {(Status != '') &&
                 <Text style={[styles.text, { color: available ? "green" : "red" }]}>{Status}</Text>}
         </View>
-           );
+    );
 }
 
 
@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
         borderColor: '#ccc',
         borderWidth: 1,
         borderRadius: 5,
-        marginBottom:5,
+        marginBottom: 5,
         paddingHorizontal: 10,
         width: '99%',
         backgroundColor: 'white',

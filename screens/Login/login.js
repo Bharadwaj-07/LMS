@@ -23,7 +23,7 @@ export default function LoginPage({ navigation }) {
           setFailure(false);
           navigation.navigate("Home");
         }
-        if(!response.data.verified) {
+        if (!response.data.verified) {
           console.log(failure);
           setFailure(true);
         }

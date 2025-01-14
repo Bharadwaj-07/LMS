@@ -6,14 +6,14 @@ import { StyleSheet, View, ImageBackground, Text, TouchableOpacity, TextInput, }
 import debounce from 'lodash.debounce';
 
 {/**arguments must be passed in parenthesis else it will not recognize */ }
-export default function Signup({ route,navigation }) {
+export default function Signup({ route, navigation }) {
     const [Uname, setUname] = useState("");
     var [Status, setStatus] = useState("");
     const [available, setAvailable] = useState(false);
-    
+
     const handlePress = () => {
         if (available) {
-            navigation.navigate("Details",{Uname});
+            navigation.navigate("Details", { Uname });
         }
         else {
             setStatus("Please Pick a User Name");
@@ -23,7 +23,7 @@ export default function Signup({ route,navigation }) {
         try {
             // Sending a POST request to check username availability
             console.log(Uname);
-            const response = await axios.post('http://10.25.75.67:5000/api/Users/check', { Name:Uname,fieldName:"uname" });
+            const response = await axios.post('http://10.25.75.67:5000/api/Users/check', { Name: Uname, fieldName: "uname" });
 
             // Log the full response for debugging (optional)
             console.log('Server Response:', response);
