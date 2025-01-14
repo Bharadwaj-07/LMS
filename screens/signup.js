@@ -23,7 +23,7 @@ export default function Signup({ route,navigation }) {
         try {
             // Sending a POST request to check username availability
             console.log(Uname);
-            const response = await axios.post('http://10.25.75.67:5000/api/Users/check', { Uname });
+            const response = await axios.post('http://10.25.75.67:5000/api/Users/check', { Name:Uname,fieldName:"uname" });
 
             // Log the full response for debugging (optional)
             console.log('Server Response:', response);

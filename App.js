@@ -5,11 +5,13 @@ import LoginPage from './screens/login'; // Adjust paths to your screens
 import Signup from './screens/signup';
 import Details from './screens/Details';
 import Password from './screens/Password';
+import Home from './screens/Home';
 const Stack = createStackNavigator();
 const App=()=>{
   return (<NavigationContainer>
     <Stack.Navigator initialRouteName='Login'>
       <Stack.Screen name='Login' component={LoginPage}/>
+      <Stack.Screen name="Home" component={Home}/>
       <Stack.Screen name='Signup' component={Signup}/>
       <Stack.Screen name='Details' component={Details}/>
       <Stack.Screen name='Password' component={Password}/>

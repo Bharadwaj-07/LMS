@@ -1,15 +1,38 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, Image, ImageBackground, TextInput, TouchableOpacity, Alert, Form } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-
+import axios from "axios"
 export default function LoginPage({ navigation }) {
   const [UserName, setUname] = useState('');
   const [password, setPassword] = useState('');
-
+  const [authenticate, setAuthenticate] = useState(false);
+  const [failure, setFailure] = useState(false);
   const ForgotPassword = () => {
     Alert.alert("Please contact the concerned TA");
   };
-  HandleLogin = () => {
+  HandleLogin = async (UserName, password) => {
+    if (password != "" && UserName != "") {
+      try {
+        // Send the POST request to the backend API
+        const response = await axios.post('http://10.25.75.67:5000/api/Users/login', { uname: UserName, passwd: password });
+        console.log(response.data);
+        setAuthenticate(response.data.verified);
+        if (response.data.verified) {
+          setUname("");
+          setPassword("");
+          setFailure(false);
+          navigation.navigate("Home");
+        }
+        if(!response.data.verified) {
+          console.log(failure);
+          setFailure(true);
+        }
+      } catch (error) {
+        // Handle error
+        setStatus('Error saving data');
+        console.error('Error:', error);
+      }
+    }
 
   }
   return (
@@ -38,10 +61,11 @@ export default function LoginPage({ navigation }) {
           value={password}
           onChangeText={setPassword}
         />
+        {(failure) && <Text style={styles.title}>Wrong Username or Password!!</Text>}
         {/*Forgot Password */}
         <TouchableOpacity style={styles.small_button} onPress={ForgotPassword}><Text style={styles.small_text}>Forgot Password?</Text></TouchableOpacity>
         {/* Login Button */}
-        <TouchableOpacity style={styles.button} >
+        <TouchableOpacity style={styles.button} onPress={() => HandleLogin(UserName, password)} >
           <Text style={styles.buttonText}>Login</Text>
         </TouchableOpacity>
         {/* New User */}

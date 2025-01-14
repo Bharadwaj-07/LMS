@@ -3,25 +3,81 @@ import { StyleSheet, Text, View, Image, ImageBackground, TextInput, TouchableOpa
 import { useNavigation } from '@react-navigation/native';
 import SubjectToAvailability from '../components/SubjectToAvailability';
 import { newUser,setUserDetails } from './signup'; 
+import {ValidateAge,ValidateEmail,ValidateName,ValidatePhoneNumber,ValidateUserName} from "../components/Validations";
+// import { set } from 'mongoose';
 export default function Details({ route,navigation }) {
   const{Uname}=route.params;
   const [email, setEmail] = useState('');
+  const [ValidEmail,setVEmail]=useState(true);
   const [Name, setName] = useState("");
-  const [Age, setAge] = useState();
+  const [ValidName,setVName]=useState(true);
+  const [Age, setAge] = useState("");
+  const [ValidAge,setVAge]=useState(true);
   const [College, setCollege] = useState("");
+  const [ValidCollege,setVCollege]=useState(true);
   const [Number, setNumber] = useState("");
-  const handleDetails = () => {
+  const [ValidNumber,setVNumber]=useState(true);
+  const [ValidUser,setVUser]=useState(false);
+  const [Inputs,setInputs]=useState(false);
+    const handleDetails = () => {
+    setVUser(true);
+    
+    console.log("visited");
+    console.log(email);
+    if(!ValidateEmail(email)){
+      console.log("invalid");
+      setVEmail(false);
+      setVUser(false);
+    }
+    else{
+      setVEmail(true);
+      console.log(ValidEmail);
+    }
+    if(!ValidateAge(Age)){
+      setVAge(false);
+      setVUser(false);
+    }
+    else{
+      setVAge(true);
+    }
+    if(!ValidateName(College)){
+      setVCollege(false);
+      setVUser(false);
+    }
+    else{
+      setVCollege(true);
+    }
+    if(!ValidatePhoneNumber(Number)){
+      setVNumber(false);
+      setVUser(false);
+    }
+    else{
+      setVNumber(true);
+    }
+    if(!ValidateName(Name)){
+      setVName(false);
+      setVUser(false);
+    }
+    else{
+      setVName(true);
+    }
+    setInputs(false);
+    if(ValidUser){
     const UserDetails={
       Uname,
       email,
       Age,
       College,
       Number, 
-      Name
+      Name,
     }
     console.log(UserDetails);
-    navigation.navigate("Password",UserDetails);
+    navigation.navigate("Password",UserDetails);}
+    else{
+      setInputs(true);
+    }
   }
+  
   return (
 
     <ImageBackground source={require("../assets/IIT_Admin_Block.png")}
@@ -31,31 +87,40 @@ export default function Details({ route,navigation }) {
         <Image source={require("../assets/hat_icon.png")}
           style={styles.medium_icon}
         />
+        {(!ValidUser&&Inputs)&&<Text style={[styles.text, { color:"red" }]}>Invalid Inputs</Text>}
         {/**Name Input */}
-        <TextInput style={styles.input}
-          placeholder='Name'
+        <TextInput style={[styles.input,{borderColor:ValidName?'white':'red'}]}
+          placeholder='name'
           value={Name}
-          onChangeText={setName}></TextInput>
+          onChangeText={setName}>
+          </TextInput>
+
         {/* email Input */}
         <SubjectToAvailability
           Name={email}
           setName={setEmail}
-          fieldName="Email" />
+          fieldName="email"
+          Color={ValidEmail}>
+          </SubjectToAvailability>
+         
         <SubjectToAvailability style={styles.input}
           Name={Number}
           setName={setNumber}
-          fieldName="Phone Number"></SubjectToAvailability>
-        <TextInput style={styles.input}
-          placeholder='Age'
+          fieldName="number"
+          Color={ValidNumber}></SubjectToAvailability>
+         
+        <TextInput style={[styles.input,{borderColor:ValidAge?'white':'red'}]}
+          placeholder='age'
           value={Age}
           onChangeText={setAge}></TextInput>
-
-        <TextInput style={styles.input}
-          placeholder='College'
+        
+        <TextInput style={[styles.input,{borderColor:ValidCollege?'white':'red'}]}
+          placeholder='college'
           value={College}
           onChangeText={setCollege}></TextInput>
+        
         <TouchableOpacity style={styles.button}
-          onPress={handleDetails}><Text style={styles.buttonText}>Next</Text></TouchableOpacity>
+          onPress={()=>handleDetails()}><Text style={styles.buttonText}>Next</Text></TouchableOpacity>
       </View>
 
     </ImageBackground>

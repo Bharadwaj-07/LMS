@@ -34,7 +34,6 @@ export default function Password({ route,navigation }) {
         console.log(passwordInput);
         if (password === passwordInput) {
             setMatch(true);
-
             setLoading(true);
         }
         else {
@@ -50,11 +49,13 @@ export default function Password({ route,navigation }) {
                     <TextInput
                         style={styles.input}
                         placeholder="Enter Password"
-                        secureTextEntry
+                        secureTextEntry={visible}
                         value={password}
                         onChangeText={setPassword}
                     />
-                    <TouchableOpacity style={{ alignItems: "center" }} onPress={() => { setVisible(!visible) }}><Text>{visible ? 'Hide' : 'Show'}</Text></TouchableOpacity>
+                    <TouchableOpacity style={{ alignItems: "center" ,
+                        
+                    }} onPress={() => { setVisible(!visible) }}><Text>{visible ? 'Hide' : 'Show'}</Text></TouchableOpacity>
                 </View>
                 <View style={{ flexDirection: 'row', padding: 10, alignItems: "center", justifyContent: "space-between", }}>
                     {/**I have an issue here updates not happening simultaneously */}
@@ -62,7 +63,7 @@ export default function Password({ route,navigation }) {
                     <TextInput
                         style={styles.input}
                         placeholder="Re-Enter Password"
-                        secureTextEntry
+                        secureTextEntry={visible}
                         value={passwordInput}
                         onChangeText={setPasswordInput}
                     />

@@ -3,10 +3,17 @@ const Persons = require("../Models/Profile")
 mongoose = require("mongoose");
 exports.availability = async (req, res) => {
 
-    let { Uname } = req.body;
+    let Name = req.body.Name;
+    console.log("Name", Name);
+    const fieldName = req.body.fieldName;
+    console.log(req.body);
+    console.log(Name, fieldName);
+    Name = Name.toLowerCase();
     try {
-        const Person = await Persons.findOne({ Uname });
+        // const Person = await Persons.findOne({ fieldName:Uname });
+        const Person = await Persons.findOne({ [fieldName]: Name });
         console.log(Person);
+        console.log(fieldName, Name);
         if (Person) {
             return res.json({ available: false });
         }
@@ -18,10 +25,10 @@ exports.availability = async (req, res) => {
     }
 }
 exports.login = async (req, res) => {
-    const { Uname, password } = req.body;
+    let { uname:Uname, passwd:password } = req.body;
     Uname = Uname.toLowerCase();
     try {
-        const Person = await Persons.findOne({ Uname });
+        const Person = await Persons.findOne({ "uname": Uname });
         if (Person) {
             if (Person.password === password) {
                 return res.json({ verified: true });
@@ -32,18 +39,20 @@ exports.login = async (req, res) => {
         }
         return res.json({ verified: false });
     }
-    catch (e) { console.log(e); }
+    catch (e) {
+        console.log(e);
+        return res.json({ verified: false });
+
+    }
 }
+
 exports.store = async (req, res) => {
     console.log("Request received:", req.body);
-    const { Uname, password, Number, email, Age, College, Name } = req.body;
+    let { Uname, password, Number, email, Age, College, Name } = req.body;
 
-    // Check if all required fields are provided
-    // if (!Uname || !password || !Number || !email || !Age || !College || !Name) {
-    //     console.error("Missing required fields:", req.body);
-    //     return res.status(400).send({ message: "All fields are required" });
-    // }
-
+    Uname = Uname.toLowerCase();
+    email = email.toLowerCase();
+    college = College.toLowerCase();
     const User = new Persons({
         uname: Uname,
         password: password,
