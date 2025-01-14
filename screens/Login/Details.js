@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, Image, ImageBackground, TextInput, TouchableOpacity, } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import SubjectToAvailability from '../components/SubjectToAvailability';
+import SubjectToAvailability from '../../components/SubjectToAvailability';
 import { newUser,setUserDetails } from './signup'; 
-import {ValidateAge,ValidateEmail,ValidateName,ValidatePhoneNumber,ValidateUserName} from "../components/Validations";
+import {ValidateAge,ValidateEmail,ValidateName,ValidatePhoneNumber,ValidateUserName} from "../../components/Validations";
 // import { set } from 'monisValidose';
 export default function Details({ route,navigation }) {
   const{Uname}=route.params;
@@ -86,11 +86,11 @@ export default function Details({ route,navigation }) {
   
   return (
 
-    <ImageBackground source={require("../assets/IIT_Admin_Block.png")}
+    <ImageBackground source={require("../../assets/IIT_Admin_Block.png")}
       style={styles.container}>
 
       <View style={styles.rectangle}>
-        <Image source={require("../assets/hat_icon.png")}
+        <Image source={require("../../assets/hat_icon.png")}
           style={styles.medium_icon}
         />
         {(!ValidUser&&Inputs)&&<Text style={[styles.text, { color:"red" }]}>Invalid Inputs</Text>}

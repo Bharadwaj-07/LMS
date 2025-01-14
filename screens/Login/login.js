@@ -37,11 +37,11 @@ export default function LoginPage({ navigation }) {
   }
   return (
 
-    <ImageBackground source={require("../assets/IIT_Admin_Block.png")}
+    <ImageBackground source={require("../../assets/IIT_Admin_Block.png")}
       style={styles.container}>
 
       <View style={styles.rectangle}>
-        <Image source={require("../assets/hat_icon.png")}
+        <Image source={require("../../assets/hat_icon.png")}
           style={styles.medium_icon}
         />
 

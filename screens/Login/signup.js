@@ -63,7 +63,7 @@ export default function Signup({ route,navigation }) {
     }
 
     return (<ImageBackground style={styles.container}
-        source={require('../assets/iit_tp.jpg')}>
+        source={require('../../assets/iit_tp.jpg')}>
         <View style={{
             width: "80%",
             alignItems: "center",

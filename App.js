@@ -1,10 +1,10 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import LoginPage from './screens/login'; // Adjust paths to your screens
-import Signup from './screens/signup';
-import Details from './screens/Details';
-import Password from './screens/Password';
+import LoginPage from './screens/Login/login'; // Adjust paths to your screens
+import Signup from './screens/Login/signup';
+import Details from './screens/Login/Details';
+import Password from './screens/Login/Password';
 import Home from './screens/Home';
 const Stack = createStackNavigator();
 const App=()=>{
