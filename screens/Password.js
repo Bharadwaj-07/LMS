@@ -49,7 +49,7 @@ export default function Password({ route,navigation }) {
                     <TextInput
                         style={styles.input}
                         placeholder="Enter Password"
-                        secureTextEntry={visible}
+                        secureTextEntry={!visible}
                         value={password}
                         onChangeText={setPassword}
                     />
@@ -63,7 +63,7 @@ export default function Password({ route,navigation }) {
                     <TextInput
                         style={styles.input}
                         placeholder="Re-Enter Password"
-                        secureTextEntry={visible}
+                        secureTextEntry={!visible1}
                         value={passwordInput}
                         onChangeText={setPasswordInput}
                     />

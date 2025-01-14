@@ -1,7 +1,6 @@
 import React,{useState} from "react";
 export  function ValidateEmail(email){
     const regex=/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    console.log("",email);
     return (regex.test(email));
 }
 export function ValidateUserName(Uname){
@@ -19,6 +18,5 @@ export function ValidateAge(Age){
 export function ValidateName(Name){
     // const regex=/^[a-zA-Z]+(\s[a-zA-Z]+)*(\.[a-zA-Z]+)*$/
     const regex=/^[a-zA-Z]+(\s[a-zA-Z]+)*(\.[a-zA-Z]+)*$/
-
     return (regex.test(Name));
 }

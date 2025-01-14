@@ -9,9 +9,9 @@ export default function SubjectToAvailability({Name,setName,fieldName,Color}) {
     }
     const [Status,setStatus]=useState("");
     const [available,setAvailable] = useState(false);
-    console.log(Name,"name");
+    
     const availability = async (Name) => {
-        console.log(Name,"name");
+        
         try {
             // Sending a POST request to check username availability
             setAvailable(false);
@@ -19,7 +19,7 @@ export default function SubjectToAvailability({Name,setName,fieldName,Color}) {
             const response = await axios.post('http://10.25.75.67:5000/api/Users/check', { Name,fieldName });
 
             // Log the full response for debugging (optional)
-            console.log('Server Response:', response);
+            
 
             // Handle response based on the data received
             if (response.data.available) {

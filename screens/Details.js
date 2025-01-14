@@ -4,7 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import SubjectToAvailability from '../components/SubjectToAvailability';
 import { newUser,setUserDetails } from './signup'; 
 import {ValidateAge,ValidateEmail,ValidateName,ValidatePhoneNumber,ValidateUserName} from "../components/Validations";
-// import { set } from 'mongoose';
+// import { set } from 'monisValidose';
 export default function Details({ route,navigation }) {
   const{Uname}=route.params;
   const [email, setEmail] = useState('');
@@ -19,50 +19,11 @@ export default function Details({ route,navigation }) {
   const [ValidNumber,setVNumber]=useState(true);
   const [ValidUser,setVUser]=useState(false);
   const [Inputs,setInputs]=useState(false);
-    const handleDetails = () => {
-    setVUser(true);
+  const valid=()=>{setVUser(true);}  
+  const handleDetails = () => {
     
-    console.log("visited");
-    console.log(email);
-    if(!ValidateEmail(email)){
-      console.log("invalid");
-      setVEmail(false);
-      setVUser(false);
-    }
-    else{
-      setVEmail(true);
-      console.log(ValidEmail);
-    }
-    if(!ValidateAge(Age)){
-      setVAge(false);
-      setVUser(false);
-    }
-    else{
-      setVAge(true);
-    }
-    if(!ValidateName(College)){
-      setVCollege(false);
-      setVUser(false);
-    }
-    else{
-      setVCollege(true);
-    }
-    if(!ValidatePhoneNumber(Number)){
-      setVNumber(false);
-      setVUser(false);
-    }
-    else{
-      setVNumber(true);
-    }
-    if(!ValidateName(Name)){
-      setVName(false);
-      setVUser(false);
-    }
-    else{
-      setVName(true);
-    }
-    setInputs(false);
-    if(ValidUser){
+    console.log("Clicked");
+    let isValid=true;
     const UserDetails={
       Uname,
       email,
@@ -71,7 +32,52 @@ export default function Details({ route,navigation }) {
       Number, 
       Name,
     }
+    
+    setVUser(true);
+    ()=>{valid};
+    if(!ValidateEmail(email)){
+      
+      setVEmail(false);
+    {/**state update cycle is the issue for delayed click */}
+      isValid=false;
+    }
+    else{
+      setVEmail(true);
+      
+    }
+    if(!ValidateAge(Age)){
+      setVAge(false);
+      isValid=false;
+    }
+    else{
+      setVAge(true);
+    }
+    if(!ValidateName(College)){
+      setVCollege(false);
+      isValid=false;
+    }
+    else{
+      setVCollege(true);
+    }
+    if(!ValidatePhoneNumber(Number)){
+      setVNumber(false);
+      isValid=false;
+    }
+    else{
+      setVNumber(true);
+    }
+    if(!ValidateName(Name)){
+      setVName(false);
+      isValid=false;
+    }
+    else{
+      setVName(true);
+    }
+    
     console.log(UserDetails);
+    console.log(ValidUser);
+    setVUser(isValid);
+    if(isValid){
     navigation.navigate("Password",UserDetails);}
     else{
       setInputs(true);
@@ -120,7 +126,7 @@ export default function Details({ route,navigation }) {
           onChangeText={setCollege}></TextInput>
         
         <TouchableOpacity style={styles.button}
-          onPress={()=>handleDetails()}><Text style={styles.buttonText}>Next</Text></TouchableOpacity>
+          onPress={handleDetails}><Text style={styles.buttonText}>Next</Text></TouchableOpacity>
       </View>
 
     </ImageBackground>
