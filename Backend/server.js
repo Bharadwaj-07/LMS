@@ -8,7 +8,7 @@ const App = express();
 
 // Middleware
 App.use(cors());
-App.use(bodyParser.json());
+App.use(express.json());
 
 // Connect to MongoDB without deprecated options
 mongoose.connect('mongodb://127.0.0.1:27017/DB')

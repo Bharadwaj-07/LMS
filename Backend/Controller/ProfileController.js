@@ -35,23 +35,40 @@ exports.login = async (req, res) => {
     catch (e) { console.log(e); }
 }
 exports.store = async (req, res) => {
-    console.log("reached");
-    const { Uname, password, Number, email, Age, College,Name } = req.body;
+    console.log("Request received:", req.body);
+    const { Uname, password, Number, email, Age, College, Name } = req.body;
+
+    // Check if all required fields are provided
+    // if (!Uname || !password || !Number || !email || !Age || !College || !Name) {
+    //     console.error("Missing required fields:", req.body);
+    //     return res.status(400).send({ message: "All fields are required" });
+    // }
+
     const User = new Persons({
-        uname:Uname,
-        password:password,
-        number:Number,
-        email:email,
-        age:Age,
-        college:College,
-        name:Name,
+        uname: Uname,
+        password: password,
+        number: Number,
+        email: email,
+        age: Age,
+        college: College,
+        name: Name,
+    });
+    console.log({
+        uname: Uname,
+        password: password,
+        number: Number,
+        email: email,
+        age: Age,
+        college: College,
+        name: Name,
     });
     try {
+        console.log("Attempting to save user:", User);
         await User.save();
-        res.status(200).send({ message: 'User details saved successfully' });
+        console.log("User saved successfully");
+        res.status(200).send({ message: "User details saved successfully" });
     } catch (error) {
-        console.error("Error details:", error);
-        res.status(500).send({ message: error });
-        
+        console.error("Error saving user:", error);
+        res.status(500).send({ message: "Error saving user details", error: error.message });
     }
-}
+};
