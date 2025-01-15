@@ -16,7 +16,7 @@ export default function SubjectToAvailability({ Name, setName, fieldName, Color 
             // Sending a POST request to check username availability
             setAvailable(false);
 
-            const response = await axios.post('http://10.25.75.67:5000/api/Users/check', { Name, fieldName });
+            const response = await axios.post('http://10.25.78.217:5000/api/Users/check', { Name, fieldName });
 
             // Log the full response for debugging (optional)
 
@@ -24,7 +24,7 @@ export default function SubjectToAvailability({ Name, setName, fieldName, Color 
             // Handle response based on the data received
             if (response.data.available) {
                 setAvailable(true);
-                // setStatus(`${fieldName} is available`);
+                 setStatus("");;
 
             } else {
                 setStatus(`${fieldName} already exists`);

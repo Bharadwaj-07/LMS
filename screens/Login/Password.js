@@ -15,7 +15,7 @@ export default function Password({ route, navigation }) {
         const User = { ...UserDetails, password };
         try {
             // Send the POST request to the backend API
-            const response = await axios.post('http://10.25.75.67:5000/api/Users/store', { ...UserDetails, password });
+            const response = await axios.post('http://10.25.78.217:5000/api/Users/store', { ...UserDetails, password });
 
             // Handle success response
             setStatus('Data saved successfully!');

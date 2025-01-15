@@ -14,7 +14,7 @@ export default function LoginPage({ navigation }) {
     if (password != "" && UserName != "") {
       try {
         // Send the POST request to the backend API
-        const response = await axios.post('http://10.25.75.67:5000/api/Users/login', { uname: UserName, passwd: password });
+        const response = await axios.post('http://10.25.78.217:5000/api/Users/login', { uname: UserName, passwd: password });
         console.log(response.data);
         setAuthenticate(response.data.verified);
         if (response.data.verified) {

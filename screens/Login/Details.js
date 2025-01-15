@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, Image, ImageBackground, TextInput, TouchableOpacity, } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
 import SubjectToAvailability from '../../components/SubjectToAvailability';
-import { newUser, setUserDetails } from './signup';
 import { ValidateAge, ValidateEmail, ValidateName, ValidatePhoneNumber, ValidateUserName } from "../../components/Validations";
 // import { set } from 'monisValidose';
+import DTimePicker from '../../components/DatePicker';
 export default function Details({ route, navigation }) {
+  const Rules= "1. Name should contain alphabets, only white spaces and . allowed\n2. Age should be a number\n3. College should contain alphabets, white spaces and . symbols\n4.Phone Number should be a 10 digit number\n5. Email should be in the proper format with domain name and @ symbol";
   const { Uname } = route.params;
   const [email, setEmail] = useState('');
   const [ValidEmail, setVEmail] = useState(true);
@@ -125,7 +125,10 @@ export default function Details({ route, navigation }) {
           placeholder='college'
           value={College}
           onChangeText={setCollege}></TextInput>
-
+        <TouchableOpacity style={styles.small_button} onPress={() => { alert(Rules) }}>
+        <Image source={require("../../assets/help-icon.png")} style={styles.medium_icon} />
+        
+        </TouchableOpacity>
         <TouchableOpacity style={styles.button}
           onPress={handleDetails}><Text style={styles.buttonText}>Next</Text></TouchableOpacity>
       </View>
