@@ -127,7 +127,6 @@ export default function Details({ route, navigation }) {
           onChangeText={setCollege}></TextInput>
         <TouchableOpacity style={styles.small_button} onPress={() => { alert(Rules) }}>
         <Image source={require("../../assets/help-icon.png")} style={styles.medium_icon} />
-        
         </TouchableOpacity>
         <TouchableOpacity style={styles.button}
           onPress={handleDetails}><Text style={styles.buttonText}>Next</Text></TouchableOpacity>
