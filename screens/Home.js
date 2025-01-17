@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef, } from "react";
 import { StyleSheet, View, Text } from "react-native";
+import { GLOBAL_CONFIG } from '../components/global_config';
+
 export default function Home({ navigation }) {
 
   return (<View style={styles.container}>

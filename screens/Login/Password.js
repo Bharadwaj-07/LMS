@@ -2,6 +2,8 @@
 import React, { useState } from "react";
 import { StyleSheet, Text, View, Image, ImageBackground, TextInput, TouchableOpacity, } from 'react-native';
 import axios from 'axios';
+import { GLOBAL_CONFIG } from '../../components/global_config';
+
 export default function Password({ route, navigation }) {
     const UserDetails = route.params;
     const [password, setPassword] = useState("");
@@ -15,7 +17,7 @@ export default function Password({ route, navigation }) {
         const User = { ...UserDetails, password };
         try {
             // Send the POST request to the backend API
-            const response = await axios.post('http://10.25.78.217:5000/api/Users/store', { ...UserDetails, password });
+            const response = await axios.post(`http://${GLOBAL_CONFIG.SYSTEM_IP}:5000/api/Users/store`, { ...UserDetails, password });
 
             // Handle success response
             setStatus('Data saved successfully!');

@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, View, Image, ImageBackground, TextInput, TouchableOpacity, Alert, Form } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import axios from "axios"
+import { GLOBAL_CONFIG } from '../../components/global_config';
+
 export default function LoginPage({ navigation }) {
   const [UserName, setUname] = useState('');
   const [password, setPassword] = useState('');
@@ -14,7 +16,7 @@ export default function LoginPage({ navigation }) {
     if (password != "" && UserName != "") {
       try {
         // Send the POST request to the backend API
-        const response = await axios.post('http://10.25.78.217:5000/api/Users/login', { uname: UserName, passwd: password });
+        const response = await axios.post(`http://${GLOBAL_CONFIG.SYSTEM_IP}:5000/api/Users/login`, { uname: UserName, passwd: password });
         console.log(response.data);
         setAuthenticate(response.data.verified);
         if (response.data.verified) {

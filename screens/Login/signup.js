@@ -4,6 +4,7 @@ import axios from 'axios'
 import { useNavigation } from '@react-navigation/native';
 import { StyleSheet, View, ImageBackground, Text, TouchableOpacity, TextInput, } from 'react-native';
 import debounce from 'lodash.debounce';
+import { GLOBAL_CONFIG } from '../../components/global_config';
 
 {/**arguments must be passed in parenthesis else it will not recognize */ }
 export default function Signup({ route, navigation }) {
@@ -23,7 +24,7 @@ export default function Signup({ route, navigation }) {
         try {
             // Sending a POST request to check username availability
             console.log(Uname);
-            const response = await axios.post('http://10.25.78.217:5000/api/Users/check', { Name: Uname, fieldName: "uname" });
+            const response = await axios.post(`http://${GLOBAL_CONFIG.SYSTEM_IP}:5000/api/Users/check`, { Name: Uname, fieldName: "uname" });
 
             // Log the full response for debugging (optional)
             console.log('Server Response:', response);

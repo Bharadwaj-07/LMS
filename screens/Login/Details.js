@@ -3,15 +3,19 @@ import { StyleSheet, Text, View, Image, ImageBackground, TextInput, TouchableOpa
 import SubjectToAvailability from '../../components/SubjectToAvailability';
 import { ValidateAge, ValidateEmail, ValidateName, ValidatePhoneNumber, ValidateUserName } from "../../components/Validations";
 // import { set } from 'monisValidose';
+import { GLOBAL_CONFIG } from '../../components/global_config';
 import DTimePicker from '../../components/DatePicker';
+
 export default function Details({ route, navigation }) {
-  const Rules= "1. Name should contain alphabets, only white spaces and . allowed\n2. Age should be a number\n3. College should contain alphabets, white spaces and . symbols\n4.Phone Number should be a 10 digit number\n5. Email should be in the proper format with domain name and @ symbol";
+  const Rules = "1. Name should contain alphabets, only white spaces and . allowed\n2. Email should be in the proper format with domain name and @ symbol\n3.Phone Number should be a 10 digit number\n4. Age should be a number\n5. College should contain alphabets, white spaces and . symbols\n6. Date of Birth (AtLeast 17 years old)";
+  const [set, setDateSet] = useState(false);
   const { Uname } = route.params;
   const [email, setEmail] = useState('');
   const [ValidEmail, setVEmail] = useState(true);
   const [Name, setName] = useState("");
   const [ValidName, setVName] = useState(true);
   const [Age, setAge] = useState("");
+  const [error, seterror] = useState(false);
   const [ValidAge, setVAge] = useState(true);
   const [College, setCollege] = useState("");
   const [ValidCollege, setVCollege] = useState(true);
@@ -20,7 +24,23 @@ export default function Details({ route, navigation }) {
   const [ValidUser, setVUser] = useState(false);
   const [Inputs, setInputs] = useState(false);
   const valid = () => { setVUser(true); }
+  const [date, setDate] = useState(new Date());
   const handleDetails = () => {
+    const validateAge = (selectedDate) => {
+      const today = new Date();
+      selectedDate = new Date(selectedDate);
+      const age = today.getFullYear() - selectedDate.getFullYear();
+      const monthDifference = today.getMonth() - selectedDate.getMonth();
+      const dayDifference = today.getDate() - selectedDate.getDate();
+      console.log("age",age);
+      if(age<=0)return false;
+      // Adjust the age if the birthday hasn't occurred this year
+        if (monthDifference < 0 || (monthDifference === 0 && dayDifference < 0)) {
+          return ((age - 1 >= 17)); // Return true if age is 17 or above
+        }
+    
+      return ((age >= 17));
+    };
 
     console.log("Clicked");
     let isValid = true;
@@ -73,7 +93,11 @@ export default function Details({ route, navigation }) {
     else {
       setVName(true);
     }
-
+    if (!validateAge(date)) {
+      seterror(true);
+      isValid = false;
+    }
+    else { seterror(false); }
     console.log(UserDetails);
     console.log(ValidUser);
     setVUser(isValid);
@@ -125,8 +149,21 @@ export default function Details({ route, navigation }) {
           placeholder='college'
           value={College}
           onChangeText={setCollege}></TextInput>
+        <View style={[styles.input, { borderColor: !error ? 'white' : 'red' }]}>
+          <View style={[{ flexDirection: 'row', paddingHorizontal: 5, alignItems: "center", justifyContent: "space-between", }]}>
+            <Text style={[{ paddingVertical: 0, borderRadius: 5, alignItems: 'center', width: '70%', }]}>
+              {(!set) ? "Date of Birth" : date.toLocaleDateString('en-US', { year: 'numeric', month: 'numeric', day: 'numeric' })}
+            </Text>
+            <DTimePicker
+              date={date}
+              setDate={setDate}
+              set={set}
+              state={setDateSet}
+              validateAge={ValidateAge}
+              seterror={seterror}></DTimePicker></View>
+        </View>
         <TouchableOpacity style={styles.small_button} onPress={() => { alert(Rules) }}>
-        <Image source={require("../../assets/help-icon.png")} style={styles.medium_icon} />
+          <Image source={require("../../assets/help-icon.png")} style={styles.medium_icon} />
         </TouchableOpacity>
         <TouchableOpacity style={styles.button}
           onPress={handleDetails}><Text style={styles.buttonText}>Next</Text></TouchableOpacity>

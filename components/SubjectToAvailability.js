@@ -3,6 +3,7 @@ import React, { use, useState } from 'react';
 import axios from 'axios'
 import { StyleSheet, View, ImageBackground, Text, TouchableOpacity, TextInput, } from 'react-native';
 import debounce from 'lodash.debounce';
+import { GLOBAL_CONFIG } from './global_config';
 export default function SubjectToAvailability({ Name, setName, fieldName, Color }) {
     const handlePress = () => {
 
@@ -16,7 +17,7 @@ export default function SubjectToAvailability({ Name, setName, fieldName, Color 
             // Sending a POST request to check username availability
             setAvailable(false);
 
-            const response = await axios.post('http://10.25.78.217:5000/api/Users/check', { Name, fieldName });
+            const response = await axios.post(`http://${GLOBAL_CONFIG.SYSTEM_IP}:5000/api/Users/check`, { Name, fieldName });
 
             // Log the full response for debugging (optional)
 
