@@ -37,6 +37,13 @@ const SchemaProfile = new mongoose.Schema({
                 return(value.length==10);
             }
         }
+    },
+    courses:{
+        type:Array,
+    },
+    DOB:{
+        type:Date,
+        required:true
     }
 });
 

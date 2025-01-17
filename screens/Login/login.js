@@ -9,6 +9,7 @@ export default function LoginPage({ navigation }) {
   const [password, setPassword] = useState('');
   const [authenticate, setAuthenticate] = useState(false);
   const [failure, setFailure] = useState(false);
+  const [visible, setVisible] = useState(false);
   const ForgotPassword = () => {
     Alert.alert("Please contact the concerned TA");
   };
@@ -23,7 +24,7 @@ export default function LoginPage({ navigation }) {
           setUname("");
           setPassword("");
           setFailure(false);
-          navigation.navigate("Home");
+          navigation.navigate("Home",UserName);
         }
         if (!response.data.verified) {
           console.log(failure);
@@ -56,13 +57,16 @@ export default function LoginPage({ navigation }) {
         />
 
         {/* Password Input */}
+        <View style={{width:"100%",alignItems:"center"}}>
         <TextInput
           style={styles.input}
           placeholder="Enter Password"
-          secureTextEntry
+          secureTextEntry={!visible}
           value={password}
           onChangeText={setPassword}
         />
+        <TouchableOpacity style={{alignItems:"center",position:"relative",alignItems:"left",marginBottom:10}} onPress={() => { setVisible(!visible) }}><Text>{visible ? 'Hide' : 'Show'}</Text></TouchableOpacity>
+        </View>
         {(failure) && <Text style={styles.title}>Wrong Username or Password!!</Text>}
         {/*Forgot Password */}
         <TouchableOpacity style={styles.small_button} onPress={ForgotPassword}><Text style={styles.small_text}>Forgot Password?</Text></TouchableOpacity>

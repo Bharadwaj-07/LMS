@@ -48,7 +48,7 @@ exports.login = async (req, res) => {
 
 exports.store = async (req, res) => {
     console.log("Request received:", req.body);
-    let { Uname, password, Number, email, Age, College, Name } = req.body;
+    let { Uname, password, Number, email, Age, College, Name,courses,DOB } = req.body;
 
     Uname = Uname.toLowerCase();
     email = email.toLowerCase();
@@ -61,6 +61,8 @@ exports.store = async (req, res) => {
         age: Age,
         college: College,
         name: Name,
+        courses:courses,
+        DOB:DOB,
     });
     console.log({
         uname: Uname,
@@ -80,4 +82,14 @@ exports.store = async (req, res) => {
         console.error("Error saving user:", error);
         res.status(500).send({ message: "Error saving user details", error: error.message });
     }
-};
+}
+exports.getCourses = async (req, res) => {
+    try {
+        const courses = await Persons.findOne({uname:req.uname});
+        res.status(200).send(courses);
+    }
+    catch (e) {
+        console.log(e);
+        res.status(500).send({ message: "Error fetching courses", error: e.message });
+    }
+}
