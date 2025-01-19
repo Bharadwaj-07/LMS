@@ -4,13 +4,13 @@ import axios from 'axios'
 import { StyleSheet, View, ImageBackground, Text, TouchableOpacity, TextInput, } from 'react-native';
 import debounce from 'lodash.debounce';
 import { GLOBAL_CONFIG } from './global_config';
-export default function SubjectToAvailability({ Name, setName, fieldName, Color }) {
+export default function SubjectToAvailability({ Name, setName, fieldName,placeholder, Color }) {
     const handlePress = () => {
 
     }
     const [Status, setStatus] = useState("");
     const [available, setAvailable] = useState(false);
-
+    if(placeholder=="") {placeholder=fieldName;} 
     const availability = async (Name) => {
 
         try {
@@ -56,7 +56,7 @@ export default function SubjectToAvailability({ Name, setName, fieldName, Color 
             borderColor: Color ? 'white' : 'red',
         }}>
             <TextInput style={[styles.input, { borderColor: Color ? 'white' : 'red' },]}
-                placeholder={fieldName}
+                placeholder={placeholder}
                 value={Name}
                 onChangeText={checkName}></TextInput>
             {(Status != '') &&

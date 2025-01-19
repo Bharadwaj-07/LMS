@@ -4,7 +4,8 @@ import { GLOBAL_CONFIG } from '../components/global_config';
 import { Alert, Modal, Pressable } from 'react-native';
 import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
 import axios from "axios";
-export default function Home({navigate,route}) {
+import UserClass from "../components/classTab";
+export default function Home({navigation,route}) {
   const setModalVisibility = () => {
     setModalVisible(!modalVisible);
     setJoin(!join);
@@ -38,6 +39,14 @@ export default function Home({navigate,route}) {
     <SafeAreaView style={styles.container} edges={['top']}>
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         {/* <Modal style={styles.container}></Modal> */}
+      <UserClass 
+      navigation={navigation}
+      name="CSE 101" />
+      
+      <UserClass name="CSE 101" />
+      <UserClass name="CSE 101" />
+      <UserClass name="CSE 101" />
+      <UserClass name="CSE 101" />
       </ScrollView>
       <Modal
         animationType="slide"

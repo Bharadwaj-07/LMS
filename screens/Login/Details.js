@@ -137,6 +137,7 @@ export default function Details({ route, navigation }) {
           Name={email}
           setName={setEmail}
           fieldName="email"
+          placeholder="Email"
           Color={ValidEmail}>
         </SubjectToAvailability>
 
@@ -144,6 +145,7 @@ export default function Details({ route, navigation }) {
           Name={Number}
           setName={setNumber}
           fieldName="number"
+          placeholder="Phone Number"
           Color={ValidNumber}></SubjectToAvailability>
 
         <TextInput style={[styles.input, { borderColor: ValidAge ? 'white' : 'red' }]}
