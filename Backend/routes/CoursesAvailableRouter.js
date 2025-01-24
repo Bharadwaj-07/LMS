@@ -3,9 +3,7 @@ const Course = require('../models/CoursesAvailableModel')
 
 const router = express.Router();
 
-console.log("router")
-router.post('/', async (req, res) => {
-    console.log('POST /coursesAvailable');
+const storeCourseData = async (req, res) => {
     const { courseId, instructor, subject } = req.body;
 
     try {
@@ -15,10 +13,10 @@ router.post('/', async (req, res) => {
     } catch (err) {
         res.status(400).json({ message: 'Error creating course', error: err.message });
     }
-});
+}
+router.post('/', storeCourseData);
 
 router.get('/', async (req, res) => {
-    console.log('GET /coursesAvailable');
     try {
         const courses = await Course.find();
         res.status(200).json(courses);
@@ -27,4 +25,4 @@ router.get('/', async (req, res) => {
     }
 });
 
-module.exports = router;
+module.exports = { router, storeCourseData };

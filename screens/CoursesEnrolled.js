@@ -1,21 +1,67 @@
 import { StyleSheet, Text, View, ScrollView } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import CardDetails from '../components/CardDetails';
+import data from '../env.js'
 
 
 const CoursesEnrolled = () => {
-    return (<View style={styles.container}>
-        <ScrollView>
-            <CardDetails course="Industrial Software Engineering" instructor="Sridhar Chimalakonda" />
-            <CardDetails course="Industrial Software Engineering" instructor="Sridhar Chimalakonda" />
-            <CardDetails course="Industrial Software Engineering" instructor="Sridhar Chimalakonda" />
-            <CardDetails course="Industrial Software Engineering" instructor="Sridhar Chimalakonda" />
-            <CardDetails course="Industrial Software Engineering" instructor="Sridhar Chimalakonda" />
-            <CardDetails course="Industrial Software Engineering" instructor="Sridhar Chimalakonda" />
-            <CardDetails course="Industrial Software Engineering" instructor="Sridhar Chimalakonda" />
-            <CardDetails course="Industrial Software Engineering" instructor="Sridhar Chimalakonda" />
-            <CardDetails course="Industrial Software Engineering" instructor="Sridhar Chimalakonda" />
-        </ScrollView>
-    </View>)
+    const [classes, setClasses] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    const fetchClasses = () => {
+        console.log(data.ip)
+        axios.get(`http://${data.ip}:3000/createClass`)
+            .then((response) => {
+                console.log(response.data)
+                setClasses(response.data);
+                setLoading(false);
+            })
+            .catch((err) => {
+                setError(err.message);
+                setLoading(false);
+            });
+    };
+    useEffect(() => {
+        fetchClasses();
+        const interval = setInterval(() => {
+            fetchClasses();
+        }, 3000);
+        return () => clearInterval(interval);
+    }, []);
+
+
+    if (loading) {
+        return (
+            <View style={styles.message}>
+                <Text>Loading classes...</Text>
+            </View>
+        );
+    }
+
+    if (error) {
+        return (
+            <View style={styles.message}>
+                <Text>Error loading classes: {error}</Text>
+            </View>
+        );
+    }
+
+    return (
+        <View style={styles.container}>
+            <ScrollView>
+                {classes.map((classItem) => (
+                    <CardDetails
+                        key={classItem._id}
+                        course={classItem.className}
+                        instructor={classItem.instructorName}
+
+                    />
+                ))}
+            </ScrollView>
+        </View>
+    );
 
 }
 
@@ -26,4 +72,10 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#fff',
     },
+    message: {
+        flex: 1,
+        backgroundColor: '#FFF',
+        justifyContent: 'center',
+        alignItems: 'center'
+    }
 });

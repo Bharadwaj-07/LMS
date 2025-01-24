@@ -27,7 +27,7 @@ const CoursesAvailable = () => {
         fetchCourses();
         const interval = setInterval(() => {
             fetchCourses();
-        }, 5000);
+        }, 3000);
         return () => clearInterval(interval);
     }, []);
 

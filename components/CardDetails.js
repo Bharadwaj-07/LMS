@@ -27,8 +27,8 @@ const CardDetails = ({ course, instructor }) => {
                     onLongPress={handleLongPress}
                     style={{ flex: 1, margin: 10 }}>
                     <Card.Content>
-                        <Title>{course}</Title>
-                        <Paragraph>{instructor}</Paragraph>
+                        <Title style={{ fontSize: 25, fontWeight: '350', marginBottom: '5' }}>{course}</Title>
+                        <Paragraph style={{ fontSize: 20, marginBottom: '5' }}>{instructor}</Paragraph>
                     </Card.Content>
                     <Card.Actions>
                         <Button onPress={() => console.log('Button 2 pressed')} style={{
