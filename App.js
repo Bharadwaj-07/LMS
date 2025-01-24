@@ -8,6 +8,7 @@ import CoursesAvailable from './screens/CoursesAvailable';
 import Dashboard from './screens/CoursesEnrolled';
 import Profile from './screens/Profile';
 import JoinClass from './screens/JoinClass';
+import CreateClass from './screens/CreateClass';
 
 
 export default function App() {
@@ -78,7 +79,7 @@ export default function App() {
         />
         <Drawer.Screen
           name="Create Class"
-          component={() => (<View><Text>Create Class</Text></View>)}
+          component={CreateClass}
           options={{
             drawerIcon: ({ color }) => (
               <Ionicons name="add-outline" size={25} color={color} />
