@@ -2,7 +2,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const ProfileRoutes=require('./Routes/ProfileRouter');
+const ProfileRoutes=require('./routes/ProfileRouter');
+const AttendanceRoutes=require('./routes/AttendanceRouter');
 const cookieParser = require('cookie-parser');
 
 const coursesAvailableRouter = require('./routes/CoursesAvailableRouter')
@@ -41,10 +42,14 @@ conn.once('open', () => { console.log("Connected to DataBase.") });
 
 
 App.use('/api/Users', ProfileRoutes)
+
 App.use('/coursesAvailable', coursesAvailableRouter.router);
 App.use('/createClass', CreateClassRouter);
 App.use('/joinClass', JoinClassRouter);
 App.use('/marks', marksRouter);
+
+App.use('/api/Attendance', AttendanceRoutes)
+
 
 
 const PORT = 5000;

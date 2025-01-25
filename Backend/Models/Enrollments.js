@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const SchemaCourse = new mongoose.Schema({
+const Enrollment = new mongoose.Schema({
     user: {
         type: String,
         required: true,
@@ -12,4 +12,4 @@ const SchemaCourse = new mongoose.Schema({
     }]
 
 });
-module.exports = mongoose.model('RefreshToken', RefreshToken);
+module.exports = mongoose.model('Enrollments', Enrollment);

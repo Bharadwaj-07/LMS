@@ -3,7 +3,8 @@ const LoginDetails = new mongoose.Schema({
     Username: {
         type: String,
         required: true,
-        unique: true
+        unique: true,
+        ref:"profiles"
     },
     Password: {
         type: String,
