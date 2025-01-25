@@ -1,6 +1,8 @@
 import * as React from 'react';
-import { SafeAreaView, ScrollView, View, StyleSheet } from 'react-native';
+import { SafeAreaView, ScrollView, View, StyleSheet, Alert } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import axios from 'axios';
+import data from '../env.js'
 import {
     PaperProvider,
     Card,
@@ -9,13 +11,24 @@ import {
     Paragraph,
 } from 'react-native-paper';
 
-const CardDetails = ({ course, instructor }) => {
+const CardDetails = ({ course, instructor, id, fetchClasses }) => {
     const handlePress = () => {
         console.log('Card pressed');
     };
 
     const handleLongPress = () => {
         console.log('Card long-pressed');
+    };
+
+    const deleteClass = async (classId) => {
+        try {
+            const response = await axios.delete(`http://${data.ip}:3000/createClass/${classId}`);
+            console.log(response.data.message);
+            Alert.alert('Success', 'Classroom deleted successfully!');
+            fetchClasses()
+        } catch (error) {
+            console.error('Error deleting class:', error.response ? error.response.data : error.message);
+        }
     };
 
     return (
@@ -31,7 +44,7 @@ const CardDetails = ({ course, instructor }) => {
                         <Paragraph style={{ fontSize: 20, marginBottom: '5' }}>{instructor}</Paragraph>
                     </Card.Content>
                     <Card.Actions>
-                        <Button onPress={() => console.log('Button 2 pressed')} style={{
+                        <Button onPress={() => deleteClass(id)} style={{
                             backgroundColor: '#3C0A6B',
                         }}>
                             <Ionicons name="trash-outline" color='white' size={20} />

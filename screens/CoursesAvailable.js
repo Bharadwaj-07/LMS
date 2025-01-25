@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native';
 import React, { useState, useEffect } from 'react';
-import { ScrollView } from 'react-native-gesture-handler';
+import { ScrollView } from 'react-native-gesture-handler'
+import { useFocusEffect } from '@react-navigation/native';;
 import axios from 'axios';
 import CourseDetailsToJoin from '../components/CourseDetailsToJoin';
 import data from '../env.js'
@@ -23,13 +24,17 @@ const CoursesAvailable = () => {
                 setLoading(false);
             });
     };
-    useEffect(() => {
-        fetchCourses();
-        const interval = setInterval(() => {
-            fetchCourses();
-        }, 3000);
-        return () => clearInterval(interval);
-    }, []);
+    // useEffect(() => {
+    //     if (CheckNewClass) {
+    //         fetchCourses();
+    //     }
+    // }, [CheckNewClass]);
+
+    useFocusEffect(
+        React.useCallback(() => {
+            fetchCourses(); // Fetch classes when the screen gains focus
+        }, []) // Empty dependency array means it triggers every time the screen is focused
+    );
 
 
     if (loading) {

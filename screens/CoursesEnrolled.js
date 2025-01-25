@@ -1,5 +1,6 @@
 import { StyleSheet, Text, View, ScrollView } from 'react-native';
 import React, { useState, useEffect } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
 import axios from 'axios';
 import CardDetails from '../components/CardDetails';
 import data from '../env.js'
@@ -9,6 +10,7 @@ const CoursesEnrolled = () => {
     const [classes, setClasses] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+
 
     const fetchClasses = () => {
         console.log(data.ip)
@@ -23,13 +25,12 @@ const CoursesEnrolled = () => {
                 setLoading(false);
             });
     };
-    useEffect(() => {
-        fetchClasses();
-        const interval = setInterval(() => {
+
+    useFocusEffect(
+        React.useCallback(() => {
             fetchClasses();
-        }, 3000);
-        return () => clearInterval(interval);
-    }, []);
+        }, [])
+    );
 
 
     if (loading) {
@@ -56,6 +57,8 @@ const CoursesEnrolled = () => {
                         key={classItem._id}
                         course={classItem.className}
                         instructor={classItem.instructorName}
+                        id={classItem._id}
+                        fetchClasses={fetchClasses}
 
                     />
                 ))}
