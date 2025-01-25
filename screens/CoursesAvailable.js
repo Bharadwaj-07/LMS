@@ -4,7 +4,8 @@ import { ScrollView } from 'react-native-gesture-handler'
 import { useFocusEffect } from '@react-navigation/native';;
 import axios from 'axios';
 import CourseDetailsToJoin from '../components/CourseDetailsToJoin';
-import data from '../env.js'
+import { GLOBAL_CONFIG } from '../components/global_config';
+// import data from '../env.js'
 const CoursesAvailable = () => {
 
     const [courses, setCourses] = useState([]);
@@ -13,7 +14,7 @@ const CoursesAvailable = () => {
 
     const fetchCourses = () => {
         console.log(data.ip)
-        axios.get(`http://${data.ip}:3000/coursesAvailable`)
+        axios.get(`http://${GLOBAL_CONFIG}:3000/coursesAvailable`)
             .then((response) => {
                 console.log(response.data)
                 setCourses(response.data);

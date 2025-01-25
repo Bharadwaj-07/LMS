@@ -21,7 +21,6 @@ const App=()=>{
       <Stack.Screen name='Class Room' component={MainWindow}/>
     </Stack.Navigator>
   </NavigationContainer>)
-  // return (<ClassInput></ClassInput>);
  
 }
 export default App;

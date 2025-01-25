@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { View, TextInput, Text, StyleSheet, Alert, TouchableOpacity } from 'react-native';
 import axios from 'axios';
-import data from '../env.js'
+// import data from '../env.js'
 import { FontAwesome } from '@expo/vector-icons';
+import { GLOBAL_CONFIG } from '../components/global_config';
 
 const JoinClass = () => {
     const [classId, setClassId] = useState('');
@@ -20,7 +21,7 @@ const JoinClass = () => {
         setLoading(true);
 
         try {
-            const response = await axios.post(`http://${data.ip}:3000/joinClass/join`, {
+            const response = await axios.post(`http://${GLOBAL_CONFIG}:3000/joinClass/join`, {
                 classId, username, userId
             });
             Alert.alert('Success', 'You have successfully joined the class!');

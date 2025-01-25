@@ -3,7 +3,8 @@ import React, { useState, useEffect } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
 import axios from 'axios';
 import CardDetails from '../components/CardDetails';
-import data from '../env.js'
+import { GLOBAL_CONFIG } from '../components/global_config';
+// import data from '../env.js'
 
 
 const CoursesEnrolled = () => {
@@ -14,8 +15,8 @@ const CoursesEnrolled = () => {
     const userId = "user2";
 
     const fetchClasses = () => {
-        console.log(data.ip)
-        axios.get(`http://${data.ip}:3000/createClass/${userId}`)
+        // console.log(data.ip)
+        axios.get(`http://${GLOBAL_CONFIG}:3000/createClass/${userId}`)
             .then((response) => {
                 console.log(response.data)
                 setClasses(response.data);

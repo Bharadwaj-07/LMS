@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { FontAwesome, MaterialIcons } from '@expo/vector-icons';
 import axios from 'axios';
-import data from '../env'
+import { GLOBAL_CONFIG } from '../components/global_config';
+// import data from '../env'
 
 const CreateClass = () => {
   const [className, setClassName] = useState('');
@@ -26,7 +27,7 @@ const CreateClass = () => {
     };
 
     try {
-      const response = await axios.post(`http://${data.ip}:3000/createClass`, payload);
+      const response = await axios.post(`http://${GLOBAL_CONFIG}:3000/createClass`, payload);
       if (response.status === 201) {
         Alert.alert('Success', 'Classroom created successfully!');
         setClassName('');

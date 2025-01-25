@@ -5,6 +5,11 @@ const cors = require('cors');
 const ProfileRoutes=require('./Routes/ProfileRouter');
 const cookieParser = require('cookie-parser');
 
+const coursesAvailableRouter = require('./routes/CoursesAvailableRouter')
+const CreateClassRouter = require('./routes/CreateClassRouter')
+const JoinClassRouter = require('./routes/JoinClassRoute');
+const marksRouter = require('./routes/MarksRouter')
+
 const App = express();
 
 // Middleware
@@ -18,12 +23,17 @@ App.use(express.json());
 App.use(cookieParser());
 
 
-mongoose.connect('mongodb://127.0.0.1:27017/DB')
-  .then(() => {
-    console.log("Connected to MongoDB");
-
-  })
-  .catch(err => console.error("Could not connect to MongoDB", err));
+mongoose
+    .connect("mongodb://127.0.0.1:27017/DB", {
+        useNewUrlParser: true,
+        useUnifiedTopology: true
+    })
+    .then(() => {
+        console.log('Connected to MongoDB successfully!');
+    })
+    .catch((error) => {
+        console.error('Error connecting to MongoDB:', error.message);
+    });
 
 const conn = mongoose.connection;
 conn.on("error", (err) => console.error.bind(console, "DB connection error"));
@@ -31,6 +41,10 @@ conn.once('open', () => { console.log("Connected to DataBase.") });
 
 
 App.use('/api/Users', ProfileRoutes)
+App.use('/coursesAvailable', coursesAvailableRouter.router);
+App.use('/createClass', CreateClassRouter);
+App.use('/joinClass', JoinClassRouter);
+App.use('/marks', marksRouter);
 
 
 const PORT = 5000;

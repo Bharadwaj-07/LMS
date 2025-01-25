@@ -2,7 +2,8 @@ import * as React from 'react';
 import { SafeAreaView, ScrollView, View, StyleSheet, Alert } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import axios from 'axios';
-import data from '../env.js'
+import GLOBAL_CONFIG from './global_config';
+// import data from '../env.js'
 import {
     PaperProvider,
     Card,
@@ -10,6 +11,7 @@ import {
     Title,
     Paragraph,
 } from 'react-native-paper';
+
 
 const CardDetails = ({ course, instructor, id, fetchClasses }) => {
     const handlePress = () => {
@@ -24,7 +26,7 @@ const CardDetails = ({ course, instructor, id, fetchClasses }) => {
 
     const deleteClass = async (classId) => {
         try {
-            const response = await axios.delete(`http://${data.ip}:3000/createClass/${classId}/${userId}`);
+            const response = await axios.delete(`http://${GLOBAL_CONFIG}:3000/createClass/${classId}/${userId}`);
             console.log(response.data.message);
             Alert.alert('Success', 'Classroom deleted successfully!');
             fetchClasses()
