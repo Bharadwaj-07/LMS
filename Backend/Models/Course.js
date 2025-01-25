@@ -1,14 +1,14 @@
-const mongoose=require('mongoose')
+const mongoose = require('mongoose')
 const SchemaCourse = new mongoose.Schema({
     courseCode: {
         type: String,
         required: [true, "Course Code missing"],
         unique: true,  // Custom error message for validation
     },
-    courseName:{
+    courseName: {
         type: String,
-        required:[true, "Course Name missing"],
-        unique:true,
+        required: [true, "Course Name missing"],
+        unique: true,
     },
     instructors: {
         type: Array,
@@ -22,9 +22,9 @@ const SchemaCourse = new mongoose.Schema({
     description: {
         type: String,
     },
-    department:{
+    department: {
         type: String,
-        required:[true,"Department missing"]
+        required: [true, "Department missing"]
     },
     students: {
         type: Array,

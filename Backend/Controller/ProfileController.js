@@ -1,9 +1,9 @@
 const res = require("express/lib/response")
-const Persons = require("../Models/Profile")
+const Persons = require("../models/Profile")
 const jwt = require("jsonwebtoken");
-const LoginDetails = require("../Models/LoginDetails");
-const RefreshToken = require("../Models/RefreshToken");
-mongoose = require("mongoose");  
+const LoginDetails = require("../models/LoginDetails");
+const RefreshToken = require("../models/RefreshToken");
+mongoose = require("mongoose");
 require('dotenv').config();
 
 exports.availability = async (req, res) => {
@@ -34,14 +34,14 @@ exports.login = async (req, res) => {
     Uname = Uname.toLowerCase();
     try {
         const Person = await LoginDetails.findOne({ "Username": Uname });
-        console.log("preson",Person);
+        console.log("preson", Person);
         if (Person) {
-            
+
             if (Person.Password === password) {
                 const accessToken = jwt.sign({ Uname },
                     process.env.ACCESS_TOKEN_SECRET,
                     { expiresIn: '10s' });
-                const refreshToken = jwt.sign( {Uname}, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '1d' });
+                const refreshToken = jwt.sign({ Uname }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '1d' });
                 const tokenEntry = new RefreshToken({
                     token: refreshToken,
                     userId: Uname,
@@ -50,12 +50,12 @@ exports.login = async (req, res) => {
                 await tokenEntry.save();
 
                 return res.status(200)
-                .json({
-                    accessToken,
-                    refreshToken,
-                    message:'Login Successful',
-                    verified:true,
-                });
+                    .json({
+                        accessToken,
+                        refreshToken,
+                        message: 'Login Successful',
+                        verified: true,
+                    });
             }
             else {
                 return res.json({ verified: false });
@@ -72,7 +72,7 @@ exports.login = async (req, res) => {
 
 exports.store = async (req, res) => {
     console.log("Request received:", req.body);
-    let { Uname, password, Number, email, Age, College, Name, courses, DOB } = req.body;
+    let { Uname, password, Number, email, Age, College, Name, DOB } = req.body;
 
     Uname = Uname.toLowerCase();
     email = email.toLowerCase();
@@ -84,7 +84,6 @@ exports.store = async (req, res) => {
         age: Age,
         college: College,
         name: Name,
-        courses: courses,
         DOB: DOB,
     });
     const Login = new LoginDetails({
@@ -109,53 +108,53 @@ exports.store = async (req, res) => {
 exports.getCourses = async (req, res) => {
     // console.log(res);
     try {
-        console.log("Username",req.Uname);
+        console.log("Username", req.Uname);
         const courses = await Persons.findOne({ uname: req.uname.Uname });
-        console.log("Courses",courses);
+        console.log("Courses", courses);
         res.status(200).send(courses.courses);
     }
     catch (e) {
-        console.log("error at courses",e);
+        console.log("error at courses", e);
         res.status(500).send({ message: "Error fetching courses", error: e.message });
     }
 }
 exports.logout = async (req, res) => {
-    const {refreshToken}=req.body;
-    if(!refreshToken){
-        return res.status(400).json({message:"Logout"});
+    const { refreshToken } = req.body;
+    if (!refreshToken) {
+        return res.status(400).json({ message: "Logout" });
     }
-    try{
-        await RefreshToken.deleteOne({token:refreshToken});
-        res.status(200).json({message:"Logout Successful"});
+    try {
+        await RefreshToken.deleteOne({ token: refreshToken });
+        res.status(200).json({ message: "Logout Successful" });
     }
-    catch(e){
+    catch (e) {
         console.log(e);
-        res.status(500).json({message:"Error logging out",error:e.message});
+        res.status(500).json({ message: "Error logging out", error: e.message });
     }
 }
 exports.refresh = async (req, res) => {
 
     const user = req.body.uname;
-    const refreshToken=req.body.refreshToken;
-    console.log("User refresh:",user);
-    console.log("Refresh Token:",refreshToken);
-  if (!refreshToken) {
-    return res.status(400).json('Refresh Token is required');
-    
-  }
-  if (!await RefreshToken.findOne({ token: refreshToken })) {
-    return res.status(403).json('Invalid Refresh Token');
-  }
+    const refreshToken = req.body.refreshToken;
+    console.log("User refresh:", user);
+    console.log("Refresh Token:", refreshToken);
+    if (!refreshToken) {
+        return res.status(400).json('Refresh Token is required');
 
-  jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
-    if (err) {
-      return res.status(403).json('Invalid Refresh Token');
     }
-    const generateAccessToken = (user) => {
-      return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET);
-    };
-    // After successful verification, generate a new access token
-    const accessToken = generateAccessToken(user);
-    return res.json({ accessToken });
-  });
+    if (!await RefreshToken.findOne({ token: refreshToken })) {
+        return res.status(403).json('Invalid Refresh Token');
+    }
+
+    jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
+        if (err) {
+            return res.status(403).json('Invalid Refresh Token');
+        }
+        const generateAccessToken = (user) => {
+            return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET);
+        };
+        // After successful verification, generate a new access token
+        const accessToken = generateAccessToken(user);
+        return res.json({ accessToken });
+    });
 }

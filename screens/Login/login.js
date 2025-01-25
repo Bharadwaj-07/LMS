@@ -19,7 +19,7 @@ export default function LoginPage({ navigation }) {
       try {
         // Send the POST request to the backend API
         const response = await API.post(`http://${GLOBAL_CONFIG.SYSTEM_IP}:5000/api/Users/login`, { uname: UserName, passwd: password });
-        console.log("response received",response.data);
+        console.log("response received", response.data);
         AsyncStorage.setItem('access_token', response.data.accessToken);
         AsyncStorage.setItem('refresh_token', response.data.refreshToken);
 
@@ -29,7 +29,7 @@ export default function LoginPage({ navigation }) {
           setPassword("");
           setFailure(false);
           AsyncStorage.setItem('uname', UserName);
-          navigation.navigate("Home",UserName);
+          navigation.navigate("Home", UserName);
         }
         if (!response.data.verified) {
           console.log(failure);
@@ -62,15 +62,15 @@ export default function LoginPage({ navigation }) {
         />
 
         {/* Password Input */}
-        <View style={{width:"100%",alignItems:"center"}}>
-        <TextInput
-          style={styles.input}
-          placeholder="Enter Password"
-          secureTextEntry={!visible}
-          value={password}
-          onChangeText={setPassword}
-        />
-        <TouchableOpacity style={{alignItems:"center",position:"relative",alignItems:"left",marginBottom:10}} onPress={() => { setVisible(!visible) }}><Text>{visible ? 'Hide' : 'Show'}</Text></TouchableOpacity>
+        <View style={{ width: "100%", alignItems: "center" }}>
+          <TextInput
+            style={styles.input}
+            placeholder="Enter Password"
+            secureTextEntry={!visible}
+            value={password}
+            onChangeText={setPassword}
+          />
+          <TouchableOpacity style={{ alignItems: "center", position: "relative", alignItems: "left", marginBottom: 10 }} onPress={() => { setVisible(!visible) }}><Text>{visible ? 'Hide' : 'Show'}</Text></TouchableOpacity>
         </View>
         {(failure) && <Text style={styles.title}>Wrong Username or Password!!</Text>}
         {/*Forgot Password */}

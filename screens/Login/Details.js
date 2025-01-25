@@ -25,9 +25,8 @@ export default function Details({ route, navigation }) {
   const [Inputs, setInputs] = useState(false);
   const valid = () => { setVUser(true); }
   const [DOB, setDate] = useState(new Date());
-  const [courses, setCourses] = useState([]);
   const handleDetails = () => {
-    const validateAge = (selectedDate,Age) => {
+    const validateAge = (selectedDate, Age) => {
       const today = new Date();
       selectedDate = new Date(selectedDate);
 
@@ -41,8 +40,8 @@ export default function Details({ route, navigation }) {
 
       const correctedAge = isBirthdayPassedThisYear ? age : age - 1;
       console.log(Age);
-      console.log(correctedAge >= 17&&Age==correctedAge);
-      return (correctedAge >= 17&&Age==correctedAge); // Return true if the corrected age is 17 or above
+      console.log(correctedAge >= 17 && Age == correctedAge);
+      return (correctedAge >= 17 && Age == correctedAge); // Return true if the corrected age is 17 or above
     };
 
     const findAge = (selectedDate) => {
@@ -58,9 +57,10 @@ export default function Details({ route, navigation }) {
         (today.getMonth() === birthMonth && today.getDate() >= birthDay);
 
       const correctedAge = isBirthdayPassedThisYear ? age : age - 1;
-    return correctedAge};
-    let Age=(findAge(DOB));
-    
+      return correctedAge
+    };
+    let Age = (findAge(DOB));
+
     console.log("Clicked");
     let isValid = true;
     const UserDetails = {
@@ -70,10 +70,9 @@ export default function Details({ route, navigation }) {
       College,
       Number,
       Name,
-      courses,
       DOB,
     }
-    
+
     setVUser(true);
     () => { valid };
     if (!ValidateEmail(email)) {
@@ -114,7 +113,7 @@ export default function Details({ route, navigation }) {
     else {
       setVName(true);
     }
-    if (!validateAge(DOB,Age)) {
+    if (!validateAge(DOB, Age)) {
       seterror(true);
       isValid = false;
     }
