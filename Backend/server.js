@@ -2,7 +2,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const ProfileRoutes=require('./Routes/ProfileRouter');
+const ProfileRoutes=require('./routes/ProfileRouter');
+const AttendanceRoutes=require('./routes/AttendanceRouter');
 const cookieParser = require('cookie-parser');
 
 const App = express();
@@ -31,6 +32,7 @@ conn.once('open', () => { console.log("Connected to DataBase.") });
 
 
 App.use('/api/Users', ProfileRoutes)
+App.use('/api/Attendance', AttendanceRoutes)
 
 
 const PORT = 5000;

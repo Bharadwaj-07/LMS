@@ -1,4 +1,5 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
+const { refresh } = require('../Controller/ProfileController');
 const SchemaCourse = new mongoose.Schema({
     courseCode: {
         type: String,
@@ -27,7 +28,8 @@ const SchemaCourse = new mongoose.Schema({
         required: [true, "Department missing"]
     },
     students: {
-        type: Array,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'profiles'
     }
 });
 
