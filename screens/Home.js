@@ -4,35 +4,45 @@ import { GLOBAL_CONFIG } from '../components/global_config';
 import { Alert, Modal, Pressable } from 'react-native';
 import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
 import axios from "axios";
+import API from "../Middleware/API";
 import UserClass from "../components/classTab";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 export default function Home({navigation,route}) {
   const setModalVisibility = () => {
     setModalVisible(!modalVisible);
     setJoin(!join);
   }
+  console.log("User:",route.params);
   const[User,setUser]=useState(route.params);
   const [modalVisible, setModalVisible] = useState(false);
   const [join, setJoin] = useState(true);
   const courses=[];
-  const getUserCourses = async () => {
+  const getUserCourses = async (User) => {
     try {
-      const response = await axios.post(`http://${GLOBAL_CONFIG.SYSTEM_IP}:5000/api/Users/getCourses`, { 
+      const response = await API.post(`http://${GLOBAL_CONFIG.SYSTEM_IP}:5000/api/Users/getCourses`, { 
         uname: User
       });
       console.log("Courses:", response.data); // Log actual courses data
       return response.data; // Return the courses data if needed
     } catch (error) {
+      AsyncStorage.clear();
+      try{
+      await axios.post(`http://${GLOBAL_CONFIG.SYSTEM_IP}:5000/api/Users/logout`,{refreshToken:'None'});}
+      catch(error){
+        console.log("Error at logout:",error);
+      }
+      navigation.navigate("Login");
       console.error("Error fetching courses:", error); // Log errors
       throw error; // Re-throw the error if you need to handle it elsewhere
     }
   };
   //running the anonymous function is tricky
-  (async () => {
+  (async (User) => {
     try {
-      await getUserCourses();
+      await getUserCourses(User);
       console.log("Checking");
     } catch (error) {
-      console.error("Caught error:", error);
+      console.log("Caught error:", error);
     }
   })();
   return (<SafeAreaProvider>

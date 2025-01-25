@@ -14,7 +14,7 @@ export default function Details({ route, navigation }) {
   const [ValidEmail, setVEmail] = useState(true);
   const [Name, setName] = useState("");
   const [ValidName, setVName] = useState(true);
-  const [Age, setAge] = useState("");
+  // const [Age, setAge] = useState("");
   const [error, seterror] = useState(false);
   const [ValidAge, setVAge] = useState(true);
   const [College, setCollege] = useState("");
@@ -45,7 +45,22 @@ export default function Details({ route, navigation }) {
       return (correctedAge >= 17&&Age==correctedAge); // Return true if the corrected age is 17 or above
     };
 
+    const findAge = (selectedDate) => {
+      const today = new Date();
+      selectedDate = new Date(selectedDate);
 
+      const age = today.getFullYear() - selectedDate.getFullYear();
+      const birthMonth = selectedDate.getMonth();
+      const birthDay = selectedDate.getDate();
+
+      const isBirthdayPassedThisYear =
+        today.getMonth() > birthMonth ||
+        (today.getMonth() === birthMonth && today.getDate() >= birthDay);
+
+      const correctedAge = isBirthdayPassedThisYear ? age : age - 1;
+    return correctedAge};
+    let Age=(findAge(DOB));
+    
     console.log("Clicked");
     let isValid = true;
     const UserDetails = {
@@ -58,7 +73,7 @@ export default function Details({ route, navigation }) {
       courses,
       DOB,
     }
-
+    
     setVUser(true);
     () => { valid };
     if (!ValidateEmail(email)) {
@@ -148,10 +163,6 @@ export default function Details({ route, navigation }) {
           placeholder="Phone Number"
           Color={ValidNumber}></SubjectToAvailability>
 
-        <TextInput style={[styles.input, { borderColor: ValidAge ? 'white' : 'red' }]}
-          placeholder='age'
-          value={Age}
-          onChangeText={setAge}></TextInput>
 
         <TextInput style={[styles.input, { borderColor: ValidCollege ? 'white' : 'red' }]}
           placeholder='college'

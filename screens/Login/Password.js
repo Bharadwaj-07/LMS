@@ -15,6 +15,9 @@ export default function Password({ route, navigation }) {
     const [status, setStatus] = useState("");
     const Switching = async () => {
         const User = { ...UserDetails, password };
+        if (password === "" || passwordInput === "") {
+            return;
+        }
         try {
             // Send the POST request to the backend API
             const response = await axios.post(`http://${GLOBAL_CONFIG.SYSTEM_IP}:5000/api/Users/store`, { ...UserDetails,password: password});
@@ -25,7 +28,7 @@ export default function Password({ route, navigation }) {
         } catch (error) {
             // Handle error
             setStatus('Error saving data');
-            console.error('Error:', error);
+            console.error('Error here at saving:', error);
         }
         console.log(User)
         navigation.navigate("Login");

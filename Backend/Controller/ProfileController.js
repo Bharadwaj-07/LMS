@@ -1,6 +1,11 @@
 const res = require("express/lib/response")
 const Persons = require("../Models/Profile")
-mongoose = require("mongoose");
+const jwt = require("jsonwebtoken");
+const LoginDetails = require("../Models/LoginDetails");
+const RefreshToken = require("../Models/RefreshToken");
+mongoose = require("mongoose");  
+require('dotenv').config();
+
 exports.availability = async (req, res) => {
 
     let Name = req.body.Name;
@@ -25,13 +30,32 @@ exports.availability = async (req, res) => {
     }
 }
 exports.login = async (req, res) => {
-    let { uname:Uname, passwd:password } = req.body;
+    let { uname: Uname, passwd: password } = req.body;
     Uname = Uname.toLowerCase();
     try {
-        const Person = await Persons.findOne({ "uname": Uname });
+        const Person = await LoginDetails.findOne({ "Username": Uname });
+        console.log("preson",Person);
         if (Person) {
-            if (Person.password === password) {
-                return res.json({ verified: true });
+            
+            if (Person.Password === password) {
+                const accessToken = jwt.sign({ Uname },
+                    process.env.ACCESS_TOKEN_SECRET,
+                    { expiresIn: '10s' });
+                const refreshToken = jwt.sign( {Uname}, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '1d' });
+                const tokenEntry = new RefreshToken({
+                    token: refreshToken,
+                    userId: Uname,
+                    expiresAt: new Date(Date.now() + 86400000)
+                });
+                await tokenEntry.save();
+
+                return res.status(200)
+                .json({
+                    accessToken,
+                    refreshToken,
+                    message:'Login Successful',
+                    verified:true,
+                });
             }
             else {
                 return res.json({ verified: false });
@@ -48,35 +72,34 @@ exports.login = async (req, res) => {
 
 exports.store = async (req, res) => {
     console.log("Request received:", req.body);
-    let { Uname, password, Number, email, Age, College, Name,courses,DOB } = req.body;
+    let { Uname, password, Number, email, Age, College, Name, courses, DOB } = req.body;
 
     Uname = Uname.toLowerCase();
     email = email.toLowerCase();
-    college = College.toLowerCase();
+    College = College.toLowerCase();
     const User = new Persons({
         uname: Uname,
-        password: password,
         number: Number,
         email: email,
         age: Age,
         college: College,
         name: Name,
-        courses:courses,
-        DOB:DOB,
+        courses: courses,
+        DOB: DOB,
     });
-    console.log({
-        uname: Uname,
-        password: password,
-        number: Number,
-        email: email,
-        age: Age,
-        college: College,
-        name: Name,
+    const Login = new LoginDetails({
+        Username: Uname,
+        Password: password,
     });
+    console.log("login details:", Login);
+
     try {
         console.log("Attempting to save user:", User);
         await User.save();
         console.log("User saved successfully");
+        console.log("Attempting to save user:", Login);
+        await Login.save();
+        console.log("Login details saved successfully");
         res.status(200).send({ message: "User details saved successfully" });
     } catch (error) {
         console.error("Error saving user:", error);
@@ -84,12 +107,55 @@ exports.store = async (req, res) => {
     }
 }
 exports.getCourses = async (req, res) => {
+    // console.log(res);
     try {
-        const courses = await Persons.findOne({uname:req.uname});
-        res.status(200).send(courses);
+        console.log("Username",req.Uname);
+        const courses = await Persons.findOne({ uname: req.uname.Uname });
+        console.log("Courses",courses);
+        res.status(200).send(courses.courses);
     }
     catch (e) {
-        console.log(e);
+        console.log("error at courses",e);
         res.status(500).send({ message: "Error fetching courses", error: e.message });
     }
+}
+exports.logout = async (req, res) => {
+    const {refreshToken}=req.body;
+    if(!refreshToken){
+        return res.status(400).json({message:"Logout"});
+    }
+    try{
+        await RefreshToken.deleteOne({token:refreshToken});
+        res.status(200).json({message:"Logout Successful"});
+    }
+    catch(e){
+        console.log(e);
+        res.status(500).json({message:"Error logging out",error:e.message});
+    }
+}
+exports.refresh = async (req, res) => {
+
+    const user = req.body.uname;
+    const refreshToken=req.body.refreshToken;
+    console.log("User refresh:",user);
+    console.log("Refresh Token:",refreshToken);
+  if (!refreshToken) {
+    return res.status(400).json('Refresh Token is required');
+    
+  }
+  if (!await RefreshToken.findOne({ token: refreshToken })) {
+    return res.status(403).json('Invalid Refresh Token');
+  }
+
+  jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
+    if (err) {
+      return res.status(403).json('Invalid Refresh Token');
+    }
+    const generateAccessToken = (user) => {
+      return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET);
+    };
+    // After successful verification, generate a new access token
+    const accessToken = generateAccessToken(user);
+    return res.json({ accessToken });
+  });
 }

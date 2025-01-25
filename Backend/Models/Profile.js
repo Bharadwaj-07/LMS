@@ -9,10 +9,6 @@ const SchemaProfile = new mongoose.Schema({
         type: String,
         required:[true, ""],
     },
-    password: {
-        type: String,
-        required: [true, "Enter a valid password"],
-    },
     age: {
         type: Number,
         required: [true, ""],

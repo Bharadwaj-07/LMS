@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, Image, ImageBackground, TextInput, TouchableOpacity, Alert, Form } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import axios from "axios"
+import API from '../../Middleware/API';
 import { GLOBAL_CONFIG } from '../../components/global_config';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 export default function LoginPage({ navigation }) {
   const [UserName, setUname] = useState('');
   const [password, setPassword] = useState('');
   const [authenticate, setAuthenticate] = useState(false);
   const [failure, setFailure] = useState(false);
   const [visible, setVisible] = useState(false);
+  const [status, setStatus] = useState("");
   const ForgotPassword = () => {
     Alert.alert("Please contact the concerned TA");
   };
@@ -17,13 +18,17 @@ export default function LoginPage({ navigation }) {
     if (password != "" && UserName != "") {
       try {
         // Send the POST request to the backend API
-        const response = await axios.post(`http://${GLOBAL_CONFIG.SYSTEM_IP}:5000/api/Users/login`, { uname: UserName, passwd: password });
-        console.log(response.data);
+        const response = await API.post(`http://${GLOBAL_CONFIG.SYSTEM_IP}:5000/api/Users/login`, { uname: UserName, passwd: password });
+        console.log("response received",response.data);
+        AsyncStorage.setItem('access_token', response.data.accessToken);
+        AsyncStorage.setItem('refresh_token', response.data.refreshToken);
+
         setAuthenticate(response.data.verified);
         if (response.data.verified) {
           setUname("");
           setPassword("");
           setFailure(false);
+          AsyncStorage.setItem('uname', UserName);
           navigation.navigate("Home",UserName);
         }
         if (!response.data.verified) {

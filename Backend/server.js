@@ -3,12 +3,17 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const ProfileRoutes = require('./Routes/ProfileRouter');
+const cookieParser = require('cookie-parser');
 
 const App = express();
 
 // Middleware
-App.use(cors());
+App.use(cors({origin: 'http://localhost:8081',
+  credentials: true,}
+));
+
 App.use(express.json());
+App.use(cookieParser());
 
 // Connect to MongoDB without deprecated options
 mongoose.connect('mongodb://127.0.0.1:27017/DB')
