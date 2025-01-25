@@ -9,6 +9,9 @@ const CreateClass = () => {
   const [subjectName, setSubjectName] = useState('');
   const [instructorName, setInstructorName] = useState('');
 
+  // code to extract userID
+  const userId = "user1";
+
   const handleSubmit = async () => {
     if (!className || !subjectName || !instructorName) {
       Alert.alert('Error', 'All fields are required!');
@@ -19,6 +22,7 @@ const CreateClass = () => {
       className,
       subjectName,
       instructorName,
+      userId
     };
 
     try {

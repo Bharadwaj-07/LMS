@@ -20,9 +20,11 @@ const CardDetails = ({ course, instructor, id, fetchClasses }) => {
         console.log('Card long-pressed');
     };
 
+    const userId = "user1";
+
     const deleteClass = async (classId) => {
         try {
-            const response = await axios.delete(`http://${data.ip}:3000/createClass/${classId}`);
+            const response = await axios.delete(`http://${data.ip}:3000/createClass/${classId}/${userId}`);
             console.log(response.data.message);
             Alert.alert('Success', 'Classroom deleted successfully!');
             fetchClasses()

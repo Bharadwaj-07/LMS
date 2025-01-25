@@ -1,6 +1,10 @@
 const mongoose = require('mongoose');
 
 const classSchema = new mongoose.Schema({
+    userId: {
+        type: String,
+        required: true,
+    },
     className: {
         type: String,
         required: true,

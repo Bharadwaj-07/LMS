@@ -24,16 +24,11 @@ const CoursesAvailable = () => {
                 setLoading(false);
             });
     };
-    // useEffect(() => {
-    //     if (CheckNewClass) {
-    //         fetchCourses();
-    //     }
-    // }, [CheckNewClass]);
 
     useFocusEffect(
         React.useCallback(() => {
-            fetchCourses(); // Fetch classes when the screen gains focus
-        }, []) // Empty dependency array means it triggers every time the screen is focused
+            fetchCourses();
+        }, [])
     );
 
 
@@ -61,7 +56,7 @@ const CoursesAvailable = () => {
                         key={course._id}
                         course={course.subject}
                         instructor={course.instructor}
-                        courseId={course.courseId}
+                        courseId={course._id}
                     />
                 ))}
             </ScrollView>

@@ -11,10 +11,11 @@ const CoursesEnrolled = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
+    const userId = "user2";
 
     const fetchClasses = () => {
         console.log(data.ip)
-        axios.get(`http://${data.ip}:3000/createClass`)
+        axios.get(`http://${data.ip}:3000/createClass/${userId}`)
             .then((response) => {
                 console.log(response.data)
                 setClasses(response.data);

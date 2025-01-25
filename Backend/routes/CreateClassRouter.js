@@ -5,9 +5,9 @@ const Course = require('../models/CoursesAvailableModel');
 const router = express.Router();
 
 router.post('/', async (req, res) => {
-    const { className, subjectName, instructorName } = req.body;
+    const { className, subjectName, instructorName, userId } = req.body;
 
-    if (!className || !subjectName || !instructorName) {
+    if (!className || !subjectName || !instructorName || !userId) {
         return res.status(400).json({ error: 'All fields are required!' });
     }
 
@@ -16,14 +16,16 @@ router.post('/', async (req, res) => {
             className,
             subjectName,
             instructorName,
+            userId
         });
 
         const savedClass = await newClass.save();
 
         const newCourse = new Course({
-            courseId: savedClass._id,
+            classId: savedClass._id,
             instructor: instructorName,
             subject: subjectName,
+            userId
         });
 
         const savedCourse = await newCourse.save();
@@ -39,26 +41,31 @@ router.post('/', async (req, res) => {
     }
 });
 
-router.get('/', async (req, res) => {
+router.get('/:userId', async (req, res) => {
+    const userId = req.params.userId;
+    console.log(userId)
     try {
-        const classes = await Class.find();
+        const classes = await Class.find({ userId });
+        console.log(classes)
         res.status(200).json(classes);
     } catch (err) {
         res.status(500).json({ message: 'Error fetching classes', error: err.message });
     }
 });
 
-router.delete('/:id', async (req, res) => {
-    const classId = req.params.id;
-    console.log(classId)
+router.delete('/:classId/:userId', async (req, res) => {
+    const { classId, userId } = req.params;
 
     try {
+        console.log('Params:', { classId, userId });
+
         const deletedClass = await Class.findByIdAndDelete(classId);
 
         if (!deletedClass) {
             return res.status(404).json({ error: 'Class not found' });
         }
-        const deletedCourse = await Course.findOneAndDelete({ courseId: classId });
+
+        const deletedCourse = await Course.findOneAndDelete({ classId, userId });
 
         if (!deletedCourse) {
             return res.status(404).json({ error: 'Course not found' });
@@ -70,10 +77,11 @@ router.delete('/:id', async (req, res) => {
             course: deletedCourse,
         });
     } catch (error) {
-        console.error(error);
+        console.error('Error during deletion:', error);
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });
+
 
 
 module.exports = router;

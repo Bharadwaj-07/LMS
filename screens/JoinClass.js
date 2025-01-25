@@ -1,26 +1,31 @@
 import React, { useState } from 'react';
 import { View, TextInput, Text, StyleSheet, Alert, TouchableOpacity } from 'react-native';
 import axios from 'axios';
+import data from '../env.js'
 import { FontAwesome } from '@expo/vector-icons';
 
 const JoinClass = () => {
-    const [classCode, setClassCode] = useState('');
+    const [classId, setClassId] = useState('');
+    const [username, setusername] = useState('');
     const [loading, setLoading] = useState(false);
+
+    const userId = 'user2';
+
     const join = async () => {
-        if (!classCode) {
-            Alert.alert('Error', 'Please enter a class code!');
+        if (!classId || !username) {
+            Alert.alert('Error', 'Please enter all fields!');
             return;
         }
 
         setLoading(true);
 
         try {
-            const response = await axios.post('http://', {
-                classCode,
+            const response = await axios.post(`http://${data.ip}:3000/joinClass/join`, {
+                classId, username, userId
             });
-            if (response.status === 200) {
-                Alert.alert('Success', 'You have successfully joined the class!');
-            }
+            Alert.alert('Success', 'You have successfully joined the class!');
+            setClassId('');
+            setusername('');
         } catch (error) {
             Alert.alert('Error', 'Unable to join the class. Please try again.');
         } finally {
@@ -40,8 +45,22 @@ const JoinClass = () => {
                     <TextInput
                         style={styles.input}
                         placeholder="Enter Class Code"
-                        value={classCode}
-                        onChangeText={setClassCode}
+                        value={classId}
+                        onChangeText={setClassId}
+                        keyboardType="default"
+                    />
+                </View>
+            </View>
+
+            <View style={styles.fieldContainer}>
+                <Text style={styles.label}>Name</Text>
+                <View style={styles.inputContainer}>
+                    <FontAwesome name="building" size={20} color="#3C0A6B" />
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Name"
+                        value={username}
+                        onChangeText={setusername}
                         keyboardType="default"
                     />
                 </View>
