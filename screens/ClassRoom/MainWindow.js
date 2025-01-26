@@ -7,6 +7,7 @@ import { GLOBAL_CONFIG } from '../../components/global_config';
 
 export default function MainWindow({ navigation, route }) {
     const course = route.params;
+    console.log(course);
     const [userId, setUserId] = useState(null);
 
     // Fetch user ID from AsyncStorage when the component mounts

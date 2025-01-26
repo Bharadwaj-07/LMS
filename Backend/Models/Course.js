@@ -20,7 +20,7 @@ const SchemaCourse = new mongoose.Schema({
         ref: 'profiles'
     }]
 });
-
+SchemaCourse.index({ courseCode: 1,courseName:1 }, { unique: true });
 // Create the model based on the schema
 module.exports = mongoose.model('courses', SchemaCourse);
 

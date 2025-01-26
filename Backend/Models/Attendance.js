@@ -5,13 +5,13 @@ const Attendance = new mongoose.Schema({
         required: [true, "Date is required"],
     },
     course:{
-        type:mongoose.Schema.Types.ObjectId,
+        type:String,
         required:true,
-        ref:'courses'
     },
-    attendance:[{
-        type:mongoose.Schema.Types.ObjectId,
-        ref:'profiles'
-    }]
+    attendance:{
+        type:Array,
+        required:true,
+    }
 });
+Attendance.index({date:1,course:1},{unique:true});
 module.exports = mongoose.model('Attendance', Attendance);

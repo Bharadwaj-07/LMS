@@ -3,17 +3,14 @@ const jwt = require("jsonwebtoken");
 const Attendance = require("../models/Attendance");
 const Admins = require("../models/Admins");
 const Courses = require("../models/Course");
+const Profile = require("../models/Profile");
 mongoose = require("mongoose");
 require('dotenv').config();
 
 exports.getDates = async (req, res) => {
     const { course } = req.body;
     try {
-        const courseDetails = await Courses.findOne({ courseCode: course });
-        console.log(courseDetails);
-        const courseId = new mongoose.Types.ObjectId('6794f930d83cb1cfc2cb0cfa');
-        console.log(courseId);
-        const dates = await Attendance.find({ course: courseId });
+        const dates = await Attendance.find({ course: course });
         console.log(dates);
         return res.json(dates);
     }
@@ -39,16 +36,24 @@ exports.checkAdmin = async (req, res) => {
 }
 exports.getAttendance = async (req, res) => {
     const { date, course } = req.query;
-    console.log("date", date);
+    console.log("date", req.query);
     try {
-        const courseId = new mongoose.Types.ObjectId('6794f930d83cb1cfc2cb0cfa');
-        const Record = await Attendance.find({ date: date, course: courseId }).populate('attendance', 'name');
+        const Record = await Attendance.find({ date: date, course: course }).populate('attendance');
         if (Record.length == 0) {
             return res.status(400).json({ message: "No attendance found" });
         }
-        const names = Record[0].attendance.map((item) => item.name);
-        console.log(Record);
-        return res.json(names);
+        const userIds = Record[0].attendance.map((item) => item);
+        console.log("UserIds", userIds);
+        // Fetch user profiles for the given IDs using Promise.all
+        const profiles = await Promise.all(userIds.map(async (id) => {
+            const profile = await Profile.findById(id).select('name');
+            return profile ? profile.name : null;
+        }));
+
+        console.log("Names:", profiles);
+        
+        // Return the list of names
+        return res.json(profiles);
     }
     catch (e) {
         console.log(e);
@@ -56,19 +61,25 @@ exports.getAttendance = async (req, res) => {
 }
 exports.getUsers = async (req, res) => {
     const { course } = req.body;
+    console.log("Course at attendance", course);
     try {
-        const users = await Courses.find({ course: course }).populate('students', 'name');
-        const names = users.students.map((item) => item.name);
-        console.log(names);
-        return res.json(names);
-    }
-    catch (e) {
-        console.log(e);
-    }
+        const users = await Courses.find({ courseCode: course }).populate('students', 'name');
+        console.log("Users", users);
 
-}
+        // Extract the list of students
+        const studentsList = users.flatMap(user => user.students); // Flatten to a single array
+        console.log("Extracted Students:", studentsList);
+
+        return res.json(studentsList);
+    } catch (e) {
+        console.log(e);
+        return res.status(500).json({ error: 'An error occurred while fetching users' });
+    }
+};
+
 exports.SetAttendance = async (req, res) => {
     const { date, course, attendance } = req.body;
+    console.log("Date", date);
     try {
         const Record = await Attendance.findOne({ date: date, course: course });
         if (Record) {

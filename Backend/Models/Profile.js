@@ -39,7 +39,7 @@ const SchemaProfile = new mongoose.Schema({
         required: true
     }
 });
-
+SchemaProfile.index({ uname: 1, email: 1 }, { unique: true });
 // Create the model based on the schema
 module.exports = mongoose.model('profiles', SchemaProfile);
 

@@ -7,8 +7,9 @@ import axios from "axios";
 import API from "../../Middleware/API";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 export default function Dates({navigation,route}){
+    const course=route.params.course;
+    console.log(route.params);
         const HandleAttendance=()=>{};
-        const course='CS101';
         const [dates,setDates]=useState([]);
         const getDates=async()=>{
                 try {
@@ -34,7 +35,7 @@ export default function Dates({navigation,route}){
                                     key={item.date}
                                     style={styles.button}
                                     onPress={() => {
-                                        navigation.navigate('Present', { course: course, date: item });
+                                        navigation.navigate('Present', { course: course, date: item.date });
                                     }}
                                 >
                                     <Text style={styles.buttonText}>{item.date}</Text>

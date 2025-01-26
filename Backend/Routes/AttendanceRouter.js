@@ -24,5 +24,5 @@ router.post("/dates", getDates);
 router.post("/students", getUsers);
 router.get("/attendance", getAttendance);
 router.post("/Admin",checkAdmin);
-router.post("/attendance", AuthenticateToken,SetAttendance);
+router.post("/attendance",SetAttendance);
 module.exports = router

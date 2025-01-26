@@ -13,7 +13,7 @@ export default function AttendanceDate({navigation,route}){
     const getStudents=async()=>{
         try {
             const response = await axios.get(`http://${GLOBAL_CONFIG.SYSTEM_IP}:5000/api/Attendance/attendance`,{params:{ course: course,
-              date: date.date
+              date: date
             }});
             console.log("Students:", response.data); // Log actual courses data
             setStudents(response.data);
@@ -28,7 +28,7 @@ export default function AttendanceDate({navigation,route}){
     return (<SafeAreaView>
         <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
             {students.map(student=>(
-                <View>
+                <View key={student}>
                     <Text>{student}</Text>
                 </View>))}
            </ScrollView>

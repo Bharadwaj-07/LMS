@@ -10,4 +10,5 @@ const Admins = new mongoose.Schema({
         required:true,
     }]
 });
+Admins.index({course:1},{unique:true});
 module.exports = mongoose.model('Admins', Admins);

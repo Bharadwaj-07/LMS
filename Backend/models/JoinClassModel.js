@@ -25,5 +25,5 @@ const joinClassSchema = new mongoose.Schema(
         timestamps: true,
     }
 );
-
+joinClassSchema.index({ userId: 1, classId: 1 }, { unique: true });
 module.exports = mongoose.model('JoinClass', joinClassSchema);

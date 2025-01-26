@@ -17,7 +17,7 @@ const courseSchema = new mongoose.Schema({
     collection: 'coursesAvailable',
     timestamps: true
 });
-
+courseSchema.index({ classId: 1, subject: 1 }, { unique: true });
 const Course = mongoose.model('Course', courseSchema);
 
 module.exports = Course;
