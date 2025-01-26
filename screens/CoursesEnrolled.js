@@ -12,20 +12,8 @@ const CoursesEnrolled = ({navigation}) => {
     const [classes, setClasses] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-
-    const findAdmin = async(className) => {
-        const userId = await AsyncStorage.getItem('uname');
-        try{
-        const response = await axios.post(`http://${GLOBAL_CONFIG.SYSTEM_IP}:5000/api/Attendance/Admin`, {
-            className,
-            userId,
-        });return(response.data.admin);}
-        catch (error) {
-            console.error("Error fetching admin data:", error);
-            Alert.alert("Error", "Unable to fetch admin data.");
-        }return ;
-
-    }
+    const [admin, setAdminData] = useState({});
+    
 
     const fetchClasses = async () => {
         // console.log(data.ip)
@@ -42,11 +30,11 @@ const CoursesEnrolled = ({navigation}) => {
             });
     };
 
-    useFocusEffect(
-        React.useCallback(() => {
-            fetchClasses();
-        }, [])
-    );
+        useFocusEffect(
+            React.useCallback(() => {
+                fetchClasses();
+            }, [])
+        );
 
 
     if (loading) {
@@ -76,19 +64,11 @@ const CoursesEnrolled = ({navigation}) => {
                         id={classItem._id}
                         fetchClasses={fetchClasses}
                         navigation={navigation}
-                        admin={()=>{findAdmin(classItem.className)}}
+
 
                     />
 
                 ))}
-                                    <CardDetails
-                        key={'sdfsfs'}
-                        course={"CS101"}
-                        instructor={"Prof. XYZ"}
-                        id={"123"}
-                        fetchClasses={fetchClasses}
-                        navigation={navigation}
-                        admin={false}/>
             </ScrollView>
         </View>
     );

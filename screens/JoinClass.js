@@ -4,29 +4,33 @@ import axios from 'axios';
 // import data from '../env.js'
 import { FontAwesome } from '@expo/vector-icons';
 import { GLOBAL_CONFIG } from '../components/global_config';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 const JoinClass = () => {
     const [classId, setClassId] = useState('');
-    const [username, setusername] = useState('');
+    const [username, setUsername] = useState('');
     const [loading, setLoading] = useState(false);
 
-    const userId = 'user2';
+    
 
     const join = async () => {
+        userId = await AsyncStorage.getItem('uname');
+        console.log("UserID",userId);
+        console.log("Trying to join a class");
         if (!classId || !username) {
             Alert.alert('Error', 'Please enter all fields!');
             return;
         }
-
+        console.log("Trying to join a class");
         setLoading(true);
 
         try {
-            const response = await axios.post(`http://${GLOBAL_CONFIG}:3000/joinClass/join`, {
+            console.log("Trying to join a class");
+            const response = await axios.post(`http://${GLOBAL_CONFIG.SYSTEM_IP}:5000/joinClass/join`, {
                 classId, username, userId
             });
             Alert.alert('Success', 'You have successfully joined the class!');
             setClassId('');
-            setusername('');
+            setUsername('');
         } catch (error) {
             Alert.alert('Error', 'Unable to join the class. Please try again.');
         } finally {
@@ -61,16 +65,16 @@ const JoinClass = () => {
                         style={styles.input}
                         placeholder="Name"
                         value={username}
-                        onChangeText={setusername}
+                        onChangeText={setUsername}
                         keyboardType="default"
                     />
                 </View>
             </View>
 
 
-            <TouchableOpacity style={styles.button} onPress={join}>
-                <Text style={styles.buttonText}>Join</Text>
-            </TouchableOpacity>
+           <TouchableOpacity style={styles.button} onPress={join}>
+                   <Text style={styles.buttonText}>Join</Text>
+                 </TouchableOpacity>
         </View>
 
     );

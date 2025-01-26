@@ -1,24 +1,43 @@
 const express = require('express');
 const router = express.Router();
 const JoinClass = require('../models/JoinClassModel');
-
+const Profile = require('../models/Profile');
+const CourseModel = require('../models/Course');
 router.post('/join', async (req, res) => {
     const { userId, classId, username } = req.body;
-    console.log("join post router")
-    console.log(req.body)
-
+    console.log("join post router");
+    console.log(req.body);
+    console.log(userId);
     if (!userId || !classId || !username) {
         return res.status(400).json({ message: 'Missing required fields' });
     }
 
     try {
-        console.log("hello")
+        console.log("hello");
+
+        // Create a new JoinClass instance
         const newJoin = new JoinClass({ userId, classId, username });
-        console.log(newJoin)
+        console.log(newJoin);
         const savedJoin = await newJoin.save();
+        const user = userId.toLowerCase();
+
+        const student=await Profile.findOne({uname:user});
+        console.log(student);
+        console.log(student._id);
+        console.log(classId);
+        // Update the students array in the Course model
+        const updatedCourse = await CourseModel.findOneAndUpdate(
+            { courseCode: classId }, 
+            { $addToSet: { students: student._id } }, 
+            { new: true }
+        );
+        console.log(updatedCourse);
+        if (!updatedCourse) {
+            return res.status(404).json({ message: 'Course not found for the given classId' });
+        }
 
         res.status(201).json({
-            message: 'User successfully joined the class',
+            message: 'User successfully joined the class and added to the course',
             data: savedJoin,
         });
     } catch (error) {
@@ -32,7 +51,6 @@ router.get('/class/:classId', async (req, res) => {
 
     try {
         const usersInClass = await JoinClass.find({ classId }).populate('userId', 'username');
-
         if (!usersInClass || usersInClass.length === 0) {
             return res.status(404).json({ message: 'No users found in this class' });
         }

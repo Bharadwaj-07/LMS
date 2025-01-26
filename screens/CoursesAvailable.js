@@ -56,7 +56,7 @@ const CoursesAvailable = () => {
                         key={course._id}
                         course={course.subject}
                         instructor={course.instructor}
-                        courseId={course._id}
+                        courseId={course.classId}
                         
                     />
                 ))}

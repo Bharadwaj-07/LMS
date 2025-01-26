@@ -1,8 +1,10 @@
 import * as React from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useState,useEffect } from 'react';
 import { SafeAreaView, ScrollView, View, StyleSheet, Alert } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import axios from 'axios';
-import GLOBAL_CONFIG from './global_config';
+import { GLOBAL_CONFIG } from './global_config';
 // import data from '../env.js'
 import {
     PaperProvider,
@@ -13,12 +15,34 @@ import {
 } from 'react-native-paper';
 
 
-const CardDetails = ({ course, instructor, id, fetchClasses,navigation,admin }) => {
+const CardDetails = ({ course, instructor, id, fetchClasses,navigation }) => {
     const handlePress = () => {
         console.log('Card pressed');
         navigation.navigate('Classroom',  course );
     };
+    const [admin,setAdminData]=React.useState(false);
+    const findAdmin = async() => {
+        
+        const userId = await AsyncStorage.getItem('uname');
+        const user=userId.toLowerCase();
+        console.log("User",user);
+        try{
+        const response = await axios.post(`http://${GLOBAL_CONFIG.SYSTEM_IP}:5000/api/Attendance/Admin`, {
+            course,
+            user,
+        });
+        console.log(response.data.admin);
+        setAdminData(response.data.admin);
+        return(response.data.admin);}
+        catch (error) {
+            console.error("Error fetching admin data:", error);
+            Alert.alert("Error", "Unable to fetch admin data.");
+        }
+        return false;
 
+    }
+    useEffect(() => {
+        findAdmin();}, []);
     const handleLongPress = () => {
         console.log('Card long-pressed');
     };

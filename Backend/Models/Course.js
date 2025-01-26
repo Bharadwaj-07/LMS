@@ -15,22 +15,10 @@ const SchemaCourse = new mongoose.Schema({
         type: Array,
         required: [true, "Instructor missing"],
     },
-    credits: {
-        type: Number,
-        required: [true, "Credits value missing"],
-        min: 1
-    },
-    description: {
-        type: String,
-    },
-    department: {
-        type: String,
-        required: [true, "Department missing"]
-    },
-    students: {
+    students: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'profiles'
-    }
+    }]
 });
 
 // Create the model based on the schema

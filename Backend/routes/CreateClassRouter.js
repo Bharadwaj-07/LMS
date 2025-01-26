@@ -1,16 +1,18 @@
 const express = require('express');
 const Class = require('../models/CreateClassModel');
 const Course = require('../models/CoursesAvailableModel');
-const Admin=require('../models/Admins');
+const Admin = require('../models/Admins');
+const JoinClass = require('../models/JoinClassModel');
 const router = express.Router();
-
+const CourseModel = require('../models/Course');
 router.post('/', async (req, res) => {
-    const { className, subjectName, instructorName, userId } = req.body;
-
-    if (!className || !subjectName || !instructorName || !userId) {
+    const { className, subjectName, instructorName, user } = req.body;
+    console.log(req.body);
+    if (!className || !subjectName || !instructorName || !user) {
         return res.status(400).json({ error: 'All fields are required!' });
     }
-
+    const userId = user.toLowerCase();
+    console.log("User", userId);
     try {
         const newClass = new Class({
             className,
@@ -18,15 +20,22 @@ router.post('/', async (req, res) => {
             instructorName,
             userId
         });
-        const admin=new Admin({
-            course:className,
-            Admins:[userId]
+        const admin = new Admin({
+            course: className,
+            Admins: [userId]
         });
+        const course = new CourseModel({
+            courseCode: className,
+            courseName: subjectName,
+            instructors: [instructorName],
+            students: []
+        });
+        const saveCourse = await course.save();
         const savedClass = await newClass.save();
-        const savedAdmin=await admin.save();
+        const savedAdmin = await admin.save();
 
         const newCourse = new Course({
-            classId: savedClass._id,
+            classId: className,
             instructor: instructorName,
             subject: subjectName,
             userId
@@ -39,7 +48,9 @@ router.post('/', async (req, res) => {
             class: savedClass,
             course: savedCourse,
         });
-    } catch (error) {
+    }
+    catch (error) {
+        console.error("error");
         console.error(error);
         res.status(500).json({ error: 'Internal Server Error' });
     }
@@ -47,11 +58,22 @@ router.post('/', async (req, res) => {
 
 router.post('/user', async (req, res) => {
     const userId = req.body.userId;
-    console.log("user",userId)
+    console.log("user fetching", userId)
     try {
-        const classes = await Class.find({ userId:userId });
-        console.log(classes)
-        res.status(200).json(classes);
+        const classes = await Class.find({ userId: userId });
+        const joinClasses = await JoinClass.find({ userId: userId })
+            .populate('classId', 'classId')
+            .select('classId');
+
+        const classIds = joinClasses.map(joinClass => joinClass.classId);
+
+        console.log(classIds);
+        let classId = ["CS 201"];
+
+        const memberClasses = await Class.find({ className: { $in: classId } });
+        const mergedClasses = [...classes, ...memberClasses];
+        console.log(memberClasses, "Members");
+        res.status(200).json(mergedClasses);
     } catch (err) {
         res.status(500).json({ message: 'Error fetching classes', error: err.message });
     }
