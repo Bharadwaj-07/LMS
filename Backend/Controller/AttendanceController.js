@@ -23,7 +23,7 @@ exports.getDates = async (req, res) => {
 }
 exports.checkAdmin = async (req, res) => {
     const course=req.body.course;
-    const userId = req.body.userId;
+    const userId = req.body.user;
     console.log("body",req.body);
     try {
         const courseDetails = await Admins.findOne({ course: course });

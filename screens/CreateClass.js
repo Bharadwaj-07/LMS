@@ -18,7 +18,8 @@ const CreateClass = () => {
       Alert.alert('Error', 'All fields are required!');
       return;
     }
-    const userId = await AsyncStorage.getItem('uname'); ;
+    const user = await AsyncStorage.getItem('uname'); 
+    const userId = user.toLowerCase();
   console.log("Uname",userId);
     const payload = {
       className,
@@ -28,6 +29,7 @@ const CreateClass = () => {
     };
 
     try {
+      console.log("Entering to create class",userId);
       const response = await axios.post(`http://${GLOBAL_CONFIG.SYSTEM_IP}:5000/createClass`, payload);
       if (response.status === 201) {
         Alert.alert('Success', 'Classroom created successfully!');

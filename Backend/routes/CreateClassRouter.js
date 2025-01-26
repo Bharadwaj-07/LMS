@@ -6,12 +6,12 @@ const JoinClass = require('../models/JoinClassModel');
 const router = express.Router();
 const CourseModel = require('../models/Course');
 router.post('/', async (req, res) => {
-    const { className, subjectName, instructorName, user } = req.body;
+    let { className, subjectName, instructorName, userId } = req.body;
     console.log(req.body);
-    if (!className || !subjectName || !instructorName || !user) {
+    if (!className || !subjectName || !instructorName || !userId) {
         return res.status(400).json({ error: 'All fields are required!' });
     }
-    const userId = user.toLowerCase();
+    userId = userId.toLowerCase();
     console.log("User", userId);
     try {
         const newClass = new Class({
@@ -35,7 +35,7 @@ router.post('/', async (req, res) => {
         const savedAdmin = await admin.save();
 
         const newCourse = new Course({
-            classId: className,
+            classId: className, 
             instructor: instructorName,
             subject: subjectName,
             userId
@@ -50,7 +50,7 @@ router.post('/', async (req, res) => {
         });
     }
     catch (error) {
-        console.error("error");
+        console.log("error");
         console.error(error);
         res.status(500).json({ error: 'Internal Server Error' });
     }

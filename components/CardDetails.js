@@ -1,6 +1,6 @@
 import * as React from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useState,useEffect } from 'react';
+import { useState,useEffect,useFocusEffect } from 'react';
 import { SafeAreaView, ScrollView, View, StyleSheet, Alert } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import axios from 'axios';
@@ -41,8 +41,8 @@ const CardDetails = ({ course, instructor, id, fetchClasses,navigation }) => {
         return false;
 
     }
-    useEffect(() => {
-        findAdmin();}, []);
+
+        findAdmin();
     const handleLongPress = () => {
         console.log('Card long-pressed');
     };

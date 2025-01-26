@@ -28,10 +28,11 @@ export default function MainWindow({ navigation, route }) {
             return;
         }
         try {
+            const user = userId.toLowerCase();
             console.log(userId,course);
             const response = await axios.post(`http://${GLOBAL_CONFIG.SYSTEM_IP}:5000/api/Attendance/Admin`, {
                 course,
-                userId,
+                user,
             });
             if (response.data.admin) {
                 navigation.navigate('Dates', { course: route.params });

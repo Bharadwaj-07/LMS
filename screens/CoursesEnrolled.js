@@ -16,7 +16,6 @@ const CoursesEnrolled = ({navigation}) => {
     
 
     const fetchClasses = async () => {
-        // console.log(data.ip)
         const userId = await AsyncStorage.getItem('uname');
         axios.post(`http://${GLOBAL_CONFIG.SYSTEM_IP}:5000/createClass/user`,{userId:userId})
             .then((response) => {
