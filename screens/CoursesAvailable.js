@@ -14,7 +14,7 @@ const CoursesAvailable = () => {
 
     const fetchCourses = () => {
         console.log(data.ip)
-        axios.get(`http://${GLOBAL_CONFIG}:3000/coursesAvailable`)
+        axios.get(`http://${GLOBAL_CONFIG.SYSTEM_IP}:5000/coursesAvailable`)
             .then((response) => {
                 console.log(response.data)
                 setCourses(response.data);

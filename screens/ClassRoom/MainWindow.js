@@ -17,8 +17,6 @@ export default function MainWindow({navigation,route}) {
                 <Text style={styles.buttonText}>Attendance</Text></TouchableOpacity>
             <TouchableOpacity style={[styles.modalView, { backgroundColor: "#91f" }]}>
                 <Text style={styles.buttonText}>Progress</Text></TouchableOpacity>
-            <TouchableOpacity style={[styles.modalView, { backgroundColor: "#e11" }]}>
-                <Text style={styles.buttonText}>Assignments</Text></TouchableOpacity>
         </View>
     </View>);
 }

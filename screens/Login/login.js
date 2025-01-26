@@ -30,6 +30,7 @@ export default function LoginPage({ navigation }) {
           setFailure(false);
           AsyncStorage.setItem('uname', UserName);
           navigation.navigate("Home", UserName);
+          
         }
         if (!response.data.verified) {
           console.log(failure);
