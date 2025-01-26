@@ -64,8 +64,6 @@ const CoursesEnrolled = ({navigation}) => {
                         id={classItem._id}
                         fetchClasses={fetchClasses}
                         navigation={navigation}
-
-
                     />
 
                 ))}
