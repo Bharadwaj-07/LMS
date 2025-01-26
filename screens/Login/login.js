@@ -30,7 +30,10 @@ export default function LoginPage({ navigation }) {
           setFailure(false);
           AsyncStorage.setItem('uname', UserName);
           navigation.navigate("Home", UserName);
-          
+          navigation.reset({
+            index: 0,  // Index of the screen you want to navigate to (0 means it's the first screen)
+            routes: [{ name: 'Home', params: { UserName: UserName } }], // Set the Home screen as the new root
+          });
         }
         if (!response.data.verified) {
           console.log(failure);

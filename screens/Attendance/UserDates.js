@@ -36,21 +36,10 @@ export default function Dates({ navigation, route }) {
             <TouchableOpacity
               key={item.date}
               style={[styles.tab, attendedDates.includes(item.date) ? styles.attendedTab : styles.missedTab]}
-              onPress={() => {
-                navigation.navigate('Present', { course: course, date: item });
-              }}
             >
               <Text style={styles.tabText}>{item.date}</Text>
             </TouchableOpacity>
           ))}
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => {
-              navigation.navigate('Mark', { course: course });
-            }}
-          >
-            <Text style={styles.buttonText}>Take Attendance</Text>
-          </TouchableOpacity>
         </ScrollView>
       </SafeAreaView>
     </SafeAreaProvider>

@@ -3,6 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'reac
 import { FontAwesome, MaterialIcons } from '@expo/vector-icons';
 import axios from 'axios';
 import { GLOBAL_CONFIG } from '../components/global_config';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 // import data from '../env'
 
 const CreateClass = () => {
@@ -11,14 +12,14 @@ const CreateClass = () => {
   const [instructorName, setInstructorName] = useState('');
 
   // code to extract userID
-  const userId = "user1";
-
+  
   const handleSubmit = async () => {
     if (!className || !subjectName || !instructorName) {
       Alert.alert('Error', 'All fields are required!');
       return;
     }
-
+    const userId = await AsyncStorage.getItem('uname'); ;
+  console.log("Uname",userId);
     const payload = {
       className,
       subjectName,

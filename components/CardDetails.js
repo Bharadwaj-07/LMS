@@ -13,9 +13,10 @@ import {
 } from 'react-native-paper';
 
 
-const CardDetails = ({ course, instructor, id, fetchClasses }) => {
+const CardDetails = ({ course, instructor, id, fetchClasses,navigation,admin }) => {
     const handlePress = () => {
         console.log('Card pressed');
+        navigation.navigate('Classroom',  course );
     };
 
     const handleLongPress = () => {
@@ -45,7 +46,8 @@ const CardDetails = ({ course, instructor, id, fetchClasses }) => {
                     style={{ flex: 1, margin: 10 }}>
                     <Card.Content>
                         <Title style={{ fontSize: 25, fontWeight: '350', marginBottom: '5' }}>{course}</Title>
-                        <Paragraph style={{ fontSize: 20, marginBottom: '5' }}>{instructor}</Paragraph>
+                        <Paragraph style={{ fontSize: 20, marginBottom: '5' }}>{instructor}</Paragraph> 
+                        {admin ? <Paragraph style={{ fontSize: 20, marginBottom: '5' }}>Admin</Paragraph> : null}
                     </Card.Content>
                     <Card.Actions>
                         <Button onPress={() => deleteClass(id)} style={{

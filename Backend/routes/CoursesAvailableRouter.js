@@ -4,10 +4,10 @@ const Course = require('../models/CoursesAvailableModel')
 const router = express.Router();
 
 const storeCourseData = async (req, res) => {
-    const { classId, instructor, subject, userId } = req.body;
+    const { classId, instructor, subject} = req.body;
 
     try {
-        const newCourse = new Course({ classId, instructor, subject, userId });
+        const newCourse = new Course({ classId, instructor, subject });
         await newCourse.save();
         res.status(201).json({ message: 'Course created successfully', course: newCourse });
     } catch (err) {

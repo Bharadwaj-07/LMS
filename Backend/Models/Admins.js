@@ -3,11 +3,11 @@ const mongoose = require('mongoose')
 const Admins = new mongoose.Schema({
     course:{
         type:String,
-        ref:'courses'
+        required:true,
     },
     Admins:[{
-        type:mongoose.Schema.Types.ObjectId,
-        ref:'profiles'
+        type:String,
+        required:true,
     }]
 });
 module.exports = mongoose.model('Admins', Admins);

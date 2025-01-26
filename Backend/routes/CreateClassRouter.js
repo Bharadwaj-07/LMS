@@ -1,7 +1,7 @@
 const express = require('express');
 const Class = require('../models/CreateClassModel');
 const Course = require('../models/CoursesAvailableModel');
-
+const Admin=require('../models/Admins');
 const router = express.Router();
 
 router.post('/', async (req, res) => {
@@ -18,8 +18,12 @@ router.post('/', async (req, res) => {
             instructorName,
             userId
         });
-
+        const admin=new Admin({
+            course:className,
+            Admins:[userId]
+        });
         const savedClass = await newClass.save();
+        const savedAdmin=await admin.save();
 
         const newCourse = new Course({
             classId: savedClass._id,
@@ -41,11 +45,11 @@ router.post('/', async (req, res) => {
     }
 });
 
-router.get('/:userId', async (req, res) => {
-    const userId = req.params.userId;
-    console.log(userId)
+router.post('/user', async (req, res) => {
+    const userId = req.body.userId;
+    console.log("user",userId)
     try {
-        const classes = await Class.find({ userId });
+        const classes = await Class.find({ userId:userId });
         console.log(classes)
         res.status(200).json(classes);
     } catch (err) {

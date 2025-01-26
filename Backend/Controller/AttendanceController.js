@@ -21,16 +21,31 @@ exports.getDates = async (req, res) => {
         console.log(e);
     }
 }
+exports.checkAdmin = async (req, res) => {
+    const { course, userId } = req.body;
+    console.log("body",req.body);
+    try {
+        const courseDetails = await Admins.findOne({ course: course });
+        console.log(courseDetails);
+        if (courseDetails.Admins.includes(userId)) {
+            return res.json({ admin: true });
+        }
+    }
+    catch (e) {
+        console.log(e);
+    }
+    return res.json({ admin: false });
+}
 exports.getAttendance = async (req, res) => {
-    const { date ,course} = req.query;
-    console.log("date",date);
+    const { date, course } = req.query;
+    console.log("date", date);
     try {
         const courseId = new mongoose.Types.ObjectId('6794f930d83cb1cfc2cb0cfa');
-        const Record = await Attendance.find({ date: date,course:courseId }).populate('attendance','name');
-        if(Record.length==0){
-            return res.status(400).json({message:"No attendance found"});
+        const Record = await Attendance.find({ date: date, course: courseId }).populate('attendance', 'name');
+        if (Record.length == 0) {
+            return res.status(400).json({ message: "No attendance found" });
         }
-        const names=Record[0].attendance.map((item)=>item.name);
+        const names = Record[0].attendance.map((item) => item.name);
         console.log(Record);
         return res.json(names);
     }
@@ -39,15 +54,16 @@ exports.getAttendance = async (req, res) => {
     }
 }
 exports.getUsers = async (req, res) => {
-    const {course} = req.body;
-    try{
-        const users=await Courses.find({course:course}).populate('students','name');
-        const names=users.students.map((item)=>item.name);
+    const { course } = req.body;
+    try {
+        const users = await Courses.find({ course: course }).populate('students', 'name');
+        const names = users.students.map((item) => item.name);
         console.log(names);
         return res.json(names);
     }
-    catch(e){
-        console.log(e);}
+    catch (e) {
+        console.log(e);
+    }
 
 }
 exports.SetAttendance = async (req, res) => {

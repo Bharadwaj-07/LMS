@@ -13,7 +13,6 @@ const CoursesAvailable = () => {
     const [error, setError] = useState(null);
 
     const fetchCourses = () => {
-        console.log(data.ip)
         axios.get(`http://${GLOBAL_CONFIG.SYSTEM_IP}:5000/coursesAvailable`)
             .then((response) => {
                 console.log(response.data)
@@ -58,6 +57,7 @@ const CoursesAvailable = () => {
                         course={course.subject}
                         instructor={course.instructor}
                         courseId={course._id}
+                        
                     />
                 ))}
             </ScrollView>

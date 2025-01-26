@@ -4,19 +4,33 @@ import { useFocusEffect } from '@react-navigation/native';
 import axios from 'axios';
 import CardDetails from '../components/CardDetails';
 import { GLOBAL_CONFIG } from '../components/global_config';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 // import data from '../env.js'
 
 
-const CoursesEnrolled = () => {
+const CoursesEnrolled = ({navigation}) => {
     const [classes, setClasses] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    const userId = "user2";
+    const findAdmin = async(className) => {
+        const userId = await AsyncStorage.getItem('uname');
+        try{
+        const response = await axios.post(`http://${GLOBAL_CONFIG.SYSTEM_IP}:5000/api/Attendance/Admin`, {
+            className,
+            userId,
+        });return(response.data.admin);}
+        catch (error) {
+            console.error("Error fetching admin data:", error);
+            Alert.alert("Error", "Unable to fetch admin data.");
+        }return ;
 
-    const fetchClasses = () => {
+    }
+
+    const fetchClasses = async () => {
         // console.log(data.ip)
-        axios.get(`http://${GLOBAL_CONFIG}:3000/createClass/${userId}`)
+        const userId = await AsyncStorage.getItem('uname');
+        axios.post(`http://${GLOBAL_CONFIG.SYSTEM_IP}:5000/createClass/user`,{userId:userId})
             .then((response) => {
                 console.log(response.data)
                 setClasses(response.data);
@@ -61,9 +75,20 @@ const CoursesEnrolled = () => {
                         instructor={classItem.instructorName}
                         id={classItem._id}
                         fetchClasses={fetchClasses}
+                        navigation={navigation}
+                        admin={()=>{findAdmin(classItem.className)}}
 
                     />
+
                 ))}
+                                    <CardDetails
+                        key={'sdfsfs'}
+                        course={"CS101"}
+                        instructor={"Prof. XYZ"}
+                        id={"123"}
+                        fetchClasses={fetchClasses}
+                        navigation={navigation}
+                        admin={false}/>
             </ScrollView>
         </View>
     );
