@@ -4,10 +4,11 @@ const JoinClass = require('../models/JoinClassModel');
 const Profile = require('../models/Profile');
 const CourseModel = require('../models/Course');
 router.post('/join', async (req, res) => {
-    const { userId, classId, username } = req.body;
+    let { userId, classId, username } = req.body;
     console.log("join post router");
     console.log(req.body);
     console.log(userId);
+     userId = userId.toLowerCase();
     if (!userId || !classId || !username) {
         return res.status(400).json({ message: 'Missing required fields' });
     }

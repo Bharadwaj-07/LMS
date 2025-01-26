@@ -57,20 +57,22 @@ router.post('/', async (req, res) => {
 });
 
 router.post('/user', async (req, res) => {
-    const userId = req.body.userId;
+    let userId = req.body.userId;
+    userId = userId.toLowerCase();
     console.log("user fetching", userId)
     try {
         const classes = await Class.find({ userId: userId });
+        console.log("Classes",classes);
         const joinClasses = await JoinClass.find({ userId: userId })
             .populate('classId', 'classId')
             .select('classId');
-
+        console.log("JoinClasses",joinClasses);
         const classIds = joinClasses.map(joinClass => joinClass.classId);
 
         console.log(classIds);
         let classId = ["CS 201"];
 
-        const memberClasses = await Class.find({ className: { $in: classId } });
+        const memberClasses = await Class.find({ className: { $in: classIds } });
         const mergedClasses = [...classes, ...memberClasses];
         console.log(memberClasses, "Members");
         res.status(200).json(mergedClasses);
