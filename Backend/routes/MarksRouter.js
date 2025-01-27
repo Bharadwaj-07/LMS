@@ -2,22 +2,35 @@ const express = require('express');
 const router = express.Router();
 const Marks = require('../models/MarksModel');
 
-router.post('/', async (req, res) => {
-    const { userId, classId, test1, test2, endSem } = req.body;
-
-    if (!userId || !classId) {
-        return res.status(400).json({ message: 'userId and classId are required.' });
+router.post('/setmarks', async (req, res) => {
+    const marksList = req.body.students; // Assuming this is an array of marks objects
+    console.log("marks",marksList);
+    if ( marksList.length === 0) {
+        return res.status(400).json({ message: 'Marks list is required and should not be empty.' });
     }
 
     try {
-        const updatedMarks = await Marks.findOneAndUpdate(
-            { userId, classId },
-            { $set: { test1, test2, endSem } },
-            { new: true, upsert: true }
+        // Use `Promise.all` to handle multiple updates in parallel
+        console.log("Entering updation");
+        const updatedMarks = await Promise.all(
+            marksList.map(async (marks) => {
+                const { userId, classId, test1, test2, endSem } = marks;
+                console.log("User",userId, classId, test1, test2, endSem)
+                if (!userId || !classId) {
+                    throw new Error('userId and classId are required for each entry.');
+                }
+
+                // Update or insert each entry
+                return await Marks.findOneAndUpdate(
+                    { userId, classId }, // Find by userId and classId
+                    { $set: { test1, test2, endSem } }, // Update the marks fields
+                    { new: true, upsert: true } // Return updated doc, create if not exists
+                );
+            })
         );
 
         res.status(201).json({
-            message: 'Marks added/updated successfully',
+            message: 'Marks added/updated successfully for all students.',
             data: updatedMarks,
         });
     } catch (error) {
@@ -26,13 +39,31 @@ router.post('/', async (req, res) => {
     }
 });
 
+router.post('/getmarks/student',async(req,res)=>{
+    const classId=req.body.course;
+    const userId=req.body.user;
+    console.log(classId,userId,"user");
+    try{
+        const marks = await Marks.findOne({ classId:classId,userId:userId });
+        console.log(marks.test1);
+        res.status(200).json({test1:marks.test1,test2:marks.test2,endSem:marks.endSem});
+    }
+    catch(e){
+        console.log(e);
+    }
+})
 // GET: Get all marks for a specific class
-router.get('/class/:classId', async (req, res) => {
-    const { classId } = req.params;
+router.post('/getmarks', async (req, res) => {
+    console.log("Hello");
+    const classId  = req.body.course;
+    console.log(req.body)
+    
+    console.log(classId)
+
 
     try {
-        const marks = await Marks.find({ classId }).populate('userId', 'username');
-
+        const marks = await Marks.find({ classId:classId });
+        console.log(marks);
         if (!marks || marks.length === 0) {
             return res.status(404).json({ message: 'No marks found for this class' });
         }

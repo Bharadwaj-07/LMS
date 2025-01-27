@@ -13,6 +13,8 @@ import Mark from './screens/Attendance/Mark';
 import UserDates from './screens/Attendance/UserDates';
 import MainWindow from './screens/ClassRoom/MainWindow';
 import ClassInput from './components/ClassInput'; 
+import AdminMarks from './screens/AdminMarks';
+import StudentMarks from './screens/StudentMarks';
 const Stack = createStackNavigator();
 const App=()=>{
   return (<NavigationContainer>
@@ -27,6 +29,8 @@ const App=()=>{
       <Stack.Screen name='Present' component={Present}/>
       <Stack.Screen name='Mark' component={Mark}/>
       <Stack.Screen name='UserDates' component={UserDates}/>
+      <Stack.Screen name='AdminMarks' component={AdminMarks}/>
+      <Stack.Screen name='StudentMarks' component={StudentMarks}/>
     </Stack.Navigator>
   </NavigationContainer>)
  

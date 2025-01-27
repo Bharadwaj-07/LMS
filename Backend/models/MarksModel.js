@@ -11,18 +11,15 @@ const marksSchema = new mongoose.Schema(
             required: true,
         },
         test1: {
-            type: Number,
-            default: 0,
+            type: String,
             min: 0,
         },
         test2: {
-            type: Number,
-            default: 0,
+            type: String,
             min: 0,
         },
         endSem: {
-            type: Number,
-            default: 0,
+            type: String,
             min: 0,
         },
     },

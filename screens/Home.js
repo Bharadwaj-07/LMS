@@ -96,7 +96,7 @@ export default function App() {
             ),
           }}
         />
-        <Drawer.Screen
+        {/* <Drawer.Screen
           name="Profile"
           component={Profile}
           options={{
@@ -104,7 +104,7 @@ export default function App() {
               <Ionicons name="person" size={25} color={color} />
             ),
           }}
-        />
+        /> */}
       </Drawer.Navigator>
     );
   };

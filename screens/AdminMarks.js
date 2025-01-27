@@ -1,79 +1,109 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, FlatList, StyleSheet, Alert } from "react-native";
 import RNPickerSelect from 'react-native-picker-select';
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
+import axios from 'axios'
+import { GLOBAL_CONFIG } from "../components/global_config"; 
 
-const AdminMarks = () => {
+
+const AdminMarks = ({ navigation, route }) => {
+    const course = route.params.course;
     const [selectedTest, setSelectedTest] = useState('');
-    const [students, setStudents] = useState([
-        { id: "1", name: "John Doe", marks: 0 },
-        { id: "2", name: "Jane Smith", marks: 0 },
-        { id: "3", name: "Sam Wilson", marks: 0 },
-    ]);
+    const [students, setStudents] = useState([]);
 
-    const handleMarksChange = (id, marks) => {
+    const getStudents = async () => {
+        try {
+            const response = await axios.post(
+                `http://${GLOBAL_CONFIG.SYSTEM_IP}:5000/marks/getmarks`,
+                { course: course }
+            );
+            setStudents(response.data.data);
+        } catch (e) {
+            console.error(e);
+        }
+    };
+
+    useEffect(() => {
+        getStudents();
+    }, []);
+
+    const handleMarksChange = (id, value) => {
         setStudents((prev) =>
             prev.map((student) =>
-                student.id === id ? { ...student, marks: marks } : student
+                student._id === id
+                    ? { ...student, [selectedTest]: value }
+                    : student
             )
         );
     };
 
-    const handleSubmit = () => {
+    const handleSubmit = async() => {
+        console.log(students);
         if (!selectedTest) {
             Alert.alert('Error', 'Please select a test.');
             return;
         }
-        // Simulate updating marks in the backend
+        try{
+            const respons=await axios.post(`http://${GLOBAL_CONFIG.SYSTEM_IP}:5000/marks/setmarks`,{students});
+            console.log(respons.data);
+        }
+        catch(e){console.log(e);}
         Alert.alert("Marks Updated", JSON.stringify({ test: selectedTest, students }, null, 2));
         console.log("Updated Students:", students);
     };
 
     const renderStudent = ({ item }) => (
         <View style={styles.studentCard}>
-            <Text style={styles.studentName}>{item.name}</Text>
+            <Text style={styles.studentName}>{item.userId}</Text>
             <TextInput
                 style={styles.input}
                 keyboardType="numeric"
-                placeholder="Enter marks"
-                value={item.marks.toString()}
-                onChangeText={(value) => handleMarksChange(item.id, value)}
+                placeholder={`Enter marks for ${selectedTest}`}
+                value={item[selectedTest] || ''}
+                onChangeText={(value) => handleMarksChange(item._id, value)}
             />
         </View>
     );
 
     return (
-        <View style={styles.container}>
-            <Text style={styles.title}>Student Marks</Text>
-            <View style={styles.border}>
-                <RNPickerSelect
-                    onValueChange={(value) => setSelectedTest(value)}
-                    items={[
-                        { label: 'Test 1', value: 'test1' },
-                        { label: 'Test 2', value: 'test2' },
-                        { label: 'End Semester', value: 'endSemester' }
-                    ]}
-                    style={{
-                        placeholder: {
-                            color: '#3C0A6B',
-                        }
-                    }}
-                    placeholder={{ label: 'Select Test', value: '' }}
-                />
-            </View>
+        <SafeAreaProvider>
+            <SafeAreaView>
+                <View style={styles.container}>
+                    <Text style={styles.title}>Student Marks</Text>
+                    <View style={styles.border}>
+                        <RNPickerSelect
+                            onValueChange={(value) => setSelectedTest(value)}
+                            items={[
+                                { label: 'Test 1', value: 'test1' },
+                                { label: 'Test 2', value: 'test2' },
+                                { label: 'End Semester', value: 'endSem' }
+                            ]}
+                            style={{
+                                placeholder: {
+                                    color: '#3C0A6B',
+                                }
+                            }}
+                            placeholder={{ label: 'Select Test', value: '' }}
+                        />
+                    </View>
 
-            <FlatList
-                data={students}
-                keyExtractor={(item) => item.id}
-                renderItem={renderStudent}
-                contentContainerStyle={styles.list}
-            />
+                    <FlatList
+                        data={students}
+                        keyExtractor={(item) => item._id}
+                        renderItem={renderStudent}
+                        contentContainerStyle={styles.list}
+                    />
 
-            <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
-                <Text style={styles.submitButtonText}>Submit</Text>
-            </TouchableOpacity>
-        </View>
+                    <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
+                        <Text style={styles.submitButtonText}>Submit</Text>
+                    </TouchableOpacity>
+                </View>
+            </SafeAreaView>
+        </SafeAreaProvider>
     );
 };
+export default AdminMarks;
+
 
 const pickerSelectStyles = StyleSheet.create({
     inputIOS: {
@@ -163,6 +193,4 @@ const styles = StyleSheet.create({
         marginBottom: 20
     }
 });
-
-export default AdminMarks;
 

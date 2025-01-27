@@ -22,7 +22,28 @@ export default function MainWindow({ navigation, route }) {
         };
         fetchUserId();
     }, []);
-
+    const handleProgress = async () => {
+        if (!userId) {
+            Alert.alert("Error", "User ID not found!");
+            return;
+        }
+        try {
+            const user = userId.toLowerCase();
+            console.log(userId,course);
+            const response = await axios.post(`http://${GLOBAL_CONFIG.SYSTEM_IP}:5000/api/Attendance/Admin`, {
+                course,
+                user,
+            });
+            if (response.data.admin) {
+                navigation.navigate('AdminMarks', { course:course });
+            } else {
+                navigation.navigate('StudentMarks',{course:course});
+            }
+        } catch (error) {
+            console.error("Error fetching attendance data:", error);
+            Alert.alert("Error", "Unable to fetch attendance data.");
+        }
+    };
     const handleAttendance = async () => {
         if (!userId) {
             Alert.alert("Error", "User ID not found!");
@@ -38,7 +59,7 @@ export default function MainWindow({ navigation, route }) {
             if (response.data.admin) {
                 navigation.navigate('Dates', { course: route.params });
             } else {
-                navigation.navigate('UserDates');
+                navigation.navigate('UserDates',{course});
             }
         } catch (error) {
             console.error("Error fetching attendance data:", error);
@@ -62,7 +83,7 @@ export default function MainWindow({ navigation, route }) {
                     <Text style={styles.buttonText}>Attendance</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={[styles.modalView, { backgroundColor: "#91f" }]}>
-                    <Text style={styles.buttonText}>Progress</Text>
+                    <Text style={styles.buttonText} onPress={handleProgress}>Progress</Text>
                 </TouchableOpacity>
             </View>
         </View>

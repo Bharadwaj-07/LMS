@@ -97,3 +97,26 @@ exports.SetAttendance = async (req, res) => {
         console.log(e);
     }
 }
+exports.UserAttendance = async (req, res) => {
+    const course=req.body.course;
+    const user=req.body.user; // Assuming `user` is the user ID.
+    console.log("User", user);
+
+    try {
+       
+        const Records = await Attendance.find({ course: course });
+        console.log("Records", Records);
+        const userId=await Profile.findOne({uname:user});
+        console.log(userId._id,"User ID");
+        let userId_string=userId._id.toString();
+        const attendedDates = Records
+            .filter((record) => record.attendance.includes(userId_string)) 
+            .map((record) => record.date);
+
+        console.log("Attended Dates", attendedDates);
+        return res.json(attendedDates); 
+    } catch (error) {
+        console.error("Error fetching attendance:", error);
+        return res.status(500).json({ message: "An error occurred", error: error.message });
+    }
+};

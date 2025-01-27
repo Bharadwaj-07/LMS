@@ -3,22 +3,30 @@ import { StyleSheet, View, Text, TouchableOpacity, ScrollView } from "react-nati
 import { GLOBAL_CONFIG } from '../../components/global_config';
 import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
 import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function Dates({ navigation, route }) {
-  const course = 'CS101';
+  const {course} = route.params;
   const [dates, setDates] = useState([]);
   const [attendedDates, setAttendedDates] = useState([]); 
 
   const getDates = async () => {
     try {
+      let user=await AsyncStorage.getItem('uname');
+      user=user.toLowerCase();
       const response = await axios.post(`http://${GLOBAL_CONFIG.SYSTEM_IP}:5000/api/Attendance/dates`, {
         course: course
       });
-      console.log("Dates:", response.data); 
-      setDates(response.data);
-      const attended = ['2025-01-10', '2025-01-15']; 
+      const attendanceData=response.data;
+      const attended = await axios.post(`http://${GLOBAL_CONFIG.SYSTEM_IP}:5000/api/Attendance/UserAttendance`,
+        {course: course, user: user}
+      );
+      const dateArray = attendanceData.map(entry => entry.date);
+      setDates(dateArray);
+      
       setAttendedDates(attended);
-
+      console.log("Dates:", dates); 
+      console.log("Attended dates",attended)
     } catch (e) {
       console.log(e);
     }
@@ -28,16 +36,17 @@ export default function Dates({ navigation, route }) {
     getDates();
   }, []);
 
+
   return (
     <SafeAreaProvider>
       <SafeAreaView style={styles.container} edges={['top']}>
         <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
           {dates.map((item) => (
             <TouchableOpacity
-              key={item.date}
-              style={[styles.tab, attendedDates.includes(item.date) ? styles.attendedTab : styles.missedTab]}
+              key={item}
+              style={[styles.tab, attendedDates.data.includes(item) ? styles.attendedTab : styles.missedTab]}
             >
-              <Text style={styles.tabText}>{item.date}</Text>
+              <Text style={styles.tabText}>{item}</Text>
             </TouchableOpacity>
           ))}
         </ScrollView>

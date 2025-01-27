@@ -3,6 +3,7 @@ const router = express.Router();
 const JoinClass = require('../models/JoinClassModel');
 const Profile = require('../models/Profile');
 const CourseModel = require('../models/Course');
+const MarksModel = require('../models/MarksModel')
 router.post('/join', async (req, res) => {
     let { userId, classId, username } = req.body;
     console.log("join post router");
@@ -26,6 +27,14 @@ router.post('/join', async (req, res) => {
         console.log(student);
         console.log(student._id);
         console.log(classId);
+        const marks = new MarksModel({
+                    userId: user,
+                    classId: classId,
+                    test1:"-",
+                    test2:"-",
+                    endSem:"-"
+                });
+        const savedMarks=await marks.save();
         // Update the students array in the Course model
         const updatedCourse = await CourseModel.findOneAndUpdate(
             { courseCode: classId }, 
