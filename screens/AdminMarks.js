@@ -5,7 +5,7 @@ import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import axios from 'axios'
 import { GLOBAL_CONFIG } from "../components/global_config"; 
 
-
+import { Picker } from '@react-native-picker/picker';
 const AdminMarks = ({ navigation, route }) => {
     const course = route.params.course;
     const [selectedTest, setSelectedTest] = useState('');
@@ -48,7 +48,8 @@ const AdminMarks = ({ navigation, route }) => {
             console.log(respons.data);
         }
         catch(e){console.log(e);}
-        Alert.alert("Marks Updated", JSON.stringify({ test: selectedTest, students }, null, 2));
+        // Alert.alert("Marks Updated", JSON.stringify({ test: selectedTest, students }, null, 2));
+        Alert.alert("Marks updated");
         console.log("Updated Students:", students);
     };
 
@@ -67,26 +68,25 @@ const AdminMarks = ({ navigation, route }) => {
 
     return (
         <SafeAreaProvider>
-            <SafeAreaView>
+            <SafeAreaView style={styles.safeArea}>
                 <View style={styles.container}>
                     <Text style={styles.title}>Student Marks</Text>
-                    <View style={styles.border}>
-                        <RNPickerSelect
+
+                    {/* Picker Container */}
+                    <View style={styles.pickerContainer}>
+                        <Picker
+                            selectedValue={selectedTest}
                             onValueChange={(value) => setSelectedTest(value)}
-                            items={[
-                                { label: 'Test 1', value: 'test1' },
-                                { label: 'Test 2', value: 'test2' },
-                                { label: 'End Semester', value: 'endSem' }
-                            ]}
-                            style={{
-                                placeholder: {
-                                    color: '#3C0A6B',
-                                }
-                            }}
-                            placeholder={{ label: 'Select Test', value: '' }}
-                        />
+                            style={styles.picker}
+                        >
+                            <Picker.Item label="Select Test" value="" />
+                            <Picker.Item label="Test 1" value="test1" />
+                            <Picker.Item label="Test 2" value="test2" />
+                            <Picker.Item label="End Semester" value="endSem" />
+                        </Picker>
                     </View>
 
+                    {/* Student List */}
                     <FlatList
                         data={students}
                         keyExtractor={(item) => item._id}
@@ -94,6 +94,7 @@ const AdminMarks = ({ navigation, route }) => {
                         contentContainerStyle={styles.list}
                     />
 
+                    {/* Submit Button */}
                     <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
                         <Text style={styles.submitButtonText}>Submit</Text>
                     </TouchableOpacity>
@@ -102,45 +103,35 @@ const AdminMarks = ({ navigation, route }) => {
         </SafeAreaProvider>
     );
 };
+
 export default AdminMarks;
 
-
-const pickerSelectStyles = StyleSheet.create({
-    inputIOS: {
-        fontSize: 16,
-        paddingVertical: 12,
-        paddingHorizontal: 10,
-        borderWidth: 1,
-        borderColor: '#3C0A6B',
-        borderRadius: 4,
-        color: '#3C0A6B',
-        paddingRight: 30,
-        marginBottom: 20,
-    },
-    inputAndroid: {
-        fontSize: 16,
-        paddingHorizontal: 10,
-        borderWidth: 1,
-        borderColor: '#3C0A6B',
-        borderRadius: 4,
-        color: '#3C0A6B',
-        paddingRight: 30,
-        marginBottom: 20,
-    },
-});
-
 const styles = StyleSheet.create({
+    safeArea: {
+        flex: 1,
+        backgroundColor: "#FFFDF0",
+    },
     container: {
         flex: 1,
         padding: 20,
-        backgroundColor: "#FFFDF0",
     },
     title: {
         fontSize: 24,
         fontWeight: "bold",
         marginBottom: 20,
         textAlign: "center",
-        color: '#3C0A6B'
+        color: '#3C0A6B',
+    },
+    pickerContainer: {
+        borderWidth: 1,
+        borderColor: '#3C0A6B',
+        borderRadius: 8,
+        marginBottom: 20,
+        backgroundColor: "#f5f5f5",
+    },
+    picker: {
+        height: 50,
+        color: '#3C0A6B',
     },
     list: {
         paddingBottom: 20,
@@ -149,10 +140,10 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "space-between",
         alignItems: "center",
-        padding: 10,
-        marginBottom: 10,
+        padding: 15,
+        marginBottom: 12,
         backgroundColor: "#D4BEE4",
-        borderRadius: 8,
+        borderRadius: 10,
         shadowColor: "#000",
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.1,
@@ -160,16 +151,17 @@ const styles = StyleSheet.create({
         elevation: 3,
     },
     studentName: {
-        fontSize: 20,
+        fontSize: 18,
         fontWeight: 'bold',
-        color: '#3C0A6B'
+        color: '#3C0A6B',
+        flex: 1,
     },
     input: {
         width: 80,
-        padding: 5,
+        padding: 8,
         borderWidth: 1,
         borderColor: "#ccc",
-        borderRadius: 5,
+        borderRadius: 8,
         textAlign: "center",
         backgroundColor: "#f5f5f5",
     },
@@ -179,18 +171,10 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         alignItems: "center",
         marginTop: 20,
-        marginBottom: 10,
     },
     submitButtonText: {
         color: "#fff",
         fontSize: 18,
         fontWeight: 'bold',
     },
-    border: {
-        borderWidth: 1,
-        borderColor: '#3C0A6B',
-        borderRadius: 8,
-        marginBottom: 20
-    }
 });
-

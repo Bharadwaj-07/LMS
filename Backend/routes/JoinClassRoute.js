@@ -20,13 +20,16 @@ router.post('/join', async (req, res) => {
         // Create a new JoinClass instance
         const newJoin = new JoinClass({ userId, classId, username });
         console.log(newJoin);
-        const savedJoin = await newJoin.save();
+        
         const user = userId.toLowerCase();
 
         const student=await Profile.findOne({uname:user});
         console.log(student);
         console.log(student._id);
         console.log(classId);
+        const marked=await MarksModel.findOne({userId:userId});
+        console.log(marked);
+        if(!marked){
         const marks = new MarksModel({
                     userId: user,
                     classId: classId,
@@ -34,13 +37,16 @@ router.post('/join', async (req, res) => {
                     test2:"-",
                     endSem:"-"
                 });
-        const savedMarks=await marks.save();
+                const savedMarks=await marks.save();
+            }
+        
         // Update the students array in the Course model
         const updatedCourse = await CourseModel.findOneAndUpdate(
             { courseCode: classId }, 
             { $addToSet: { students: student._id } }, 
             { new: true }
         );
+        const savedJoin = await newJoin.save();
         console.log(updatedCourse);
         if (!updatedCourse) {
             return res.status(404).json({ message: 'Course not found for the given classId' });

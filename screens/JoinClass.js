@@ -13,7 +13,7 @@ const JoinClass = () => {
     
 
     const join = async () => {
-        userId = await AsyncStorage.getItem('uname');
+       const userId = await AsyncStorage.getItem('uname');
         console.log("UserID",userId);
         console.log("Trying to join a class");
         if (!classId || !username) {
@@ -22,9 +22,16 @@ const JoinClass = () => {
         }
         console.log("Trying to join a class");
         setLoading(true);
-
+        let course=classId;
+        let user=userId;
+        const response = await axios.post(`http://${GLOBAL_CONFIG.SYSTEM_IP}:5000/api/Attendance/Admin`, {
+            course,
+            user,
+        });
+        console.log("response admin",response);
+        if(!response.data.admin){
         try {
-            console.log("Trying to join a class");
+            console.log("not admin and Trying to join a class");
             const response = await axios.post(`http://${GLOBAL_CONFIG.SYSTEM_IP}:5000/joinClass/join`, {
                 classId, username, userId
             });
@@ -35,6 +42,9 @@ const JoinClass = () => {
             Alert.alert('Error', 'Unable to join the class. Please try again.');
         } finally {
             setLoading(false);
+        }}
+        else{
+            Alert.alert("You are admin of this course");
         }
     };
 

@@ -3,6 +3,7 @@ const Class = require('../models/CreateClassModel');
 const Course = require('../models/CoursesAvailableModel');
 const Admin = require('../models/Admins');
 const JoinClass = require('../models/JoinClassModel');
+const marks=require('../models/MarksModel');
 const router = express.Router();
 const CourseModel = require('../models/Course');
 router.post('/', async (req, res) => {
@@ -81,34 +82,52 @@ router.post('/user', async (req, res) => {
     }
 });
 
-router.delete('/:classId/:userId', async (req, res) => {
-    const { classId, userId } = req.params;
+router.delete('/:classId/:userId/:admin/:instructor', async (req, res) => {
+    const { classId, userId, admin,instructor } = req.params;
 
+    let deletedClasses = null;
+    let deletedCourses = null;
+    let deletedUsers = null;
+    let deletedUserClasses = null;
+    let deletedCourseModel=null;
     try {
-        console.log('Params:', { classId, userId });
+        console.log('Params:', { classId, userId, admin ,instructor});
 
-        const deletedClass = await Class.findByIdAndDelete(classId);
+        // Convert admin to boolean
+        const isAdmin = admin === 'true';
 
-        if (!deletedClass) {
-            return res.status(404).json({ error: 'Class not found' });
-        }
+        if (isAdmin) {
+            deletedClasses = await Class.findOneAndDelete({ className: classId });
 
-        const deletedCourse = await Course.findOneAndDelete({ classId, userId });
 
-        if (!deletedCourse) {
-            return res.status(404).json({ error: 'Course not found' });
+
+            deletedCourses = await Course.findOneAndDelete({ classId: classId, instructor: instructor });
+
+
+            deletedUsers = await JoinClass.deleteMany({ classId: classId });
+
+
+            deletedCourseModel=await CourseModel.findOneAndDelete({classId:classId});
+
+        } else {
+            deletedUserClasses = await JoinClass.findOneAndDelete({ userId: userId, classId: classId });
+
+
         }
 
         res.status(200).json({
-            message: 'Class and Course deleted successfully',
-            class: deletedClass,
-            course: deletedCourse,
+            message: 'Deletion successful',
+            deletedClasses: deletedClasses,
+            deletedCourses: deletedCourses,
+            deletedUsers: deletedUsers,
+            deletedUserClasses: deletedUserClasses
         });
     } catch (error) {
         console.error('Error during deletion:', error);
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });
+
 
 
 

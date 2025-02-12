@@ -47,11 +47,14 @@ const CardDetails = ({ course, instructor, id, fetchClasses,navigation }) => {
         console.log('Card long-pressed');
     };
 
-    const userId = "user1";
+    
+    
 
     const deleteClass = async (classId) => {
         try {
-            const response = await axios.delete(`http://${GLOBAL_CONFIG}:3000/createClass/${classId}/${userId}`);
+            let userId = await AsyncStorage.getItem('uname');
+            console.log(classId,userId);
+            const response = await axios.delete(`http://${GLOBAL_CONFIG.SYSTEM_IP}:5000/createClass/${classId}/${userId}/${admin}/${instructor}`);
             console.log(response.data.message);
             Alert.alert('Success', 'Classroom deleted successfully!');
             fetchClasses()
@@ -74,7 +77,7 @@ const CardDetails = ({ course, instructor, id, fetchClasses,navigation }) => {
                         {admin ? <Paragraph style={{ fontSize: 20, marginBottom: '5' }}>Admin</Paragraph> : null}
                     </Card.Content>
                     <Card.Actions>
-                        <Button onPress={() => deleteClass(id)} style={{
+                        <Button onPress={() => deleteClass(course)} style={{
                             backgroundColor: '#3C0A6B',
                         }}>
                             <Ionicons name="trash-outline" color='white' size={20} />
