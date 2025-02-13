@@ -8,16 +8,16 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 // import data from '../env.js'
 
 
-const CoursesEnrolled = ({navigation}) => {
+const CoursesEnrolled = ({ navigation }) => {
     const [classes, setClasses] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [admin, setAdminData] = useState({});
-    
+
 
     const fetchClasses = async () => {
         const userId = await AsyncStorage.getItem('uname');
-        axios.post(`http://${GLOBAL_CONFIG.SYSTEM_IP}:5000/createClass/user`,{userId:userId})
+        axios.post(`http://${GLOBAL_CONFIG.SYSTEM_IP}:5000/createClass/user`, { userId: userId })
             .then((response) => {
                 console.log(response.data)
                 setClasses(response.data);
@@ -29,11 +29,11 @@ const CoursesEnrolled = ({navigation}) => {
             });
     };
 
-        useFocusEffect(
-            React.useCallback(() => {
-                fetchClasses();
-            }, [])
-        );
+    useFocusEffect(
+        React.useCallback(() => {
+            fetchClasses();
+        }, [])
+    );
 
 
     if (loading) {
@@ -59,6 +59,7 @@ const CoursesEnrolled = ({navigation}) => {
                     <CardDetails
                         key={classItem._id}
                         course={classItem.className}
+                        subject={classItem.subjectName}
                         instructor={classItem.instructorName}
                         id={classItem._id}
                         fetchClasses={fetchClasses}
