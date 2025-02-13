@@ -85,6 +85,9 @@ export default function MainWindow({ navigation, route }) {
                 <TouchableOpacity style={[styles.modalView, { backgroundColor: "#91f" }]}>
                     <Text style={styles.buttonText} onPress={handleProgress}>Progress</Text>
                 </TouchableOpacity>
+                <TouchableOpacity style={[styles.modalView, { backgroundColor: "#91f" }]}>
+                    <Text style={styles.buttonText} onPress={handleProgress}>Quiz</Text>
+                </TouchableOpacity>
             </View>
         </View>
     );
