@@ -4,6 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import axios from "axios";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { GLOBAL_CONFIG } from '../../components/global_config';
+import { createNativeWrapper } from 'react-native-gesture-handler';
 
 export default function MainWindow({ navigation, route }) {
     const course = route.params;
@@ -29,15 +30,15 @@ export default function MainWindow({ navigation, route }) {
         }
         try {
             const user = userId.toLowerCase();
-            console.log(userId,course);
+            console.log(userId, course);
             const response = await axios.post(`http://${GLOBAL_CONFIG.SYSTEM_IP}:5000/api/Attendance/Admin`, {
                 course,
                 user,
             });
             if (response.data.admin) {
-                navigation.navigate('AdminMarks', { course:course });
+                navigation.navigate('AdminMarks', { course: course });
             } else {
-                navigation.navigate('StudentMarks',{course:course});
+                navigation.navigate('StudentMarks', { course: course });
             }
         } catch (error) {
             console.error("Error fetching attendance data:", error);
@@ -51,7 +52,7 @@ export default function MainWindow({ navigation, route }) {
         }
         try {
             const user = userId.toLowerCase();
-            console.log(userId,course);
+            console.log(userId, course);
             const response = await axios.post(`http://${GLOBAL_CONFIG.SYSTEM_IP}:5000/api/Attendance/Admin`, {
                 course,
                 user,
@@ -59,7 +60,7 @@ export default function MainWindow({ navigation, route }) {
             if (response.data.admin) {
                 navigation.navigate('Dates', { course: route.params });
             } else {
-                navigation.navigate('UserDates',{course});
+                navigation.navigate('UserDates', { course });
             }
         } catch (error) {
             console.error("Error fetching attendance data:", error);
@@ -69,20 +70,20 @@ export default function MainWindow({ navigation, route }) {
 
     return (
         <View style={styles.container}>
-            <View style={styles.centeredView}>
-                <View style={[styles.rectangle, { width: "100%", alignItems: "center" }]}>
-                    <Text style={{ fontSize: 20, fontWeight: "bold", height: 30 }}>{route.params}</Text>
-                </View>
-                <TouchableOpacity style={[styles.modalView, { backgroundColor: "#13f" }]}>
+            <View style={styles.heading}>
+                <Text style={styles.headingText}>{route.params}</Text>
+            </View>
+            <View style={styles.buttonContainer}>
+                <TouchableOpacity style={[styles.modalView]}>
                     <Text style={styles.buttonText}>Notice Board</Text>
                 </TouchableOpacity>
-                <TouchableOpacity 
-                    style={[styles.modalView, { backgroundColor: "#7ef" }]} 
+                <TouchableOpacity
+                    style={[styles.modalView,]}
                     onPress={handleAttendance}
                 >
                     <Text style={styles.buttonText}>Attendance</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={[styles.modalView, { backgroundColor: "#91f" }]}>
+                <TouchableOpacity style={[styles.modalView]}>
                     <Text style={styles.buttonText} onPress={handleProgress}>Progress</Text>
                 </TouchableOpacity>
             </View>
@@ -93,30 +94,32 @@ export default function MainWindow({ navigation, route }) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: 'white',
+        backgroundColor: '#F8F6F4',
     },
-    centeredView: {
+    heading: {
+        padding: 8,
+    },
+    headingText: {
+        textAlign: 'center',
+        color: '#3C0A6B',
+        fontWeight: 'bold',
+        fontSize: 45,
+        fontFamily: 'Times New Roman',
+        paddingLeft: 30,
+        paddingRight: 30,
+        textShadowColor: 'white',
+        textShadowOffset: { width: 5, height: 5 },
+        textShadowRadius: 10,
+    },
+    buttonContainer: {
         flex: 1,
-        position: 'relative',
-        alignItems: 'center',
-        top: 20,
-        marginTop: 22,
+        paddingTop: 30
     },
     modalView: {
-        margin: 5,
-        backgroundColor: 'white',
-        borderRadius: 20,
-        padding: 35,
-        width: "80%",
-        alignItems: 'center',
-        shadowColor: '#000',
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 4,
-        elevation: 5,
+        padding: 25,
+        margin: 15,
+        borderRadius: 8,
+        backgroundColor: '#3C0A6B'
     },
     button: {
         borderRadius: 20,
@@ -130,18 +133,6 @@ const styles = StyleSheet.create({
         color: 'white',
         fontWeight: 'bold',
         textAlign: 'center',
-        fontSize: 20,
-    },
-    addIcon: {
-        width: 50,
-        height: 50,
-    },
-    rectangle: {
-        width: '90%',
-        padding: 5,
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: 10,
-        backgroundColor: "rgba(119, 9, 9, 0.7)",
+        fontSize: 21,
     },
 });

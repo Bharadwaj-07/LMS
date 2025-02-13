@@ -1,6 +1,6 @@
 import * as React from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useState,useEffect,useFocusEffect } from 'react';
+import { useState, useEffect, useFocusEffect } from 'react';
 import { SafeAreaView, ScrollView, View, StyleSheet, Alert } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import axios from 'axios';
@@ -15,25 +15,26 @@ import {
 } from 'react-native-paper';
 
 
-const CardDetails = ({ course, instructor, id, fetchClasses,navigation }) => {
+const CardDetails = ({ subject, course, instructor, id, fetchClasses, navigation }) => {
     const handlePress = () => {
         console.log('Card pressed');
-        navigation.navigate('Classroom',  course );
+        navigation.navigate('Classroom', course);
     };
-    const [admin,setAdminData]=React.useState(false);
-    const findAdmin = async() => {
-        
+    const [admin, setAdminData] = React.useState(false);
+    const findAdmin = async () => {
+
         const userId = await AsyncStorage.getItem('uname');
-        const user=userId.toLowerCase();
-        console.log("User",user);
-        try{
-        const response = await axios.post(`http://${GLOBAL_CONFIG.SYSTEM_IP}:5000/api/Attendance/Admin`, {
-            course,
-            user,
-        });
-        console.log(response.data.admin);
-        setAdminData(response.data.admin);
-        return(response.data.admin);}
+        const user = userId.toLowerCase();
+        console.log("User", user);
+        try {
+            const response = await axios.post(`http://${GLOBAL_CONFIG.SYSTEM_IP}:5000/api/Attendance/Admin`, {
+                course,
+                user,
+            });
+            console.log(response.data.admin);
+            setAdminData(response.data.admin);
+            return (response.data.admin);
+        }
         catch (error) {
             console.error("Error fetching admin data:", error);
             Alert.alert("Error", "Unable to fetch admin data.");
@@ -42,7 +43,7 @@ const CardDetails = ({ course, instructor, id, fetchClasses,navigation }) => {
 
     }
 
-        findAdmin();
+    findAdmin();
     const handleLongPress = () => {
         console.log('Card long-pressed');
     };
@@ -51,7 +52,7 @@ const CardDetails = ({ course, instructor, id, fetchClasses,navigation }) => {
 
     const deleteClass = async (classId) => {
         try {
-            const response = await axios.delete(`http://${GLOBAL_CONFIG}:3000/createClass/${classId}/${userId}`);
+            const response = await axios.delete(`http://${GLOBAL_CONFIG}:5000/createClass/${classId}/${userId}`);
             console.log(response.data.message);
             Alert.alert('Success', 'Classroom deleted successfully!');
             fetchClasses()
@@ -67,11 +68,20 @@ const CardDetails = ({ course, instructor, id, fetchClasses,navigation }) => {
                     mode="elevated"
                     onPress={handlePress}
                     onLongPress={handleLongPress}
-                    style={{ flex: 1, margin: 10 }}>
-                    <Card.Content>
-                        <Title style={{ fontSize: 25, fontWeight: '350', marginBottom: '5' }}>{course}</Title>
-                        <Paragraph style={{ fontSize: 20, marginBottom: '5' }}>{instructor}</Paragraph> 
-                        {admin ? <Paragraph style={{ fontSize: 20, marginBottom: '5' }}>Admin</Paragraph> : null}
+                    style={{
+                        flex: 1, margin: 10, borderWidth: 1,
+                        borderColor: '#3C0A6B',
+                        borderRadius: 10,
+                        shadowColor: '#3C0A6B',
+                        shadowOffset: { width: 2, height: 2 },
+                        shadowOpacity: 0.2,
+                        shadowRadius: 10,
+                        elevation: 10,
+                    }}>
+                    < Card.Content >
+                        <Title style={{ fontSize: 30, fontWeight: 'bold', marginBottom: '10' }}>{subject}</Title>
+                        <Paragraph style={{ fontSize: 21, marginBottom: '10', fontWeight: '500' }}>{instructor}</Paragraph>
+                        {admin ? <Paragraph style={{ fontSize: 18, marginBottom: '5', fontWeight: '400' }}>[Admin]</Paragraph> : null}
                     </Card.Content>
                     <Card.Actions>
                         <Button onPress={() => deleteClass(id)} style={{
@@ -81,7 +91,7 @@ const CardDetails = ({ course, instructor, id, fetchClasses,navigation }) => {
                         </Button>
                     </Card.Actions>
                 </Card>
-            </ScrollView>
+            </ScrollView >
         </View >
     );
 };
