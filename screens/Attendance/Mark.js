@@ -68,6 +68,7 @@ export default function Mark({ navigation, route }) {
                   color="#005d5f"
                 />
                 <Text style={styles.studentName}>{student.name}</Text>
+                <Text style={styles.studentName}>{student.uname}</Text>
               </View>
             ))
           )}

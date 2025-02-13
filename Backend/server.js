@@ -12,6 +12,8 @@ const JoinClassRouter = require('./routes/JoinClassRoute');
 const marksRouter = require('./routes/MarksRouter')
 const QuizRouter=require("./Routes/QuizRouter")
 const App = express();
+const noticeRoutes = require('./routes/noticeRoutes');
+
 
 // Middleware
 App.use(cors({
@@ -50,7 +52,7 @@ App.use('/marks', marksRouter);
 App.use('/quiz',QuizRouter);
 App.use('/api/Attendance', AttendanceRoutes)
 
-
+App.use('/api/notices', noticeRoutes);
 
 const PORT = 5000;
 App.listen(PORT, () => {

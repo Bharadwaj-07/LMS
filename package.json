@@ -4,9 +4,7 @@
 
   "version": "1.0.0",
 
-
   "main": "index.js",
-
 
   "scripts": {
 
@@ -53,6 +51,8 @@
     "expo": "~52.0.25",
 
     "expo-clipboard": "~7.0.1",
+
+    "expo-modules-core": "^2.2.1",
 
     "expo-status-bar": "~2.0.1",
 

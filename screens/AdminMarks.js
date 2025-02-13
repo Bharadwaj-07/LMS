@@ -56,7 +56,7 @@ const AdminMarks = ({ navigation, route }) => {
 
     const renderStudent = ({ item }) => (
         <View style={styles.studentCard}>
-            <Text style={styles.studentName}>{item.userId}</Text>
+            <Text style={styles.studentName}>{item.userId}{item.name}</Text>
             <TextInput
                 style={styles.input}
                 keyboardType="numeric"

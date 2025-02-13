@@ -23,6 +23,26 @@ export default function MainWindow({ navigation, route }) {
         };
         fetchUserId();
     }, []);
+    const handleNoticeBoard = async () => {
+        if (!userId) {
+            Alert.alert("Error", "User ID not found!");
+            return;
+        }
+        try {
+            const user = userId.toLowerCase();
+            console.log(userId, course);
+            const response = await axios.post(`http://${GLOBAL_CONFIG.SYSTEM_IP}:5000/api/Attendance/Admin`, {
+                course,
+                user,
+            });
+            
+                navigation.navigate('NoticeBoard', { admin:response.data.admin });
+            
+        } catch (error) {
+            console.error("Error fetching attendance data:", error);
+            Alert.alert("Error", "Unable to fetch attendance data.");
+        }
+    };
     const handleProgress = async () => {
         if (!userId) {
             Alert.alert("Error", "User ID not found!");
@@ -74,15 +94,15 @@ export default function MainWindow({ navigation, route }) {
         }
         try {
             const user = userId.toLowerCase();
-            console.log(userId,course);
+            console.log(userId, course);
             const response = await axios.post(`http://${GLOBAL_CONFIG.SYSTEM_IP}:5000/api/Attendance/Admin`, {
                 course,
                 user,
             });
             if (response.data.admin) {
-                navigation.navigate('QuizList', { courseId: route.params,userId:userId,admin:true });
+                navigation.navigate('QuizList', { courseId: route.params, userId: userId, admin: true });
             } else {
-                navigation.navigate('QuizList', { courseId: route.params,userId:userId,admin:false });
+                navigation.navigate('QuizList', { courseId: route.params, userId: userId, admin: false });
             }
         } catch (error) {
             console.error("Error fetching attendance data:", error);
@@ -95,8 +115,11 @@ export default function MainWindow({ navigation, route }) {
             <View style={styles.heading}>
                 <Text style={styles.headingText}>{route.params}</Text>
             </View>
+            <TouchableOpacity style={[styles.modalView]} onPress={handleNoticeBoard}>
+                    <Text style={styles.buttonText}>Students</Text>
+                </TouchableOpacity>
             <View style={styles.buttonContainer}>
-                <TouchableOpacity style={[styles.modalView]}>
+                <TouchableOpacity style={[styles.modalView]} onPress={handleNoticeBoard}>
                     <Text style={styles.buttonText}>Notice Board</Text>
                 </TouchableOpacity>
                 <TouchableOpacity

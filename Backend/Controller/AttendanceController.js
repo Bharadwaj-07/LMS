@@ -63,11 +63,17 @@ exports.getUsers = async (req, res) => {
     const { course } = req.body;
     console.log("Course at attendance", course);
     try {
-        const users = await Courses.find({ courseCode: course }).populate('students', 'name');
+        const users = await Courses.find({ courseCode: course }).populate('students', 'name uname');
         console.log("Users", users);
 
-        // Extract the list of students
-        const studentsList = users.flatMap(user => user.students); // Flatten to a single array
+        // Extract the list of students with uname and name
+        const studentsList = users.flatMap(user => 
+            user.students.map(student => ({
+                uname: student.uname,
+                name: student.name
+            }))
+        );
+
         console.log("Extracted Students:", studentsList);
 
         return res.json(studentsList);
@@ -76,6 +82,7 @@ exports.getUsers = async (req, res) => {
         return res.status(500).json({ error: 'An error occurred while fetching users' });
     }
 };
+
 
 exports.SetAttendance = async (req, res) => {
     const { date, course, attendance } = req.body;

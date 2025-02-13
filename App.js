@@ -18,6 +18,8 @@ import StudentMarks from './screens/StudentMarks';
 import QuizList from './screens/QuizList';
 import QuizCreator from './screens/newQuiz';
 import Quiz from './screens/Quiz'
+import NoticeBoard from './screens/NoticeBoard';
+
 const Stack = createStackNavigator();
 const App = () => {
   return (<NavigationContainer>
@@ -26,21 +28,22 @@ const App = () => {
         headerStyle: { backgroundColor: '#3C0A6B' },
         headerTintColor: 'white',
       }}>
-      <Stack.Screen name='Login' component={LoginPage}/>
-      <Stack.Screen name="Home" component={Home} options={{ headerShown: false }}/>
-      <Stack.Screen name='Signup' component={Signup}/>
-      <Stack.Screen name='Details' component={Details}/>
-      <Stack.Screen name='Password' component={Password}/>
-      <Stack.Screen name='Classroom' component={MainWindow}/>
-      <Stack.Screen name='Dates' component={Dates}/>
-      <Stack.Screen name='Present' component={Present}/>
-      <Stack.Screen name='Mark' component={Mark}/>
-      <Stack.Screen name='UserDates' component={UserDates}/>
-      <Stack.Screen name='AdminMarks' component={AdminMarks}/>
-      <Stack.Screen name='StudentMarks' component={StudentMarks}/>
-      <Stack.Screen name='QuizList' component={QuizList}/>
-      <Stack.Screen name='CreateQuiz' component={QuizCreator}/>
-      <Stack.Screen name='Quiz' component={Quiz}/>
+      <Stack.Screen name='Login' component={LoginPage} />
+      <Stack.Screen name="Home" component={Home} options={{ headerShown: false }} />
+      <Stack.Screen name='Signup' component={Signup} />
+      <Stack.Screen name='Details' component={Details} />
+      <Stack.Screen name='Password' component={Password} />
+      <Stack.Screen name='Classroom' component={MainWindow} />
+      <Stack.Screen name='Dates' component={Dates} />
+      <Stack.Screen name='Present' component={Present} />
+      <Stack.Screen name='Mark' component={Mark} />
+      <Stack.Screen name='UserDates' component={UserDates} />
+      <Stack.Screen name='AdminMarks' component={AdminMarks} />
+      <Stack.Screen name='StudentMarks' component={StudentMarks} />
+      <Stack.Screen name='QuizList' component={QuizList} />
+      <Stack.Screen name='CreateQuiz' component={QuizCreator} />
+      <Stack.Screen name='Quiz' component={Quiz} />
+      <Stack.Screen name="NoticeBoard" component={NoticeBoard} />
     </Stack.Navigator>
   </NavigationContainer>)
 

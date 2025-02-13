@@ -31,6 +31,7 @@ router.post('/join', async (req, res) => {
         console.log(marked);
         if(!marked){
         const marks = new MarksModel({
+                    name:username,
                     userId: user,
                     classId: classId,
                     test1:"-",

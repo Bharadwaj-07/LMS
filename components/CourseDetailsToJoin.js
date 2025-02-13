@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { SafeAreaView, ScrollView, View, StyleSheet, Text } from 'react-native';
+import { View, ScrollView, Text, StyleSheet, Alert } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import * as Clipboard from 'expo-clipboard';
 import {
-    PaperProvider,
     Card,
     Button,
     Title,
@@ -12,7 +12,8 @@ import {
 const CourseDetailsToJoin = ({ course, instructor, courseId }) => {
 
     const handlePress = () => {
-        console.log('Card pressed');
+        Clipboard.setStringAsync(courseId);
+        Alert.alert("Copied!", "Course ID copied to clipboard.");
     };
 
     const handleLongPress = () => {
@@ -29,30 +30,19 @@ const CourseDetailsToJoin = ({ course, instructor, courseId }) => {
                     mode="elevated"
                     onPress={handlePress}
                     onLongPress={handleLongPress}
-                    style={{
-                        flex: 1, margin: 10, borderWidth: 1,
-                        borderColor: '#3C0A6B',
-                        borderRadius: 10,
-                        shadowColor: '#3C0A6B',
-                        shadowOffset: { width: 2, height: 2 },
-                        shadowOpacity: 0.2,
-                        shadowRadius: 10,
-                        elevation: 10,
-                    }}>
+                    style={styles.card}>
                     <Card.Content>
-                        <Title style={{ fontSize: 30, fontWeight: 'bold', marginBottom: 10 }}>{course}</Title>
-                        <Paragraph style={{ fontSize: 21, marginBottom: 10, fontWeight: '500' }}>{instructor}</Paragraph>
-                        <Paragraph style={{ fontSize: 18, marginBottom: 5, fontWeight: '400' }}>
-                            CourseId To Join: <Text style={{ fontSize: 15, fontWeight: 'bold' }} >{courseId}</Text>
+                        <Title style={styles.title}>{course}</Title>
+                        <Paragraph style={styles.instructor}>{instructor}</Paragraph>
+                        <Paragraph style={styles.text}>
+                            CourseId To Join: <Text style={styles.boldText}>{courseId}</Text>
                         </Paragraph>
-                        <Paragraph style={{ fontSize: 18, marginBottom: 5, fontWeight: '400' }}>
-                            Subject Code: <Text style={{ fontSize: 15, fontWeight: 'bold' }}>{subjectCode}</Text>
+                        <Paragraph style={styles.text}>
+                            Subject Code: <Text style={styles.boldText}>{subjectCode}</Text>
                         </Paragraph>
                     </Card.Content>
                     <Card.Actions>
-                        <Button onPress={handlePress} style={{
-                            backgroundColor: '#3C0A6B',
-                        }}>
+                        <Button onPress={handlePress} style={styles.button}>
                             <Ionicons name="copy-outline" color='white' size={20} />
                         </Button>
                     </Card.Actions>
@@ -61,5 +51,25 @@ const CourseDetailsToJoin = ({ course, instructor, courseId }) => {
         </View>
     );
 };
+
+const styles = StyleSheet.create({
+    card: {
+        flex: 1,
+        margin: 10,
+        borderWidth: 1,
+        borderColor: '#3C0A6B',
+        borderRadius: 10,
+        shadowColor: '#3C0A6B',
+        shadowOffset: { width: 2, height: 2 },
+        shadowOpacity: 0.2,
+        shadowRadius: 10,
+        elevation: 10,
+    },
+    title: { fontSize: 30, fontWeight: 'bold', marginBottom: 10 },
+    instructor: { fontSize: 21, marginBottom: 10, fontWeight: '500' },
+    text: { fontSize: 18, marginBottom: 5, fontWeight: '400' },
+    boldText: { fontSize: 15, fontWeight: 'bold' },
+    button: { backgroundColor: '#3C0A6B' },
+});
 
 export default CourseDetailsToJoin;
