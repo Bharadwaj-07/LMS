@@ -15,6 +15,9 @@ import MainWindow from './screens/ClassRoom/MainWindow';
 import ClassInput from './components/ClassInput'; 
 import AdminMarks from './screens/AdminMarks';
 import StudentMarks from './screens/StudentMarks';
+import QuizList from './screens/QuizList'; 
+import QuizCreator from './screens/newQuiz';
+import Quiz from './screens/Quiz'
 const Stack = createStackNavigator();
 const App=()=>{
   return (<NavigationContainer>
@@ -31,6 +34,9 @@ const App=()=>{
       <Stack.Screen name='UserDates' component={UserDates}/>
       <Stack.Screen name='AdminMarks' component={AdminMarks}/>
       <Stack.Screen name='StudentMarks' component={StudentMarks}/>
+      <Stack.Screen name='QuizList' component={QuizList}/>
+      <Stack.Screen name='CreateQuiz' component={QuizCreator}/>
+      <Stack.Screen name='Quiz' component={Quiz}/>
     </Stack.Navigator>
   </NavigationContainer>)
  

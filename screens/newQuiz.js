@@ -2,13 +2,15 @@ import React, { useState } from "react";
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert } from "react-native";
 import axios from "axios";
 import { GLOBAL_CONFIG } from '../components/global_config';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { ScrollView } from 'react-native-gesture-handler';
 
-const API_URL = `http://${GLOBAL_CONFIG.SYSTEM_IP}:5000/api/quizzes`;
 
-export default function QuizCreator({ navigation }) {
+export default function QuizCreator({ navigation, route }) {
   const [questions, setQuestions] = useState([{ questionText: "", options: [], answer: "" }]);
-  const courseId = "CS201"; // Change this dynamically if needed
-
+  const [quizzes, setQuizzes] = useState();
+  // Change this dynamically if needed
+  const { courseId, quizNumber } = route.params;
   // Function to update question text
   const updateQuestionText = (index, text) => {
     const updatedQuestions = [...questions];
@@ -51,18 +53,18 @@ export default function QuizCreator({ navigation }) {
       }));
 
       // Determine quiz number (fetch last quiz and increment)
-      const quizListResponse = await axios.get(`${API_URL}?courseId=${courseId}`);
-      setQuizzes(response.data);
-      const quizzes = quizListResponse.data;
-      const quizNumber = quizzes.length + 1; // Increment from last quiz
-
+      // const quizListResponse = await axios.get(`http://${GLOBAL_CONFIG.SYSTEM_IP}:5000/quiz?courseId=${courseId}`);
+      // setQuizzes(quizListResponse.data);
+      // const quizzes = quizListResponse.data;
+      // const quizNumber = quizzes.length + 1; // Increment from last quiz
+      // const QuizNumber=quizNumber+1;
       const payload = { courseId, quizNumber, questions: updatedQuestions };
 
-      const response = await axios.post(API_URL, payload);
+      const response = await axios.post(`http://${GLOBAL_CONFIG.SYSTEM_IP}:5000/quiz`, payload);
 
       if (response.status === 201 || response.status === 200) {
         Alert.alert("Success", `Quiz ${quizNumber} saved successfully`);
-        navigation.goBack(); // Navigate back to Quiz List
+        navigation.navigate('QuizList', { courseId: courseId, admin: true }); // Navigate back to Quiz List
       }
     } catch (error) {
       console.error("Error submitting quiz:", error);
@@ -71,7 +73,7 @@ export default function QuizCreator({ navigation }) {
   };
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView>  <ScrollView><View style={styles.container}>
       <Text style={styles.title}>Quiz Creator</Text>
       {questions.map((q, qIndex) => (
         <View key={qIndex} style={styles.rectangle}>
@@ -107,7 +109,8 @@ export default function QuizCreator({ navigation }) {
       <TouchableOpacity style={styles.button} onPress={submitQuiz}>
         <Text style={styles.buttonText}>Submit</Text>
       </TouchableOpacity>
-    </View>
+    </View></ScrollView></SafeAreaView>
+
   );
 };
 

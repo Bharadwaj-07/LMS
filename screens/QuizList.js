@@ -2,10 +2,11 @@ import React, { useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet, FlatList, ActivityIndicator, Alert } from "react-native";
 import axios from "axios";
 import { GLOBAL_CONFIG } from '../components/global_config';
-const API_URL = "http://${GLOBAL_CONFIG.SYSTEM_IP}/quiz:5000"; // Replace with your backend URL
-
-const QuizList = ({ navigation }) => {
-  const courseId="CS201"; // Get courseId from navigation params
+ // Replace with your backend URL
+ import { SafeAreaView } from 'react-native-safe-area-context';
+ import { ScrollView } from 'react-native-gesture-handler';
+const QuizList = ({ route,navigation }) => {
+  const {courseId,userId,admin}=route.params; // Get courseId from navigation params
   const [quizzes, setQuizzes] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -17,8 +18,10 @@ const QuizList = ({ navigation }) => {
   // Function to fetch quizzes from backend
   const fetchQuizzes = async () => {
     try {
-      const response = await axios.get(`${API_URL}?courseId=${courseId}`);
+      console.log("Getting Quizzes");
+      const response = await axios.get(`http://${GLOBAL_CONFIG.SYSTEM_IP}:5000/quiz?courseId=${courseId}`);
       setQuizzes(response.data);
+      console.log(response.data);
     } catch (error) {
       console.error("Error fetching quizzes:", error);
       Alert.alert("Error", "Failed to load quizzes.");
@@ -30,7 +33,7 @@ const QuizList = ({ navigation }) => {
   // Function to navigate to the quiz creation screen
   const handleAddQuiz = () => {
     const newQuizNumber = quizzes.length + 1; // Increment quiz number
-    navigation.navigate("CreateQuiz", { quizNumber: newQuizNumber, courseId });
+    navigation.navigate("CreateQuiz", { quizNumber: newQuizNumber, courseId,userId});
   };
 
   return (
@@ -46,7 +49,7 @@ const QuizList = ({ navigation }) => {
           renderItem={({ item }) => (
             <TouchableOpacity
               style={styles.quizButton}
-              onPress={() => navigation.navigate("Quiz", { quizNumber: item.quizNumber, courseId:courseId })}
+              onPress={() => navigation.navigate("Quiz", { quizNumber: item.quizNumber, courseId:courseId,admin:admin,userId:userId })}
             >
               <Text style={styles.quizText}>{`Quiz ${item.quizNumber}`}</Text>
             </TouchableOpacity>
@@ -55,9 +58,9 @@ const QuizList = ({ navigation }) => {
       )}
 
       {/* Button to add a new quiz */}
-      <TouchableOpacity style={styles.addButton} onPress={handleAddQuiz}>
+      {admin&&<TouchableOpacity style={styles.addButton} onPress={handleAddQuiz}>
         <Text style={styles.addButtonText}>+ Add Quiz</Text>
-      </TouchableOpacity>
+      </TouchableOpacity>}
     </View>
   );
 };

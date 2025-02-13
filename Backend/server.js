@@ -47,7 +47,7 @@ App.use('/coursesAvailable', coursesAvailableRouter.router);
 App.use('/createClass', CreateClassRouter);
 App.use('/joinClass', JoinClassRouter);
 App.use('/marks', marksRouter);
-App.uses('/quiz',QuizRouter);
+App.use('/quiz',QuizRouter);
 App.use('/api/Attendance', AttendanceRoutes)
 
 

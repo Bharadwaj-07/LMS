@@ -66,6 +66,28 @@ export default function MainWindow({ navigation, route }) {
             Alert.alert("Error", "Unable to fetch attendance data.");
         }
     };
+    const handleQuiz = async () => {
+        if (!userId) {
+            Alert.alert("Error", "User ID not found!");
+            return;
+        }
+        try {
+            const user = userId.toLowerCase();
+            console.log(userId,course);
+            const response = await axios.post(`http://${GLOBAL_CONFIG.SYSTEM_IP}:5000/api/Attendance/Admin`, {
+                course,
+                user,
+            });
+            if (response.data.admin) {
+                navigation.navigate('QuizList', { courseId: route.params,userId:userId,admin:true });
+            } else {
+                navigation.navigate('QuizList', { courseId: route.params,userId:userId,admin:false });
+            }
+        } catch (error) {
+            console.error("Error fetching attendance data:", error);
+            Alert.alert("Error", "Unable to fetch attendance data.");
+        }
+    };
 
     return (
         <View style={styles.container}>
@@ -86,7 +108,7 @@ export default function MainWindow({ navigation, route }) {
                     <Text style={styles.buttonText} onPress={handleProgress}>Progress</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={[styles.modalView, { backgroundColor: "#91f" }]}>
-                    <Text style={styles.buttonText} onPress={handleProgress}>Quiz</Text>
+                    <Text style={styles.buttonText} onPress={handleQuiz}>Quiz</Text>
                 </TouchableOpacity>
             </View>
         </View>
