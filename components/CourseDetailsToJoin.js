@@ -27,11 +27,20 @@ const CourseDetailsToJoin = ({ course, instructor, courseId }) => {
                     mode="elevated"
                     onPress={handlePress}
                     onLongPress={handleLongPress}
-                    style={{ flex: 1, margin: 10 }}>
+                    style={{
+                        flex: 1, margin: 10, borderWidth: 1,
+                        borderColor: '#3C0A6B',
+                        borderRadius: 10,
+                        shadowColor: '#3C0A6B',
+                        shadowOffset: { width: 2, height: 2 },
+                        shadowOpacity: 0.2,
+                        shadowRadius: 10,
+                        elevation: 10,
+                    }}>
                     <Card.Content>
-                        <Title style={{ fontSize: 25, fontWeight: '350', marginBottom: '5' }}>{course}</Title>
-                        <Paragraph style={{ fontSize: 20, marginBottom: '5' }}>{instructor}</Paragraph>
-                        <Paragraph style={{ fontSize: 15, marginBottom: '5' }}>CourseId To Join : <Text style={{ fontSize: 15, fontWeight: 'bold' }} >{courseId}</Text>
+                        <Title style={{ fontSize: 30, fontWeight: 'bold', marginBottom: '10' }}>{course}</Title>
+                        <Paragraph style={{ fontSize: 21, marginBottom: '10', fontWeight: '500' }}>{instructor}</Paragraph>
+                        <Paragraph style={{ fontSize: 18, marginBottom: '5', fontWeight: '400' }}>CourseId To Join : <Text style={{ fontSize: 15, fontWeight: 'bold' }} >{courseId}</Text>
                         </Paragraph>
                     </Card.Content>
                     <Card.Actions>

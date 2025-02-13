@@ -12,16 +12,20 @@ import Present from './screens/Attendance/Present';
 import Mark from './screens/Attendance/Mark';
 import UserDates from './screens/Attendance/UserDates';
 import MainWindow from './screens/ClassRoom/MainWindow';
-import ClassInput from './components/ClassInput'; 
+import ClassInput from './components/ClassInput';
 import AdminMarks from './screens/AdminMarks';
 import StudentMarks from './screens/StudentMarks';
-import QuizList from './screens/QuizList'; 
+import QuizList from './screens/QuizList';
 import QuizCreator from './screens/newQuiz';
 import Quiz from './screens/Quiz'
 const Stack = createStackNavigator();
-const App=()=>{
+const App = () => {
   return (<NavigationContainer>
-    <Stack.Navigator initialRouteName='Login'>
+    <Stack.Navigator initialRouteName='Login'
+      screenOptions={{
+        headerStyle: { backgroundColor: '#3C0A6B' },
+        headerTintColor: 'white',
+      }}>
       <Stack.Screen name='Login' component={LoginPage}/>
       <Stack.Screen name="Home" component={Home} options={{ headerShown: false }}/>
       <Stack.Screen name='Signup' component={Signup}/>
@@ -39,7 +43,7 @@ const App=()=>{
       <Stack.Screen name='Quiz' component={Quiz}/>
     </Stack.Navigator>
   </NavigationContainer>)
- 
+
 }
 export default App;
 
