@@ -6,37 +6,49 @@ const JoinClass = require('../models/JoinClassModel');
 const marks=require('../models/MarksModel');
 const router = express.Router();
 const CourseModel = require('../models/Course');
+const crypto = require('crypto');
+
 router.post('/', async (req, res) => {
     let { className, subjectName, instructorName, userId } = req.body;
     console.log(req.body);
+
     if (!className || !subjectName || !instructorName || !userId) {
         return res.status(400).json({ error: 'All fields are required!' });
     }
+
     userId = userId.toLowerCase();
     console.log("User", userId);
+
+    // Generate a unique 10-character random string
+    const uniqueString = crypto.randomBytes(5).toString('hex'); // 5 bytes = 10 hex characters
+    const uniqueCourseName = `${className}-${uniqueString}`;
+
     try {
         const newClass = new Class({
-            className,
+            className: uniqueCourseName, // Use unique name
             subjectName,
             instructorName,
             userId
         });
+
         const admin = new Admin({
-            course: className,
+            course: uniqueCourseName, // Use unique name
             Admins: [userId]
         });
+
         const course = new CourseModel({
-            courseCode: className,
+            courseCode: uniqueCourseName, // Use unique name
             courseName: subjectName,
             instructors: [instructorName],
             students: []
         });
+
         const saveCourse = await course.save();
         const savedClass = await newClass.save();
         const savedAdmin = await admin.save();
 
         const newCourse = new Course({
-            classId: className, 
+            classId: uniqueCourseName, // Use unique name
             instructor: instructorName,
             subject: subjectName,
             userId
@@ -49,13 +61,13 @@ router.post('/', async (req, res) => {
             class: savedClass,
             course: savedCourse,
         });
-    }
-    catch (error) {
+    } catch (error) {
         console.log("error");
         console.error(error);
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });
+
 
 router.post('/user', async (req, res) => {
     let userId = req.body.userId;

@@ -10,7 +10,7 @@ const AdminMarks = ({ navigation, route }) => {
     const course = route.params.course;
     const [selectedTest, setSelectedTest] = useState('');
     const [students, setStudents] = useState([]);
-
+    const [message,setMessage]=useState([]);
     const getStudents = async () => {
         try {
             const response = await axios.post(
@@ -18,6 +18,7 @@ const AdminMarks = ({ navigation, route }) => {
                 { course: course }
             );
             setStudents(response.data.data);
+            setMessage(response.data.empty);
         } catch (e) {
             console.error(e);
         }
@@ -86,13 +87,14 @@ const AdminMarks = ({ navigation, route }) => {
                         </Picker>
                     </View>
 
-                    {/* Student List */}
-                    <FlatList
+                    {/* Student List */
+                    !message&&<FlatList
                         data={students}
                         keyExtractor={(item) => item._id}
                         renderItem={renderStudent}
                         contentContainerStyle={styles.list}
-                    />
+                    />}
+                    {message&&<Text>No students found.</Text>}
 
                     {/* Submit Button */}
                     <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>

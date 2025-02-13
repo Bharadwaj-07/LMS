@@ -38,31 +38,42 @@ const QuizList = ({ route,navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Select a Quiz</Text>
-
       {loading ? (
         <ActivityIndicator size="large" color="#007bff" />
+      ) : quizzes.length === 0 ? (
+        <Text style={styles.noQuizText}>No quizzes available.</Text>
       ) : (
-        <FlatList
-          data={quizzes}
-          keyExtractor={(item) => item._id}
-          renderItem={({ item }) => (
-            <TouchableOpacity
-              style={styles.quizButton}
-              onPress={() => navigation.navigate("Quiz", { quizNumber: item.quizNumber, courseId:courseId,admin:admin,userId:userId })}
-            >
-              <Text style={styles.quizText}>{`Quiz ${item.quizNumber}`}</Text>
-            </TouchableOpacity>
-          )}
-        />
+        <>
+          <Text style={styles.title}>Select a Quiz</Text>
+          <FlatList
+            data={quizzes}
+            keyExtractor={(item) => item._id}
+            renderItem={({ item }) => (
+              <TouchableOpacity
+                style={styles.quizButton}
+                onPress={() => navigation.navigate("Quiz", { 
+                  quizNumber: item.quizNumber, 
+                  courseId: courseId, 
+                  admin: admin, 
+                  userId: userId 
+                })}
+              >
+                <Text style={styles.quizText}>{`Quiz ${item.quizNumber}`}</Text>
+              </TouchableOpacity>
+            )}
+          />
+        </>
       )}
-
+  
       {/* Button to add a new quiz */}
-      {admin&&<TouchableOpacity style={styles.addButton} onPress={handleAddQuiz}>
-        <Text style={styles.addButtonText}>+ Add Quiz</Text>
-      </TouchableOpacity>}
+      {admin && (
+        <TouchableOpacity style={styles.addButton} onPress={handleAddQuiz}>
+          <Text style={styles.addButtonText}>+ Add Quiz</Text>
+        </TouchableOpacity>
+      )}
     </View>
   );
+  
 };
 
 export default QuizList;

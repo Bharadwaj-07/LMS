@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { SafeAreaView, ScrollView, View, StyleSheet, Text } from 'react-native';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { GLOBAL_CONFIG } from './global_config';
 import {
     PaperProvider,
     Card,
@@ -19,6 +18,9 @@ const CourseDetailsToJoin = ({ course, instructor, courseId }) => {
     const handleLongPress = () => {
         console.log('Card long-pressed');
     };
+
+    // Extract the subject code before "i-phun"
+    const subjectCode = courseId.split('-')[0] || 'Unknown';
 
     return (
         <View>
@@ -38,9 +40,13 @@ const CourseDetailsToJoin = ({ course, instructor, courseId }) => {
                         elevation: 10,
                     }}>
                     <Card.Content>
-                        <Title style={{ fontSize: 30, fontWeight: 'bold', marginBottom: '10' }}>{course}</Title>
-                        <Paragraph style={{ fontSize: 21, marginBottom: '10', fontWeight: '500' }}>{instructor}</Paragraph>
-                        <Paragraph style={{ fontSize: 18, marginBottom: '5', fontWeight: '400' }}>CourseId To Join : <Text style={{ fontSize: 15, fontWeight: 'bold' }} >{courseId}</Text>
+                        <Title style={{ fontSize: 30, fontWeight: 'bold', marginBottom: 10 }}>{course}</Title>
+                        <Paragraph style={{ fontSize: 21, marginBottom: 10, fontWeight: '500' }}>{instructor}</Paragraph>
+                        <Paragraph style={{ fontSize: 18, marginBottom: 5, fontWeight: '400' }}>
+                            CourseId To Join: <Text style={{ fontSize: 15, fontWeight: 'bold' }} >{courseId}</Text>
+                        </Paragraph>
+                        <Paragraph style={{ fontSize: 18, marginBottom: 5, fontWeight: '400' }}>
+                            Subject Code: <Text style={{ fontSize: 15, fontWeight: 'bold' }}>{subjectCode}</Text>
                         </Paragraph>
                     </Card.Content>
                     <Card.Actions>
@@ -51,24 +57,9 @@ const CourseDetailsToJoin = ({ course, instructor, courseId }) => {
                         </Button>
                     </Card.Actions>
                 </Card>
-
             </ScrollView>
-        </View >
+        </View>
     );
 };
 
 export default CourseDetailsToJoin;
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        flexDirection: 'row',
-        backgroundColor: '#fff',
-    },
-    idContainer: {
-        flex: 5
-    },
-    id2Container: {
-        flex: 1
-    }
-});

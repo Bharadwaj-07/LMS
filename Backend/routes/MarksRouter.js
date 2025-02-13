@@ -65,12 +65,13 @@ router.post('/getmarks', async (req, res) => {
         const marks = await Marks.find({ classId:classId });
         console.log(marks);
         if (!marks || marks.length === 0) {
-            return res.status(404).json({ message: 'No marks found for this class' });
+            return res.status(200).json({ message: 'No marks found for this class',empty:true,data:[] });
         }
 
         res.status(200).json({
             message: 'Marks retrieved successfully',
             data: marks,
+            empty:false,
         });
     } catch (error) {
         console.error('Error fetching marks:', error);

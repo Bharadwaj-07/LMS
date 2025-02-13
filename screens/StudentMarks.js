@@ -9,7 +9,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 const StudentMarks = ({ navigation, route }) => {
     const course = route.params.course;
     console.log(course, "parameter");
-    const [marks, setMarks] = useState();
+    const [marks, setMarks] = useState(null);  // Ensure marks are properly initialized
 
     const getStudents = async () => {
         try {
@@ -19,10 +19,15 @@ const StudentMarks = ({ navigation, route }) => {
                 `http://${GLOBAL_CONFIG.SYSTEM_IP}:5000/marks/getmarks/student`,
                 { course: course, user: user }
             );
-            setMarks(response.data); // Assuming response.data contains the marks object
+            if (response.data && Object.keys(response.data).length > 0) {
+                setMarks(response.data);
+            } else {
+                setMarks(null); // No data available
+            }
             console.log(response.data, "Response");
         } catch (e) {
             console.error(e);
+            setMarks(null);  // Handle errors by resetting state
         }
     };
 
@@ -30,39 +35,34 @@ const StudentMarks = ({ navigation, route }) => {
         getStudents();
     }, []);
 
-    const renderMarks = () => {
-        if (!marks) {
-            return <Text style={styles.noData}>No marks available</Text>;
-        }
-
-        const markEntries = Object.entries(marks);
-        console.log(markEntries); // Convert marks object to array of key-value pairs
-        return (
-            <FlatList
-            nestedScrollEnabled={true}
-                data={markEntries}
-                keyExtractor={(item, index) => index.toString()}
-                renderItem={({ item }) => (
-                    <View style={styles.markCard}>
-                        <Text style={styles.markLabel}>{item[0]}:</Text>
-                        <Text style={styles.markValue}>{item[1]}</Text>
-                    </View>
-                )}
-            />
-        );
-    };
+    const renderMarks = ({ item }) => (
+        <View style={styles.markCard}>
+            <Text style={styles.markLabel}>{item.key}:</Text>
+            <Text style={styles.markValue}>{item.value}</Text>
+        </View>
+    );
 
     return (
         <SafeAreaProvider>
-            <ScrollView>
-                <View style={styles.container}>
-                    <Text style={styles.title}>Marks for {course}</Text>
-                    <View style={styles.border}>{renderMarks()}</View>
+            <SafeAreaView style={styles.container}>
+                <Text style={styles.title}>Marks for {course}</Text>
+                <View style={styles.border}>
+                    {marks ? (
+                        <FlatList
+                            nestedScrollEnabled={true}
+                            data={Object.entries(marks).map(([key, value]) => ({ key, value }))}
+                            keyExtractor={(item) => item.key}
+                            renderItem={renderMarks}
+                        />
+                    ) : (
+                        <Text style={styles.noData}>No marks available</Text>
+                    )}
                 </View>
-            </ScrollView>
+            </SafeAreaView>
         </SafeAreaProvider>
     );
 };
+
 export default StudentMarks;
 
 const styles = StyleSheet.create({
