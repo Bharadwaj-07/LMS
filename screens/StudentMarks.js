@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { View, Text, FlatList, StyleSheet, Alert } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import axios from "axios";
+import { ScrollView } from "react-native-gesture-handler";
 import { GLOBAL_CONFIG } from "../components/global_config"; 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -34,9 +35,11 @@ const StudentMarks = ({ navigation, route }) => {
             return <Text style={styles.noData}>No marks available</Text>;
         }
 
-        const markEntries = Object.entries(marks); // Convert marks object to array of key-value pairs
+        const markEntries = Object.entries(marks);
+        console.log(markEntries); // Convert marks object to array of key-value pairs
         return (
             <FlatList
+            nestedScrollEnabled={true}
                 data={markEntries}
                 keyExtractor={(item, index) => index.toString()}
                 renderItem={({ item }) => (
@@ -51,12 +54,12 @@ const StudentMarks = ({ navigation, route }) => {
 
     return (
         <SafeAreaProvider>
-            <SafeAreaView>
+            <ScrollView>
                 <View style={styles.container}>
                     <Text style={styles.title}>Marks for {course}</Text>
                     <View style={styles.border}>{renderMarks()}</View>
                 </View>
-            </SafeAreaView>
+            </ScrollView>
         </SafeAreaProvider>
     );
 };

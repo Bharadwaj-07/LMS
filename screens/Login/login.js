@@ -28,6 +28,7 @@ export default function LoginPage({ navigation }) {
           setUname("");
           setPassword("");
           setFailure(false);
+          setUname(UserName.toLowerCase());
           AsyncStorage.setItem('uname', UserName);
           navigation.navigate("Home", UserName);
           navigation.reset({

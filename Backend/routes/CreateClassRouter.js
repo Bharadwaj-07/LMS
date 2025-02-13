@@ -71,7 +71,6 @@ router.post('/user', async (req, res) => {
         const classIds = joinClasses.map(joinClass => joinClass.classId);
 
         console.log(classIds);
-        let classId = ["CS 201"];
 
         const memberClasses = await Class.find({ className: { $in: classIds } });
         const mergedClasses = [...classes, ...memberClasses];
@@ -83,7 +82,7 @@ router.post('/user', async (req, res) => {
 });
 
 router.delete('/:classId/:userId/:admin/:instructor', async (req, res) => {
-    const { classId, userId, admin,instructor } = req.params;
+    let { classId, userId, admin,instructor } = req.params;
 
     let deletedClasses = null;
     let deletedCourses = null;
@@ -91,6 +90,7 @@ router.delete('/:classId/:userId/:admin/:instructor', async (req, res) => {
     let deletedUserClasses = null;
     let deletedCourseModel=null;
     try {
+        console.log("deleting");
         console.log('Params:', { classId, userId, admin ,instructor});
 
         // Convert admin to boolean
@@ -110,6 +110,8 @@ router.delete('/:classId/:userId/:admin/:instructor', async (req, res) => {
             deletedCourseModel=await CourseModel.findOneAndDelete({classId:classId});
 
         } else {
+            console.log(userId,classId);
+            userId=userId.toLowerCase();
             deletedUserClasses = await JoinClass.findOneAndDelete({ userId: userId, classId: classId });
 
 
