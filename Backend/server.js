@@ -10,7 +10,7 @@ const coursesAvailableRouter = require('./routes/CoursesAvailableRouter')
 const CreateClassRouter = require('./routes/CreateClassRouter')
 const JoinClassRouter = require('./routes/JoinClassRoute');
 const marksRouter = require('./routes/MarksRouter')
-
+const QuizRouter=require("./Routes/QuizRouter")
 const App = express();
 
 // Middleware
@@ -47,7 +47,7 @@ App.use('/coursesAvailable', coursesAvailableRouter.router);
 App.use('/createClass', CreateClassRouter);
 App.use('/joinClass', JoinClassRouter);
 App.use('/marks', marksRouter);
-
+App.uses('/quiz',QuizRouter);
 App.use('/api/Attendance', AttendanceRoutes)
 
 
