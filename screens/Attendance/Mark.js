@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, View, Text, TouchableOpacity, ScrollView, Alert } from "react-native";
+import { StyleSheet, View, Text, TouchableOpacity, ScrollView, Alert, FlatList } from "react-native";
 import { Checkbox } from "react-native-paper"; // Import Checkbox
 import { SafeAreaView, SafeAreaProvider } from "react-native-safe-area-context";
 import axios from "axios";
@@ -54,54 +54,47 @@ export default function Mark({ navigation, route }) {
   };
 
   return (
-    <SafeAreaProvider>
-      <SafeAreaView style={styles.container} edges={["top"]}>
-        <ScrollView contentContainerStyle={{ flexGrow: 1, alignItems: "center", justifyContent: "center" }}>
-          {students.length === 0 ? (
-            <Text style={styles.noStudentsText}>No students enrolled.</Text>
-          ) : (
-            students.map((student) => (
-              <View key={student._id} style={styles.checkboxContainer}>
-                <Checkbox
-                  status={selectedStudents.includes(student._id) ? "checked" : "unchecked"}
-                  onPress={() => handleCheck(student._id)}
-                  color="#005d5f"
-                />
-                <Text style={styles.studentName}>{student.name}</Text>
-                <Text style={styles.studentName}>{student.uname}</Text>
-              </View>
-            ))
+    <View style={styles.container}>
+      {students.length === 0 ? (
+        <Text style={styles.noStudentsText}>No students enrolled.</Text>
+      ) : (
+        <FlatList
+          data={students}
+          keyExtractor={(student) => student._id}
+          contentContainerStyle={styles.listContent}
+          renderItem={({ item }) => (
+            <View style={styles.checkboxContainer}>
+              <Checkbox
+                status={selectedStudents.includes(item._id) ? "checked" : "unchecked"}
+                onPress={() => handleCheck(item._id)}
+                color="#3C0A6B"
+              />
+              <Text style={styles.studentName}>{item.name}</Text>
+            </View>
           )}
-          {students.length > 0 && (
-            <TouchableOpacity style={styles.button} onPress={handleSubmit}>
-              <Text style={styles.buttonText}>Submit</Text>
-            </TouchableOpacity>
-          )}
-        </ScrollView>
-      </SafeAreaView>
-    </SafeAreaProvider>
+        />
+      )}
+
+      {students.length > 0 && (
+        <View style={styles.submitContainer}>
+          <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+            <Text style={styles.buttonText}>Submit</Text>
+          </TouchableOpacity>
+        </View>
+      )}
+    </View>
   );
-  
+
+
+
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "gray",
   },
-  button: {
-    backgroundColor: "#005d5f",
-    paddingVertical: 10,
-    borderRadius: 5,
-    alignSelf: "center",
-    alignItems: "center",
-    width: "60%",
-    marginBottom: 20,
-  },
-  buttonText: {
-    color: "white",
-    fontSize: 16,
-    fontWeight: "bold",
+  listContent: {
+    paddingBottom: 100,
   },
   checkboxContainer: {
     flexDirection: "row",
@@ -110,7 +103,28 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   studentName: {
-    fontSize: 16,
+    fontSize: 18,
     marginLeft: 10,
+
+  },
+  submitContainer: {
+    position: "absolute",
+    bottom: 10,
+    left: 0,
+    right: 0,
+    alignItems: "center",
+    paddingVertical: 10,
+  },
+  button: {
+    backgroundColor: "#3C0A6B",
+    paddingVertical: 10,
+    borderRadius: 5,
+    alignItems: "center",
+    width: "95%",
+  },
+  buttonText: {
+    color: "white",
+    fontSize: 18,
+    fontWeight: "bold",
   },
 });

@@ -4,12 +4,12 @@ import axios from 'axios';
 import { GLOBAL_CONFIG } from '../components/global_config';
 
 export default function InstructorStudentList({ route }) {
-    const { courseId } = route.params; 
+    const { courseId } = route.params;
     console.log(courseId);
     const [students, setStudents] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [admins, setAdmins]=useState([]);
-    const course=courseId;
+    const [admins, setAdmins] = useState([]);
+    const course = courseId;
 
     const fetchAdminDetails = async () => {
         try {
@@ -21,7 +21,7 @@ export default function InstructorStudentList({ route }) {
             setLoading(false);
         }
     };
-    
+
     const fetchStudentDetails = async () => {
         try {
             const response = await axios.get(`http://${GLOBAL_CONFIG.SYSTEM_IP}:5000/details/${courseId}/students`);
@@ -43,39 +43,42 @@ export default function InstructorStudentList({ route }) {
 
     return (
         <View style={styles.container}>
-            {/* Instructors Section */}
-            <Text style={styles.header}>Teaching Assistant</Text>
-            {admins.length > 0 ? (
-                <FlatList
-                    data={admins}
-                    keyExtractor={(item) => item._id}
-                    renderItem={({ item }) => (
-                        <View style={[styles.userItem, styles.adminItem]}>
-                            <Text style={styles.boldText}>{item.uname} ({item.name})</Text>
-                            <Text style={styles.subText}>Email: {item.email}</Text>
-                        </View>
-                    )}
-                />
-            ) : (
-                <Text style={styles.noData}>No instructors assigned.</Text>
-            )}
-
-            {/* Students Section */}
-            <Text style={styles.header}>Students Enrolled</Text>
-            {students.length > 0 ? (
-                <FlatList
-                    data={students}
-                    keyExtractor={(item) => item._id}
-                    renderItem={({ item }) => (
-                        <View style={styles.userItem}>
-                            <Text style={styles.boldText}>{item.uname} ({item.name})</Text>
-                            <Text style={styles.subText}>Email: {item.email}</Text>
-                        </View>
-                    )}
-                />
-            ) : (
-                <Text style={styles.noData}>No students enrolled.</Text>
-            )}
+            <View style={styles.teacher}>
+                {/* Instructors Section */}
+                <Text style={styles.header}>Teacher</Text>
+                {admins.length > 0 ? (
+                    <FlatList
+                        data={admins}
+                        keyExtractor={(item) => item._id}
+                        renderItem={({ item }) => (
+                            <View style={[styles.userItem, styles.adminItem]}>
+                                <Text style={styles.boldText}>{item.name}  ( Username : {item.uname} )</Text>
+                                <Text style={styles.subText}>Email : {item.email}</Text>
+                            </View>
+                        )}
+                    />
+                ) : (
+                    <Text style={styles.noData}>No instructors assigned.</Text>
+                )}
+            </View>
+            <View>
+                {/* Students Section */}
+                <Text style={styles.header}>Students Enrolled</Text>
+                {students.length > 0 ? (
+                    <FlatList
+                        data={students}
+                        keyExtractor={(item) => item._id}
+                        renderItem={({ item }) => (
+                            <View style={styles.userItem}>
+                                <Text style={styles.boldText}>{item.name}  ( Username : {item.uname} )</Text>
+                                <Text style={styles.subText}>Email : {item.email}</Text>
+                            </View>
+                        )}
+                    />
+                ) : (
+                    <Text style={styles.noData}>No students enrolled.</Text>
+                )}
+            </View>
         </View>
     );
 }
@@ -86,6 +89,9 @@ const styles = StyleSheet.create({
         backgroundColor: '#F8F6F4',
         padding: 20,
     },
+    teacher: {
+        marginBottom: 20,
+    },
     header: {
         fontSize: 22,
         fontWeight: 'bold',
@@ -95,12 +101,12 @@ const styles = StyleSheet.create({
     },
     userItem: {
         padding: 10,
-        backgroundColor: '#D0E8FF', // Light blue for students
+        backgroundColor: '#D4BEE4', // Light blue for students
         marginBottom: 5,
         borderRadius: 8,
     },
     adminItem: {
-        backgroundColor: '#FFC107', // Yellow for instructors
+        backgroundColor: '#D0E8FF', // Yellow for instructors
     },
     boldText: {
         fontWeight: 'bold',
@@ -108,7 +114,8 @@ const styles = StyleSheet.create({
     },
     subText: {
         fontSize: 14,
-        color: 'gray',
+        color: 'purple',
+        paddingTop: 5,
     },
     noData: {
         fontSize: 16,

@@ -3,13 +3,14 @@ import { View, Text, FlatList, StyleSheet, Alert } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import axios from "axios";
 import { ScrollView } from "react-native-gesture-handler";
-import { GLOBAL_CONFIG } from "../components/global_config"; 
+import { GLOBAL_CONFIG } from "../components/global_config";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const StudentMarks = ({ navigation, route }) => {
     const course = route.params.course;
+    console.log(route.params)
     console.log(course, "parameter");
-    const [marks, setMarks] = useState(null);  // Ensure marks are properly initialized
+    const [marks, setMarks] = useState(null);
 
     const getStudents = async () => {
         try {
@@ -22,12 +23,12 @@ const StudentMarks = ({ navigation, route }) => {
             if (response.data && Object.keys(response.data).length > 0) {
                 setMarks(response.data);
             } else {
-                setMarks(null); // No data available
+                setMarks(null);
             }
             console.log(response.data, "Response");
         } catch (e) {
             console.error(e);
-            setMarks(null);  // Handle errors by resetting state
+            setMarks(null);
         }
     };
 
@@ -35,9 +36,19 @@ const StudentMarks = ({ navigation, route }) => {
         getStudents();
     }, []);
 
+    const getFormattedKey = (key) => {
+        const keyMapping = {
+            test1: "Test 1",
+            test2: "Test 2",
+            endSem: "End Semester"
+        };
+
+        return keyMapping[key] || key;
+    };
+
     const renderMarks = ({ item }) => (
         <View style={styles.markCard}>
-            <Text style={styles.markLabel}>{item.key}:</Text>
+            <Text style={styles.markLabel}>{getFormattedKey(item.key)} :</Text>
             <Text style={styles.markValue}>{item.value}</Text>
         </View>
     );
@@ -45,7 +56,7 @@ const StudentMarks = ({ navigation, route }) => {
     return (
         <SafeAreaProvider>
             <SafeAreaView style={styles.container}>
-                <Text style={styles.title}>Marks for {course}</Text>
+                <Text style={styles.title}>Your Marks</Text>
                 <View style={styles.border}>
                     {marks ? (
                         <FlatList

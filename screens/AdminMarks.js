@@ -3,14 +3,14 @@ import { View, Text, TextInput, TouchableOpacity, FlatList, StyleSheet, Alert } 
 import RNPickerSelect from 'react-native-picker-select';
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import axios from 'axios'
-import { GLOBAL_CONFIG } from "../components/global_config"; 
+import { GLOBAL_CONFIG } from "../components/global_config";
 
 import { Picker } from '@react-native-picker/picker';
 const AdminMarks = ({ navigation, route }) => {
     const course = route.params.course;
     const [selectedTest, setSelectedTest] = useState('');
     const [students, setStudents] = useState([]);
-    const [message,setMessage]=useState([]);
+    const [message, setMessage] = useState([]);
     const getStudents = async () => {
         try {
             const response = await axios.post(
@@ -38,17 +38,17 @@ const AdminMarks = ({ navigation, route }) => {
         );
     };
 
-    const handleSubmit = async() => {
+    const handleSubmit = async () => {
         console.log(students);
         if (!selectedTest) {
             Alert.alert('Error', 'Please select a test.');
             return;
         }
-        try{
-            const respons=await axios.post(`http://${GLOBAL_CONFIG.SYSTEM_IP}:5000/marks/setmarks`,{students});
+        try {
+            const respons = await axios.post(`http://${GLOBAL_CONFIG.SYSTEM_IP}:5000/marks/setmarks`, { students });
             console.log(respons.data);
         }
-        catch(e){console.log(e);}
+        catch (e) { console.log(e); }
         // Alert.alert("Marks Updated", JSON.stringify({ test: selectedTest, students }, null, 2));
         Alert.alert("Marks updated");
         console.log("Updated Students:", students);
@@ -56,11 +56,11 @@ const AdminMarks = ({ navigation, route }) => {
 
     const renderStudent = ({ item }) => (
         <View style={styles.studentCard}>
-            <Text style={styles.studentName}>{item.userId}{item.name}</Text>
+            <Text style={styles.studentName}>{item.name}</Text>
             <TextInput
                 style={styles.input}
                 keyboardType="numeric"
-                placeholder={`Enter marks for ${selectedTest}`}
+                placeholder={`Enter Marks`}
                 value={item[selectedTest] || ''}
                 onChangeText={(value) => handleMarksChange(item._id, value)}
             />
@@ -88,13 +88,13 @@ const AdminMarks = ({ navigation, route }) => {
                     </View>
 
                     {/* Student List */
-                    !message&&<FlatList
-                        data={students}
-                        keyExtractor={(item) => item._id}
-                        renderItem={renderStudent}
-                        contentContainerStyle={styles.list}
-                    />}
-                    {message&&<Text>No students found.</Text>}
+                        !message && <FlatList
+                            data={students}
+                            keyExtractor={(item) => item._id}
+                            renderItem={renderStudent}
+                            contentContainerStyle={styles.list}
+                        />}
+                    {message && <Text>No students Joined.</Text>}
 
                     {/* Submit Button */}
                     <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>

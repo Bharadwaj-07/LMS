@@ -4,9 +4,9 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { GLOBAL_CONFIG } from '../components/global_config';
 
-export default function NoticeBoard({ navigation,route }) {
+export default function NoticeBoard({ navigation, route }) {
     const [notices, setNotices] = useState([]);
-    const admin=route.params.admin;
+    const admin = route.params.admin;
     console.log(admin.admin);
     const [message, setMessage] = useState('');
     const [userId, setUserId] = useState('');
@@ -45,7 +45,7 @@ export default function NoticeBoard({ navigation,route }) {
             await axios.post(`http://${GLOBAL_CONFIG.SYSTEM_IP}:5000/api/notices/add`, {
                 message,
                 uname: userId,
-                isAdmin:admin
+                isAdmin: admin
             });
             setMessage('');
             fetchNotices(); // Refresh the notice list
@@ -61,31 +61,31 @@ export default function NoticeBoard({ navigation,route }) {
     };
 
     return (
-        <KeyboardAvoidingView 
+        <KeyboardAvoidingView
             style={styles.container}
             behavior='padding'
-            
+
         >
-            <Text style={styles.header}>Notice Board</Text>
+            {/* <Text style={styles.header}>Notice Board</Text> */}
             <FlatList
                 ref={flatListRef} // Attach ref to FlatList
                 data={notices}
                 keyExtractor={(item) => item._id}
                 renderItem={({ item }) => (
-                    <View style={[styles.notice,item.isAdmin ? styles.adminNotice : styles.userNotice]}>
+                    <View style={[styles.notice, item.isAdmin ? styles.adminNotice : styles.userNotice]}>
                         <Text style={styles.noticeText}>
-                            <Text style={styles.noticeUser}>{item.uname}:</Text> {item.message}
+                            <Text style={styles.noticeUser}>{item.uname} :</Text> {item.message}
                         </Text>
                         <Text style={styles.noticeTime}>{new Date(item.timestamp).toLocaleString()}</Text>
                     </View>
                 )}
-                onContentSizeChange={() => flatListRef.current?.scrollToEnd({ animated: true })} 
+                onContentSizeChange={() => flatListRef.current?.scrollToEnd({ animated: true })}
                 onLayout={() => flatListRef.current?.scrollToEnd({ animated: true })}
             />
             <View style={styles.inputContainer}>
                 <TextInput
                     style={styles.input}
-                    placeholder="Write a notice..."
+                    placeholder="Message....."
                     value={message}
                     onChangeText={setMessage}
                 />
@@ -119,11 +119,13 @@ const styles = StyleSheet.create({
     notice: {
         padding: 10,
         marginVertical: 5,
+        marginHorizontal: 10,
         backgroundColor: '#EEE',
         borderRadius: 8,
     },
     noticeText: {
-        fontSize: 16,
+        fontSize: 18,
+        fontStyle: 'italic'
     },
     noticeUser: {
         fontWeight: 'bold',
@@ -131,7 +133,7 @@ const styles = StyleSheet.create({
     },
     noticeTime: {
         fontSize: 12,
-        color: 'gray',
+        color: '#3C0A6B',
         marginTop: 5,
         textAlign: 'right',
     },
@@ -163,10 +165,10 @@ const styles = StyleSheet.create({
     buttonText: {
         color: 'white',
         fontWeight: 'bold',
-    },    userNotice: {
-        backgroundColor: '#EEE',  // Normal user messages (light gray)
+    }, userNotice: {
+        backgroundColor: '#D4BEE4',  // Normal user messages (light gray)
     },
     adminNotice: {
-        backgroundColor: '#FFD700', // Admin messages (gold)
+        backgroundColor: '#D4BEE4', // Admin messages (gold)
     },
 });
