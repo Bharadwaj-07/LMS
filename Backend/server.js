@@ -10,10 +10,10 @@ const coursesAvailableRouter = require('./routes/CoursesAvailableRouter')
 const CreateClassRouter = require('./routes/CreateClassRouter')
 const JoinClassRouter = require('./routes/JoinClassRoute');
 const marksRouter = require('./routes/MarksRouter')
-const QuizRouter=require("./Routes/QuizRouter")
+const QuizRouter=require("./routes/QuizRouter")
 const App = express();
 const noticeRoutes = require('./routes/noticeRoutes');
-
+const DetailsRoutes = require('./routes/DetailsRouter');
 
 // Middleware
 App.use(cors({
@@ -53,7 +53,7 @@ App.use('/quiz',QuizRouter);
 App.use('/api/Attendance', AttendanceRoutes)
 
 App.use('/api/notices', noticeRoutes);
-
+App.use('/details',DetailsRoutes);
 const PORT = 5000;
 App.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);

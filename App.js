@@ -19,7 +19,7 @@ import QuizList from './screens/QuizList';
 import QuizCreator from './screens/newQuiz';
 import Quiz from './screens/Quiz'
 import NoticeBoard from './screens/NoticeBoard';
-
+import InstructorStudentList from './screens/InstructorStudentList';
 const Stack = createStackNavigator();
 const App = () => {
   return (<NavigationContainer>
@@ -44,6 +44,7 @@ const App = () => {
       <Stack.Screen name='CreateQuiz' component={QuizCreator} />
       <Stack.Screen name='Quiz' component={Quiz} />
       <Stack.Screen name="NoticeBoard" component={NoticeBoard} />
+      <Stack.Screen name="Participants" component={InstructorStudentList}/>
     </Stack.Navigator>
   </NavigationContainer>)
 

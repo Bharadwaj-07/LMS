@@ -87,6 +87,9 @@ export default function MainWindow({ navigation, route }) {
             Alert.alert("Error", "Unable to fetch attendance data.");
         }
     };
+    const handleDetails=async()=>{
+        navigation.navigate('Participants',{courseId:course});
+    };
     const handleQuiz = async () => {
         if (!userId) {
             Alert.alert("Error", "User ID not found!");
@@ -115,8 +118,8 @@ export default function MainWindow({ navigation, route }) {
             <View style={styles.heading}>
                 <Text style={styles.headingText}>{route.params}</Text>
             </View>
-            <TouchableOpacity style={[styles.modalView]} onPress={handleNoticeBoard}>
-                    <Text style={styles.buttonText}>Students</Text>
+            <TouchableOpacity style={[styles.modalView]} onPress={handleDetails}>
+                    <Text style={styles.buttonText}>Participants</Text>
                 </TouchableOpacity>
             <View style={styles.buttonContainer}>
                 <TouchableOpacity style={[styles.modalView]} onPress={handleNoticeBoard}>
