@@ -36,7 +36,7 @@ export default function MainWindow({ navigation, route }) {
                 user,
             });
             
-                navigation.navigate('NoticeBoard', { admin:response.data.admin });
+                navigation.navigate('NoticeBoard', { admin:response.data.admin,course:course });
             
         } catch (error) {
             console.error("Error fetching attendance data:", error);

@@ -57,21 +57,22 @@ export default function Mark({ navigation, route }) {
     <SafeAreaProvider>
       <SafeAreaView style={styles.container} edges={["top"]}>
         <ScrollView contentContainerStyle={{ flexGrow: 1, alignItems: "center", justifyContent: "center" }}>
-          {students.length === 0 ? (
-            <Text style={styles.noStudentsText}>No students enrolled.</Text>
-          ) : (
-            students.map((student) => (
-              <View key={student._id} style={styles.checkboxContainer}>
-                <Checkbox
-                  status={selectedStudents.includes(student._id) ? "checked" : "unchecked"}
-                  onPress={() => handleCheck(student._id)}
-                  color="#005d5f"
-                />
-                <Text style={styles.studentName}>{student.name}</Text>
-                <Text style={styles.studentName}>{student.uname}</Text>
-              </View>
-            ))
-          )}
+        {students.length === 0 ? (
+  <Text style={styles.noStudentsText}>No students enrolled.</Text>
+) : (
+  students.map((student, index) => (
+    <View key={student._id || `student-${index}`} style={styles.checkboxContainer}>
+      <Checkbox
+        status={selectedStudents.includes(student._id) ? "checked" : "unchecked"}
+        onPress={() => handleCheck(student._id)}
+        color="#005d5f"
+      />
+      <Text style={styles.studentName}>{student.name}</Text>
+    </View>
+  ))
+)}
+
+
           {students.length > 0 && (
             <TouchableOpacity style={styles.button} onPress={handleSubmit}>
               <Text style={styles.buttonText}>Submit</Text>
@@ -81,7 +82,7 @@ export default function Mark({ navigation, route }) {
       </SafeAreaView>
     </SafeAreaProvider>
   );
-  
+
 }
 
 const styles = StyleSheet.create({

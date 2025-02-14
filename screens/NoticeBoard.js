@@ -7,6 +7,7 @@ import { GLOBAL_CONFIG } from '../components/global_config';
 export default function NoticeBoard({ navigation,route }) {
     const [notices, setNotices] = useState([]);
     const admin=route.params.admin;
+    const course=route.params.course;
     console.log(admin.admin);
     const [message, setMessage] = useState('');
     const [userId, setUserId] = useState('');
@@ -28,7 +29,7 @@ export default function NoticeBoard({ navigation,route }) {
 
     const fetchNotices = async () => {
         try {
-            const response = await axios.get(`http://${GLOBAL_CONFIG.SYSTEM_IP}:5000/api/notices`);
+            const response = await axios.get(`http://${GLOBAL_CONFIG.SYSTEM_IP}:5000/api/notices/${course}`);
             setNotices(response.data);
         } catch (error) {
             console.error("Error fetching notices:", error);
@@ -42,7 +43,7 @@ export default function NoticeBoard({ navigation,route }) {
         }
 
         try {
-            await axios.post(`http://${GLOBAL_CONFIG.SYSTEM_IP}:5000/api/notices/add`, {
+            await axios.post(`http://${GLOBAL_CONFIG.SYSTEM_IP}:5000/api/notices/add/${course}`, {
                 message,
                 uname: userId,
                 isAdmin:admin
