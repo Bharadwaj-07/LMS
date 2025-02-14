@@ -87,8 +87,8 @@ export default function MainWindow({ navigation, route }) {
             Alert.alert("Error", "Unable to fetch attendance data.");
         }
     };
-    const handleDetails=async()=>{
-        navigation.navigate('Participants',{courseId:course});
+    const handleDetails = async () => {
+        navigation.navigate('Participants', { courseId: course });
     };
     const handleQuiz = async () => {
         if (!userId) {
@@ -115,16 +115,11 @@ export default function MainWindow({ navigation, route }) {
 
     return (
         <View style={styles.container}>
-            <View style={styles.heading}>
+            {/* <View style={styles.heading}>
                 <Text style={styles.headingText}>{route.params}</Text>
-            </View>
-            <TouchableOpacity style={[styles.modalView]} onPress={handleDetails}>
-                    <Text style={styles.buttonText}>Participants</Text>
-                </TouchableOpacity>
+            </View> */}
+
             <View style={styles.buttonContainer}>
-                <TouchableOpacity style={[styles.modalView]} onPress={handleNoticeBoard}>
-                    <Text style={styles.buttonText}>Notice Board</Text>
-                </TouchableOpacity>
                 <TouchableOpacity
                     style={[styles.modalView,]}
                     onPress={handleAttendance}
@@ -134,8 +129,14 @@ export default function MainWindow({ navigation, route }) {
                 <TouchableOpacity style={[styles.modalView]}>
                     <Text style={styles.buttonText} onPress={handleProgress}>Progress</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={[styles.modalView, { backgroundColor: "#91f" }]}>
+                <TouchableOpacity style={[styles.modalView]}>
                     <Text style={styles.buttonText} onPress={handleQuiz}>Quiz</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={[styles.modalView]} onPress={handleNoticeBoard}>
+                    <Text style={styles.buttonText}>Discussion Board</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={[styles.modalView]} onPress={handleDetails}>
+                    <Text style={styles.buttonText}>Participants</Text>
                 </TouchableOpacity>
             </View>
         </View>

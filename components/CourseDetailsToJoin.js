@@ -28,7 +28,7 @@ const CourseDetailsToJoin = ({ course, instructor, courseId }) => {
             <ScrollView>
                 <Card
                     mode="elevated"
-                    onPress={handlePress}
+                    // onPress={handlePress}
                     onLongPress={handleLongPress}
                     style={styles.card}>
                     <Card.Content>
@@ -37,9 +37,9 @@ const CourseDetailsToJoin = ({ course, instructor, courseId }) => {
                         <Paragraph style={styles.text}>
                             CourseId To Join: <Text style={styles.boldText}>{courseId}</Text>
                         </Paragraph>
-                        <Paragraph style={styles.text}>
-                            Subject Code: <Text style={styles.boldText}>{subjectCode}</Text>
-                        </Paragraph>
+                        {/* <Paragraph style={styles.text}>
+                            Class Name: <Text style={styles.boldText}>{subjectCode}</Text>
+                        </Paragraph> */}
                     </Card.Content>
                     <Card.Actions>
                         <Button onPress={handlePress} style={styles.button}>

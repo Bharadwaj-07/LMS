@@ -28,23 +28,23 @@ const App = () => {
         headerStyle: { backgroundColor: '#3C0A6B' },
         headerTintColor: 'white',
       }}>
-      <Stack.Screen name='Login' component={LoginPage} />
+      <Stack.Screen name='Login' component={LoginPage} options={{ headerShown: false }} />
       <Stack.Screen name="Home" component={Home} options={{ headerShown: false }} />
       <Stack.Screen name='Signup' component={Signup} />
       <Stack.Screen name='Details' component={Details} />
       <Stack.Screen name='Password' component={Password} />
       <Stack.Screen name='Classroom' component={MainWindow} />
-      <Stack.Screen name='Dates' component={Dates} />
-      <Stack.Screen name='Present' component={Present} />
-      <Stack.Screen name='Mark' component={Mark} />
+      <Stack.Screen name='Dates' component={Dates} options={{ title: "Attendance" }} />
+      <Stack.Screen name='Present' component={Present} options={{ title: "Students Present" }} />
+      <Stack.Screen name='Mark' component={Mark} options={{ title: "Mark Attendance" }} />
       <Stack.Screen name='UserDates' component={UserDates} />
-      <Stack.Screen name='AdminMarks' component={AdminMarks} />
-      <Stack.Screen name='StudentMarks' component={StudentMarks} />
+      <Stack.Screen name='AdminMarks' component={AdminMarks} options={{ title: "Admin Marks" }} />
+      <Stack.Screen name='StudentMarks' component={StudentMarks} options={{ title: "Student Marks" }} />
       <Stack.Screen name='QuizList' component={QuizList} />
       <Stack.Screen name='CreateQuiz' component={QuizCreator} />
       <Stack.Screen name='Quiz' component={Quiz} />
-      <Stack.Screen name="NoticeBoard" component={NoticeBoard} />
-      <Stack.Screen name="Participants" component={InstructorStudentList}/>
+      <Stack.Screen name="NoticeBoard" component={NoticeBoard} options={{ title: "Discussion Board" }} />
+      <Stack.Screen name="Participants" component={InstructorStudentList} />
     </Stack.Navigator>
   </NavigationContainer>)
 
