@@ -12,15 +12,15 @@ const CreateClass = () => {
   const [instructorName, setInstructorName] = useState('');
 
   // code to extract userID
-  
+
   const handleSubmit = async () => {
     if (!className || !subjectName || !instructorName) {
       Alert.alert('Error', 'All fields are required!');
       return;
     }
-    const user = await AsyncStorage.getItem('uname'); 
+    const user = await AsyncStorage.getItem('uname');
     const userId = user.toLowerCase();
-  console.log("Uname",userId);
+    console.log("Uname", userId);
     const payload = {
       className,
       subjectName,
@@ -29,7 +29,7 @@ const CreateClass = () => {
     };
 
     try {
-      console.log("Entering to create class",userId);
+      console.log("Entering to create class", userId);
       const response = await axios.post(`http://${GLOBAL_CONFIG.SYSTEM_IP}:5000/createClass`, payload);
       if (response.status === 201) {
         Alert.alert('Success', 'Classroom created successfully!');
@@ -50,12 +50,12 @@ const CreateClass = () => {
       <Text style={styles.title}>Create Classroom</Text>
 
       <View style={styles.fieldContainer}>
-        <Text style={styles.label}>Class Name</Text>
+        <Text style={styles.label}>Course Code</Text>
         <View style={styles.inputContainer}>
           <FontAwesome name="building" size={20} color="#3C0A6B" />
           <TextInput
             style={styles.input}
-            placeholder="Enter class name"
+            placeholder="Enter Course Code"
             value={className}
             onChangeText={setClassName}
           />

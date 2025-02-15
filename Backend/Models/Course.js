@@ -9,7 +9,6 @@ const SchemaCourse = new mongoose.Schema({
     courseName: {
         type: String,
         required: [true, "Course Name missing"],
-        unique: true,
     },
     instructors: {
         type: Array,
@@ -20,7 +19,7 @@ const SchemaCourse = new mongoose.Schema({
         ref: 'profiles'
     }]
 });
-SchemaCourse.index({ courseCode: 1,courseName:1 }, { unique: true });
+SchemaCourse.index({ courseCode: 1 }, { unique: true });
 // Create the model based on the schema
 module.exports = mongoose.model('courses', SchemaCourse);
 

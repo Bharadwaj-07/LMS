@@ -1,21 +1,35 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, TextInput, TouchableOpacity, FlatList, StyleSheet, Alert, KeyboardAvoidingView, Platform } from 'react-native';
+import { SafeAreaView, View, LogBox, Keyboard, Text, TextInput, TouchableOpacity, FlatList, StyleSheet, Alert, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { GLOBAL_CONFIG } from '../components/global_config';
 
+
+
 export default function NoticeBoard({ navigation, route }) {
     const [notices, setNotices] = useState([]);
-    const admin=route.params.admin;
-    const course=route.params.course;
+    const admin = route.params.admin;
+    const course = route.params.course;
     console.log(admin.admin);
     const [message, setMessage] = useState('');
     const [userId, setUserId] = useState('');
-    const flatListRef = useRef(null); // Reference to FlatList
+    LogBox.ignoreLogs([
+        'VirtualizedLists should never be nested',
+    ]);
 
     useEffect(() => {
         fetchNotices();
         getUserId();
+    }, []);
+
+    useEffect(() => {
+        fetchNotices(); // Initial fetch
+
+        const interval = setInterval(() => {
+            fetchNotices(); // Fetch messages every 5 seconds
+        }, 1000);
+
+        return () => clearInterval(interval); // Cleanup interval when component unmounts
     }, []);
 
     const getUserId = async () => {
@@ -61,40 +75,54 @@ export default function NoticeBoard({ navigation, route }) {
         }
     };
 
-    return (
-        <KeyboardAvoidingView
-            style={styles.container}
-            behavior='padding'
+    const flatListRef = useRef(null);
 
-        >
-            {/* <Text style={styles.header}>Notice Board</Text> */}
-            <FlatList
-                ref={flatListRef} // Attach ref to FlatList
-                data={notices}
-                keyExtractor={(item) => item._id}
-                renderItem={({ item }) => (
-                    <View style={[styles.notice, item.isAdmin ? styles.adminNotice : styles.userNotice]}>
-                        <Text style={styles.noticeText}>
-                            <Text style={styles.noticeUser}>{item.uname} :</Text> {item.message}
-                        </Text>
-                        <Text style={styles.noticeTime}>{new Date(item.timestamp).toLocaleString()}</Text>
-                    </View>
-                )}
-                onContentSizeChange={() => flatListRef.current?.scrollToEnd({ animated: true })}
-                onLayout={() => flatListRef.current?.scrollToEnd({ animated: true })}
-            />
-            <View style={styles.inputContainer}>
-                <TextInput
-                    style={styles.input}
-                    placeholder="Message....."
-                    value={message}
-                    onChangeText={setMessage}
-                />
-                <TouchableOpacity style={styles.button} onPress={postNotice}>
-                    <Text style={styles.buttonText}>Post</Text>
-                </TouchableOpacity>
-            </View>
-        </KeyboardAvoidingView>
+    return (
+        <SafeAreaView style={styles.container}>
+            <KeyboardAvoidingView
+                style={{ flex: 1 }}
+                behavior={Platform.OS === "ios" ? "padding" : "height"}
+                keyboardVerticalOffset={90} // Adjust for iOS & Android
+            >
+                <ScrollView
+                    contentContainerStyle={{ flexGrow: 1 }}
+                    keyboardShouldPersistTaps="handled"
+                >
+                    {/* Message List */}
+                    <FlatList
+                        ref={flatListRef}
+                        data={notices}
+                        keyExtractor={(item) => item._id}
+                        contentContainerStyle={{ paddingBottom: 80 }} // Prevent last item from being hidden
+                        renderItem={({ item }) => (
+                            <View style={[styles.notice, item.isAdmin ? styles.adminNotice : styles.userNotice]}>
+                                <Text style={styles.noticeText}>
+                                    <Text style={styles.noticeUser}>{item.uname} :</Text> {item.message}
+                                </Text>
+                                <Text style={styles.noticeTime}>{new Date(item.timestamp).toLocaleString()}</Text>
+                            </View>
+                        )}
+                        onContentSizeChange={() => flatListRef.current?.scrollToEnd({ animated: true })}
+                        onLayout={() => flatListRef.current?.scrollToEnd({ animated: true })}
+                        keyboardShouldPersistTaps="handled" // Ensures tap dismisses keyboard
+                    />
+                </ScrollView>
+
+                {/* Input Field & Button */}
+                <View style={styles.inputContainer}>
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Message..."
+                        value={message}
+                        onChangeText={setMessage}
+                        onSubmitEditing={Keyboard.dismiss} // Hide keyboard on Enter
+                    />
+                    <TouchableOpacity style={styles.button} onPress={postNotice}>
+                        <Text style={styles.buttonText}>Post</Text>
+                    </TouchableOpacity>
+                </View>
+            </KeyboardAvoidingView>
+        </SafeAreaView>
     );
 }
 const styles = StyleSheet.create({
