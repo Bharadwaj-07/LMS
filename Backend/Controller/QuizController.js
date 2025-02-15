@@ -80,6 +80,20 @@ exports.studentQuiz = async (req, res) => {
     res.status(500).json({ message: "Error fetching quiz", error });
   }
 };
+exports.QuizStats = async (req, res) => {
+  console.log("enyteres studenyquiz");
+  const {  courseId,quizNumber } = req.params;
+  try {
+    const studentResponse = await StudentResponse.findOne({ quizNumber, courseId });
+
+    res.json({
+      data: studentResponse ? studentResponse : [],
+      
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching quiz", error });
+  }
+};
 
 // 📌 POST: Create or update a quiz
 exports.createQuiz = async (req, res) => {

@@ -52,6 +52,8 @@
 
     "expo-clipboard": "~7.0.1",
 
+    "expo-linear-gradient": "^14.0.2",
+
     "expo-modules-core": "^2.2.1",
 
     "expo-status-bar": "~2.0.1",
