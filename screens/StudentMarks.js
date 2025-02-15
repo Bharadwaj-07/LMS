@@ -1,17 +1,28 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, FlatList, StyleSheet, Alert } from "react-native";
+import { View, Text, FlatList, StyleSheet } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import axios from "axios";
-import { ScrollView } from "react-native-gesture-handler";
-import { GLOBAL_CONFIG } from "../components/global_config";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { GLOBAL_CONFIG } from "../components/global_config";
 
 const StudentMarks = ({ navigation, route }) => {
     const course = route.params.course;
-    console.log(route.params)
-    console.log(course, "parameter");
     const [marks, setMarks] = useState(null);
-
+    const [stats, setStats] = useState({});
+    const [maxMarks, setMaxMarks] = useState({ test1: "-", test2: "-", endSem: "-" });
+    const getMaxMarks = async () => {
+        try {
+            const response = await axios.post(`http://${GLOBAL_CONFIG.SYSTEM_IP}:5000/maxmarks/getmaxmarks`, {
+                classId: course,
+            });
+            console.log(response);
+            if (response.data.data) {
+                setMaxMarks(response.data.data);
+            }
+        } catch (e) {
+            console.error("Error fetching max marks:", e);
+        }
+    };
     const getStudents = async () => {
         try {
             let user = await AsyncStorage.getItem("uname");
@@ -20,21 +31,66 @@ const StudentMarks = ({ navigation, route }) => {
                 `http://${GLOBAL_CONFIG.SYSTEM_IP}:5000/marks/getmarks/student`,
                 { course: course, user: user }
             );
+
             if (response.data && Object.keys(response.data).length > 0) {
                 setMarks(response.data);
+                calculateStats(response.data);
             } else {
                 setMarks(null);
+                setStats({});
             }
-            console.log(response.data, "Response");
         } catch (e) {
             console.error(e);
             setMarks(null);
+            setStats({});
         }
     };
 
     useEffect(() => {
+        getMaxMarks();
         getStudents();
     }, []);
+
+    const calculateStats = async () => {
+        try {
+            const response = await axios.post(
+                `http://${GLOBAL_CONFIG.SYSTEM_IP}:5000/marks/getmarks`,
+                { course: course }
+            );
+            console.log("Stats API Response:", response.data);
+
+            if (!response.data || response.data.length === 0) {
+                setStats({
+                    test1: { highest: "-", minimum: "-", average: "-" },
+                    test2: { highest: "-", minimum: "-", average: "-" },
+                    endSem: { highest: "-", minimum: "-", average: "-" },
+                });
+                return;
+            }
+
+            let computedStats = {};
+            ["test1", "test2", "endSem"].forEach(test => {
+                const validMarks = response.data.data
+                    .map((studentMarks) => Number(studentMarks[test]))
+                    .filter((val) => Number.isFinite(val));
+
+                computedStats[test] = validMarks.length > 0
+                    ? {
+                        highest: Math.max(...validMarks),
+                        minimum: Math.min(...validMarks),
+                        average: (validMarks.reduce((a, b) => a + b, 0) / validMarks.length).toFixed(2),
+                    }
+                    : { highest: "-", minimum: "-", average: "-" };
+            });
+
+            console.log("Computed Stats:", computedStats);
+            setStats(computedStats);
+        } catch (error) {
+            console.error(error);
+            setStats({});
+        }
+    };
+
 
     const getFormattedKey = (key) => {
         const keyMapping = {
@@ -50,6 +106,15 @@ const StudentMarks = ({ navigation, route }) => {
         <View style={styles.markCard}>
             <Text style={styles.markLabel}>{getFormattedKey(item.key)} :</Text>
             <Text style={styles.markValue}>{item.value}</Text>
+            {stats[item.key] && (
+                <View style={styles.statsContainer}>
+                    <Text style={styles.statsText}>🎯 Total Marks: {maxMarks[item.key]}</Text>
+                    <Text style={styles.statsText}>📊 Highest: {stats[item.key]?.highest}</Text>
+                    <Text style={styles.statsText}>📉 Lowest: {stats[item.key]?.minimum}</Text>
+                    <Text style={styles.statsText}>📈 Average: {stats[item.key]?.average}</Text>
+                    
+                </View>
+            )}
         </View>
     );
 
@@ -95,7 +160,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
     },
     markCard: {
-        flexDirection: "row",
+        flexDirection: "column",
         justifyContent: "space-between",
         alignItems: "center",
         padding: 15,
@@ -122,5 +187,18 @@ const styles = StyleSheet.create({
         borderColor: "#3C0A6B",
         borderRadius: 8,
         padding: 10,
+    },
+    statsContainer: {
+        marginTop: 10,
+        padding: 10,
+        backgroundColor: "#D5C4E0",
+        borderRadius: 8,
+        alignItems: "center",
+        width: "100%",
+    },
+    statsText: {
+        fontSize: 16,
+        fontWeight: "bold",
+        color: "#3C0A6B",
     },
 });

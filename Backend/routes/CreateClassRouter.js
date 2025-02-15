@@ -8,7 +8,7 @@ const router = express.Router();
 const CourseModel = require('../models/Course');
 const crypto = require('crypto');
 const Attendance=require('../models/Attendance')
-
+const MaxMarks=require("../models/MaxMarks")
 router.post('/', async (req, res) => {
     let { className, subjectName, instructorName, userId } = req.body;
     console.log(req.body);
@@ -54,9 +54,14 @@ router.post('/', async (req, res) => {
             subject: subjectName,
             userId
         });
-
+        const newMaxMarks=new MaxMarks({
+            classId:uniqueCourseName,
+            test1:"-",
+            test2:"-",
+            endSem:"-"
+        })
         const savedCourse = await newCourse.save();
-
+        const saveMaxMarks=await newMaxMarks.save();
         // Generate the last 6 dates
         const today = new Date();
         const lastSixDates = Array.from({ length: 6 }, (_, i) => {

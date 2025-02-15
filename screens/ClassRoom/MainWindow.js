@@ -35,9 +35,9 @@ export default function MainWindow({ navigation, route }) {
                 course,
                 user,
             });
-            
-                navigation.navigate('NoticeBoard', { admin:response.data.admin,course:course });
-            
+
+            navigation.navigate('NoticeBoard', { admin: response.data.admin, course: course });
+
         } catch (error) {
             console.error("Error fetching attendance data:", error);
             Alert.alert("Error", "Unable to fetch attendance data.");
@@ -115,10 +115,6 @@ export default function MainWindow({ navigation, route }) {
 
     return (
         <View style={styles.container}>
-            {/* <View style={styles.heading}>
-                <Text style={styles.headingText}>{route.params}</Text>
-            </View> */}
-
             <View style={styles.buttonContainer}>
                 <TouchableOpacity
                     style={[styles.modalView,]}
@@ -126,11 +122,11 @@ export default function MainWindow({ navigation, route }) {
                 >
                     <Text style={styles.buttonText}>Attendance</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={[styles.modalView]}>
-                    <Text style={styles.buttonText} onPress={handleProgress}>Progress</Text>
+                <TouchableOpacity style={[styles.modalView]} onPress={handleProgress}>
+                    <Text style={styles.buttonText}>Progress</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={[styles.modalView]}>
-                    <Text style={styles.buttonText} onPress={handleQuiz}>Quiz</Text>
+                <TouchableOpacity style={[styles.modalView]} onPress={handleQuiz}>
+                    <Text style={styles.buttonText} >Quiz</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={[styles.modalView]} onPress={handleNoticeBoard}>
                     <Text style={styles.buttonText}>Discussion Board</Text>

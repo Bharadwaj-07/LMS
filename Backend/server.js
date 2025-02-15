@@ -14,6 +14,8 @@ const QuizRouter=require("./routes/QuizRouter")
 const App = express();
 const noticeRoutes = require('./routes/noticeRoutes');
 const DetailsRoutes = require('./routes/DetailsRouter');
+const maxMarksRoutes = require("./routes/MaxMarksRouter");
+
 
 // Middleware
 App.use(cors({
@@ -51,7 +53,7 @@ App.use('/joinClass', JoinClassRouter);
 App.use('/marks', marksRouter);
 App.use('/quiz',QuizRouter);
 App.use('/api/Attendance', AttendanceRoutes)
-
+App.use("/maxmarks", maxMarksRoutes);
 App.use('/api/notices', noticeRoutes);
 App.use('/details',DetailsRoutes);
 const PORT = 5000;
