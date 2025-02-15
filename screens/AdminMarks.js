@@ -4,6 +4,7 @@ import { Picker } from "@react-native-picker/picker";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import axios from "axios";
 import { GLOBAL_CONFIG } from "../components/global_config";
+import { KeyboardAvoidingView, Platform, ScrollView } from "react-native";
 
 const AdminMarks = ({ navigation, route }) => {
     const course = route.params.course;
@@ -16,9 +17,10 @@ const AdminMarks = ({ navigation, route }) => {
     const getMaxMarks = async () => {
         try {
             const response = await axios.post(`http://${GLOBAL_CONFIG.SYSTEM_IP}:5000/maxmarks/getmaxmarks`, { classId: course });
-            if (response.data.data) 
-                {setMaxMarks(response.data.data);
-                        setMaxMarksLocal(response.data.data);}
+            if (response.data.data) {
+                setMaxMarks(response.data.data);
+                setMaxMarksLocal(response.data.data);
+            }
         } catch (e) {
             console.error("Error fetching max marks:", e);
         }
@@ -28,9 +30,9 @@ const AdminMarks = ({ navigation, route }) => {
         try {
             await axios.post(`http://${GLOBAL_CONFIG.SYSTEM_IP}:5000/maxmarks/setmaxmarks`, {
                 classId: course,
-                test1:  maxMarksLocal["test1"],
-                test2:maxMarksLocal["test2"],
-                endSem:maxMarksLocal["endSem"]
+                test1: maxMarksLocal["test1"],
+                test2: maxMarksLocal["test2"],
+                endSem: maxMarksLocal["endSem"]
             });
             setMaxMarks(prev => ({ ...prev, [selectedTest]: maxMarksLocal[selectedTest] }));
             Alert.alert("Success", "Max Marks updated successfully!");
@@ -95,18 +97,33 @@ const AdminMarks = ({ navigation, route }) => {
 
     return (
         <SafeAreaProvider>
-            <SafeAreaView style={styles.safeArea}>
+    <SafeAreaView style={styles.safeArea}>
+        <KeyboardAvoidingView
+            style={{ flex: 1 }}
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+        >
+            <ScrollView
+                contentContainerStyle={{ flexGrow: 1 }}
+                keyboardShouldPersistTaps="handled"
+            >
                 <View style={styles.container}>
-                    <Text style={styles.title}>Student Marks</Text>
+                    {/* Everything inside this View will scroll */}
+                    
+                    {/* Picker for selecting tests */}
                     <View style={styles.pickerContainer}>
-                        <Picker selectedValue={selectedTest} onValueChange={(value) => setSelectedTest(value)} style={styles.picker}>
+                        <Picker
+                            selectedValue={selectedTest}
+                            onValueChange={(value) => setSelectedTest(value)}
+                            style={styles.picker}
+                        >
                             <Picker.Item label="Select a Test" value="" />
                             <Picker.Item label="Test 1" value="test1" />
                             <Picker.Item label="Test 2" value="test2" />
                             <Picker.Item label="End Semester" value="endSem" />
                         </Picker>
                     </View>
-                    
+
+                    {/* Max Marks Input */}
                     {selectedTest && (
                         <View style={styles.maxMarksContainer}>
                             <Text style={styles.maxMarksTitle}>🎯 Set Max Marks for {selectedTest.toUpperCase()}</Text>
@@ -123,6 +140,7 @@ const AdminMarks = ({ navigation, route }) => {
                         </View>
                     )}
 
+                    {/* Statistics */}
                     {selectedTest && stats[selectedTest] && (
                         <View style={styles.statsContainer}>
                             <Text style={styles.statsTitle}>{selectedTest.toUpperCase()} Stats</Text>
@@ -132,16 +150,30 @@ const AdminMarks = ({ navigation, route }) => {
                             <Text style={styles.statsText}>🎯 Max Marks: {maxMarks[selectedTest]}</Text>
                         </View>
                     )}
+
+                    {/* Students List */}
                     {!message && selectedTest && (
-                        <FlatList data={students} keyExtractor={(item) => item._id} renderItem={renderStudent} contentContainerStyle={styles.list} />
+                        <FlatList
+                            data={students}
+                            keyExtractor={(item) => item._id}
+                            renderItem={renderStudent}
+                            contentContainerStyle={styles.list}
+                            keyboardShouldPersistTaps="handled"
+                        />
                     )}
                     {message && <Text style={styles.noStudentsText}>No students joined.</Text>}
+
+                    {/* Submit Button */}
                     <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
                         <Text style={styles.submitButtonText}>Submit Marks</Text>
                     </TouchableOpacity>
                 </View>
-            </SafeAreaView>
-        </SafeAreaProvider>
+            </ScrollView>
+        </KeyboardAvoidingView>
+    </SafeAreaView>
+</SafeAreaProvider>
+
+
     );
 };
 
