@@ -28,8 +28,8 @@ export default function AttendanceDate({ navigation, route }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.header}>Attendance for {course}</Text>
-      <Text style={styles.dateText}>Date: {date}</Text>
+      {/* <Text style={styles.header}>Attendance for {course}</Text> */}
+      <Text style={styles.dateText}>Date : {date}</Text>
 
       {students.length === 0 ? (
         <Text style={styles.noStudentsText}>No attendance records found.</Text>
@@ -60,10 +60,11 @@ const styles = StyleSheet.create({
     color: "#3C0A6B",
   },
   dateText: {
-    fontSize: 16,
+    fontSize: 20,
     textAlign: "center",
-    color: "#555",
+    color: "#3C0A6B",
     marginBottom: 20,
+    fontWeight: 'bold'
   },
   listContent: {
     paddingBottom: 100,
@@ -74,15 +75,15 @@ const styles = StyleSheet.create({
     padding: 15,
     borderBottomWidth: 1,
     borderBottomColor: "#ccc",
-    backgroundColor: "#fff",
+    backgroundColor: "#D4BEE4",
     borderRadius: 5,
     marginVertical: 5,
-    elevation: 2, // Small shadow for better look
+    elevation: 2,
   },
   studentName: {
     fontSize: 18,
     fontWeight: "500",
-    color: "#333",
+    color: "#3C0A6B",
   },
   noStudentsText: {
     textAlign: "center",

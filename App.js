@@ -37,7 +37,7 @@ const App = () => {
       <Stack.Screen name='Dates' component={Dates} options={{ title: "Attendance" }} />
       <Stack.Screen name='Present' component={Present} options={{ title: "Students Present" }} />
       <Stack.Screen name='Mark' component={Mark} options={{ title: "Mark Attendance" }} />
-      <Stack.Screen name='UserDates' component={UserDates} />
+      <Stack.Screen name='UserDates' component={UserDates} options={{ title: "Attendance" }} />
       <Stack.Screen name='AdminMarks' component={AdminMarks} options={{ title: "Admin Marks" }} />
       <Stack.Screen name='StudentMarks' component={StudentMarks} options={{ title: "Student Marks" }} />
       <Stack.Screen name='QuizList' component={QuizList} />

@@ -48,14 +48,14 @@ const CardDetails = ({ subject, course, instructor, id, fetchClasses, navigation
         console.log('Card long-pressed');
     };
 
-    
-    
+
+
 
     const deleteClass = async (classId) => {
         try {
 
             let userId = await AsyncStorage.getItem('uname');
-            console.log(classId,userId);
+            console.log(classId, userId);
             const response = await axios.delete(`http://${GLOBAL_CONFIG.SYSTEM_IP}:5000/createClass/${classId}/${userId}/${admin}/${instructor}`);
 
             console.log(response.data.message);
@@ -86,7 +86,7 @@ const CardDetails = ({ subject, course, instructor, id, fetchClasses, navigation
                     < Card.Content >
                         <Title style={{ fontSize: 30, fontWeight: 'bold', marginBottom: '10' }}>{subject}</Title>
                         <Paragraph style={{ fontSize: 21, marginBottom: '10', fontWeight: '500' }}>{instructor}</Paragraph>
-                        {admin ? <Paragraph style={{ fontSize: 18, marginBottom: '5', fontWeight: '400' }}>[Admin]</Paragraph> : null}
+                        {admin ? <Paragraph style={{ fontSize: 18, marginBottom: '5', fontWeight: '400' }}>[Admin]</Paragraph> : <Paragraph style={{ fontSize: 18, marginBottom: '5', fontWeight: '400' }}>[Student]</Paragraph>}
                     </Card.Content>
                     <Card.Actions>
                         <Button onPress={() => deleteClass(course)} style={{

@@ -54,24 +54,25 @@ const CoursesEnrolled = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
-            <ScrollView>
-                {classes.length>0?(classes.map((classItem) => (
-                    <CardDetails
-                        key={classItem._id}
-                        course={classItem.className}
-                        subject={classItem.subjectName}
-                        instructor={classItem.instructorName}
-                        id={classItem._id}
-                        fetchClasses={fetchClasses}
-                        navigation={navigation}
-                    />
-
-                ))):(
-                                    <View style={styles.noCoursesContainer}>
-                                        <Text style={styles.container}>No courses available</Text>
-                                    </View>
-                                )}
-            </ScrollView>
+            {classes.length > 0 ? (
+                <ScrollView>
+                    {classes.map((classItem) => (
+                        <CardDetails
+                            key={classItem._id}
+                            course={classItem.className}
+                            subject={classItem.subjectName}
+                            instructor={classItem.instructorName}
+                            id={classItem._id}
+                            fetchClasses={fetchClasses}
+                            navigation={navigation}
+                        />
+                    ))}
+                </ScrollView>
+            ) : (
+                <View style={styles.noCoursesContainer}>
+                    <Text style={styles.noCoursesText}>No Courses Enrolled</Text>
+                </View>
+            )}
         </View>
     );
 
@@ -84,10 +85,14 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#fff',
     },
-    message: {
-        flex: 1,
-        backgroundColor: '#FFF',
+    noCoursesContainer: {
+        flex: 1,  // Make it take full screen height
         justifyContent: 'center',
-        alignItems: 'center'
-    }
+        alignItems: 'center',
+    },
+    noCoursesText: {
+        fontSize: 18,
+        color: '#6C757D',
+        textAlign: 'center',
+    },
 });

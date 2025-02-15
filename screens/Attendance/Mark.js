@@ -19,7 +19,7 @@ export default function Mark({ navigation, route }) {
           { course }
         );
         setStudents(response.data);
-        console.log(response,"Studnets");
+        console.log(response, "Studnets");
       } catch (e) {
         console.error(e);
       }
@@ -71,6 +71,8 @@ export default function Mark({ navigation, route }) {
               <Switch
                 value={!!selectedStudents[item._id]}
                 onValueChange={() => handleToggle(item._id)}
+                thumbColor={selectedStudents[item._id] ? "#ffffff" : "#f4f3f4"} // Circle color
+                trackColor={{ false: "#767577", true: "#3C0A6B" }}
               />
             </View>
           )}
@@ -93,7 +95,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   listContent: {
-    paddingBottom: 100,
+    paddingBottom: 80,
   },
   itemContainer: {
     flexDirection: "row",
@@ -101,10 +103,13 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     padding: 10,
     borderBottomWidth: 1,
-    borderBottomColor: "#ccc",
+    borderBottomColor: "#3C0A6B",
+    paddingLeft: 20
   },
   studentName: {
-    fontSize: 18,
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#3C0A6B'
   },
   submitContainer: {
     position: "absolute",

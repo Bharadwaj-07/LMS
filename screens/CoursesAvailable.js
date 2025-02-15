@@ -21,7 +21,7 @@ const CoursesAvailable = () => {
                 setError(err.message);
                 setLoading(false);
             });
-            
+
     };
 
     useFocusEffect(
@@ -49,24 +49,25 @@ const CoursesAvailable = () => {
 
     return (
         <View style={styles.container}>
-            <ScrollView contentContainerStyle={styles.scrollContainer}>
-                {courses.length > 0 ? (
-                    courses.map((course) => (
+            {courses.length > 0 ? (
+                <ScrollView>
+                    {courses.map((course) => (
                         <CourseDetailsToJoin
                             key={course._id}
                             course={course.subject}
                             instructor={course.instructor}
-                            courseId={course.classId}   
+                            courseId={course.classId}
                         />
-                    ))
-                ) : (
-                    <View style={styles.noCoursesContainer}>
-                        <Text style={styles.noCoursesText}>No courses available</Text>
-                    </View>
-                )}
-            </ScrollView>
+                    ))}
+                </ScrollView>
+            ) : (
+                <View style={styles.noCoursesContainer}>
+                    <Text style={styles.noCoursesText}>No Courses Available</Text>
+                </View>
+            )}
         </View>
     );
+
 };
 
 export default CoursesAvailable;
@@ -81,27 +82,10 @@ const styles = StyleSheet.create({
         paddingVertical: 20,
         paddingHorizontal: 16,
     },
-    centered: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#FFF',
-    },
-    loadingText: {
-        marginTop: 10,
-        fontSize: 16,
-        color: '#007BFF',
-    },
-    errorText: {
-        fontSize: 16,
-        color: '#D9534F',
-        textAlign: 'center',
-    },
     noCoursesContainer: {
-        flex: 1,
+        flex: 1,  // Ensure full height
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop: 20,
     },
     noCoursesText: {
         fontSize: 18,
