@@ -7,6 +7,7 @@ const marks=require('../models/MarksModel');
 const router = express.Router();
 const CourseModel = require('../models/Course');
 const crypto = require('crypto');
+const Attendance=require('../models/Attendance')
 
 router.post('/', async (req, res) => {
     let { className, subjectName, instructorName, userId } = req.body;
@@ -56,17 +57,35 @@ router.post('/', async (req, res) => {
 
         const savedCourse = await newCourse.save();
 
+        // Generate the last 6 dates
+        const today = new Date();
+        const lastSixDates = Array.from({ length: 6 }, (_, i) => {
+            const date = new Date(today);
+            date.setDate(date.getDate() - i - 1);
+            return date.toISOString().split('T')[0]; // Format: YYYY-MM-DD
+        });
+
+        // Insert the last six dates into the Attendance collection
+        const attendanceRecords = lastSixDates.map((date) => ({
+            date,
+            course: uniqueCourseName,
+            attendance: [],
+        }));
+
+        await Attendance.insertMany(attendanceRecords, { ordered: false })
+            .catch((err) => console.log("Some dates already exist, skipping duplicates"));
+
         res.status(201).json({
             message: 'Class and Course created successfully',
             class: savedClass,
             course: savedCourse,
         });
     } catch (error) {
-        console.log("error");
         console.error(error);
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });
+
 
 
 router.post('/user', async (req, res) => {

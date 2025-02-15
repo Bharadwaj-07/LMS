@@ -63,14 +63,15 @@ exports.getUsers = async (req, res) => {
     const { course } = req.body;
     console.log("Course at attendance", course);
     try {
-        const users = await Courses.find({ courseCode: course }).populate('students', 'name uname');
+        const users = await Courses.find({ courseCode: course }).populate('students', 'name uname _id');
         console.log("Users", users);
 
         // Extract the list of students with uname and name
         const studentsList = users.flatMap(user => 
             user.students.map(student => ({
                 uname: student.uname,
-                name: student.name
+                name: student.name,
+                _id:student._id,
             }))
         );
 
@@ -86,18 +87,19 @@ exports.getUsers = async (req, res) => {
 
 exports.SetAttendance = async (req, res) => {
     const { date, course, attendance } = req.body;
-    console.log("Date", date);
+    console.log("Date here", date,course,attendance);
     try {
         const Record = await Attendance.findOne({ date: date, course: course });
         if (Record) {
             await Attendance.findOneAndUpdate({ date: date, course: course }, { attendance: attendance });
         }
+        else{
         const newRecord = new Attendance({
             date: date,
             course: course,
             attendance: attendance
         });
-        await newRecord.save();
+        await newRecord.save();}
         return res.json({ message: "Attendance Marked" });
     }
     catch (e) {

@@ -55,7 +55,7 @@ const CoursesEnrolled = ({ navigation }) => {
     return (
         <View style={styles.container}>
             <ScrollView>
-                {classes.map((classItem) => (
+                {classes.length>0?(classes.map((classItem) => (
                     <CardDetails
                         key={classItem._id}
                         course={classItem.className}
@@ -66,7 +66,11 @@ const CoursesEnrolled = ({ navigation }) => {
                         navigation={navigation}
                     />
 
-                ))}
+                ))):(
+                                    <View style={styles.noCoursesContainer}>
+                                        <Text style={styles.container}>No courses available</Text>
+                                    </View>
+                                )}
             </ScrollView>
         </View>
     );

@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, View, Text, TouchableOpacity, ScrollView, Alert, FlatList } from "react-native";
-import { Checkbox } from "react-native-paper"; // Import Checkbox
-import { SafeAreaView, SafeAreaProvider } from "react-native-safe-area-context";
+import { StyleSheet, View, Text, TouchableOpacity, Alert, FlatList, Switch } from "react-native";
 import axios from "axios";
 import { GLOBAL_CONFIG } from '../../components/global_config';
 
@@ -11,44 +9,49 @@ export default function Mark({ navigation, route }) {
   const formattedDate = date.toISOString().split('T')[0];
 
   const [students, setStudents] = useState([]);
-  const [selectedStudents, setSelectedStudents] = useState([]);
-
-  const getStudents = async () => {
-    try {
-      const response = await axios.post(
-        `http://${GLOBAL_CONFIG.SYSTEM_IP}:5000/api/Attendance/students`,
-        { course }
-      );
-      setStudents(response.data);
-    } catch (e) {
-      console.error(e);
-    }
-  };
+  const [selectedStudents, setSelectedStudents] = useState({});
 
   useEffect(() => {
+    const getStudents = async () => {
+      try {
+        const response = await axios.post(
+          `http://${GLOBAL_CONFIG.SYSTEM_IP}:5000/api/Attendance/students`,
+          { course }
+        );
+        setStudents(response.data);
+        console.log(response,"Studnets");
+      } catch (e) {
+        console.error(e);
+      }
+    };
+
     getStudents();
   }, []);
 
-  const handleCheck = (studentId) => {
-    setSelectedStudents((prevState) =>
-      prevState.includes(studentId)
-        ? prevState.filter((id) => id !== studentId)
-        : [...prevState, studentId]
-    );
+  const handleToggle = (studentId) => {
+    setSelectedStudents((prevSelectedStudents) => ({
+      ...prevSelectedStudents,
+      [studentId]: !prevSelectedStudents[studentId],
+    }));
   };
 
   const handleSubmit = async () => {
+    const attendanceList = Object.keys(selectedStudents).filter(
+      (studentId) => selectedStudents[studentId]
+    );
     try {
-      const response = await axios.post(
+      console.log("posting", attendanceList);
+      await axios.post(
         `http://${GLOBAL_CONFIG.SYSTEM_IP}:5000/api/Attendance/attendance`,
         {
           date: formattedDate,
           course,
-          attendance: selectedStudents,
+          attendance: attendanceList,
         }
       );
-      Alert.alert("Attendance marked successfully");
+      Alert.alert("Success", "Attendance marked successfully");
     } catch (e) {
+      Alert.alert("Error", "Failed to mark attendance");
       console.error(e);
     }
   };
@@ -60,16 +63,15 @@ export default function Mark({ navigation, route }) {
       ) : (
         <FlatList
           data={students}
-          keyExtractor={(student) => student._id}
+          keyExtractor={(item, index) => item._id || index.toString()}
           contentContainerStyle={styles.listContent}
           renderItem={({ item }) => (
-            <View style={styles.checkboxContainer}>
-              <Checkbox
-                status={selectedStudents.includes(item._id) ? "checked" : "unchecked"}
-                onPress={() => handleCheck(item._id)}
-                color="#3C0A6B"
-              />
+            <View style={styles.itemContainer}>
               <Text style={styles.studentName}>{item.name}</Text>
+              <Switch
+                value={!!selectedStudents[item._id]}
+                onValueChange={() => handleToggle(item._id)}
+              />
             </View>
           )}
         />
@@ -84,9 +86,6 @@ export default function Mark({ navigation, route }) {
       )}
     </View>
   );
-
-
-
 }
 
 const styles = StyleSheet.create({
@@ -96,16 +95,16 @@ const styles = StyleSheet.create({
   listContent: {
     paddingBottom: 100,
   },
-  checkboxContainer: {
+  itemContainer: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 10,
-    paddingHorizontal: 10,
+    justifyContent: "space-between",
+    padding: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: "#ccc",
   },
   studentName: {
     fontSize: 18,
-    marginLeft: 10,
-
   },
   submitContainer: {
     position: "absolute",
