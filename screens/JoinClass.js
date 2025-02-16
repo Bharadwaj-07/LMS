@@ -35,6 +35,11 @@ const JoinClass = () => {
             const response = await axios.post(`http://${GLOBAL_CONFIG.SYSTEM_IP}:5000/joinClass/join`, {
                 classId, username, userId
             });
+            console.log(response.data);
+            if(!response.data.data){
+                Alert.alert('Error', 'You are already part of the class!');
+                setClassId('');
+                setUsername('');}
             Alert.alert('Success', 'You have successfully joined the class!');
             setClassId('');
             setUsername('');
@@ -44,7 +49,9 @@ const JoinClass = () => {
             setLoading(false);
         }}
         else{
-            Alert.alert("You are admin of this course");
+            Alert.alert(`You are admin of this course ${classId}`);
+            setClassId('');
+            setUsername('');
         }
     };
 

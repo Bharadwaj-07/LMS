@@ -18,7 +18,10 @@ router.post('/join', async (req, res) => {
         console.log("hello");
 
         // Create a new JoinClass instance
-        
+        const mark=await JoinClass.findOne({userId,classId});
+        if(mark){
+            return res.json({message:"Already Joined",data:false});
+        }
         const newJoin = new JoinClass({ userId, classId, username });
         console.log(newJoin);
         
@@ -56,7 +59,7 @@ router.post('/join', async (req, res) => {
 
         res.status(201).json({
             message: 'User successfully joined the class and added to the course',
-            data: savedJoin,
+            data: true,
         });
     } catch (error) {
         console.error('Error joining class:', error);
