@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, Alert, TextInput, TouchableOpacity, Image, ImageBackground } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { GLOBAL_CONFIG } from '../../components/global_config';
+import { StyleSheet, Text, View, Image, ImageBackground, TextInput, TouchableOpacity, Alert, Form } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import API from '../../Middleware/API';
+import { GLOBAL_CONFIG } from '../../components/global_config';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-// Login page component
+import axios from "axios";
 export default function LoginPage({ navigation }) {
   const [UserName, setUname] = useState('');
   const [password, setPassword] = useState('');
@@ -12,16 +13,14 @@ export default function LoginPage({ navigation }) {
   const [failure, setFailure] = useState(false);
   const [visible, setVisible] = useState(false);
   const [status, setStatus] = useState("");
-
-  // Function to handle forgot password
   const ForgotPassword = () => {
     Alert.alert("Please contact the concerned TA");
   };
-
-  // Function to handle login
+ 
   HandleLogin = async (UserName, password) => {
     if (password != "" && UserName != "") {
       try {
+        console.log(UserName);
         // Send the POST request to the backend API
         const response = await API.post(`http://${GLOBAL_CONFIG.SYSTEM_IP}:5000/api/Users/login`, { uname: UserName, passwd: password });
         console.log("response received", response.data);
@@ -51,9 +50,10 @@ export default function LoginPage({ navigation }) {
         console.error('Error:', error);
       }
     }
-  }
 
+  }
   return (
+
     <ImageBackground source={require("../../assets/IIT_Admin_Block.png")}
       style={styles.container}>
 
@@ -62,7 +62,7 @@ export default function LoginPage({ navigation }) {
           style={styles.medium_icon}
         />
 
-        {/* User Name Input */}
+        {/* Roll Number Input */}
         <TextInput
           style={styles.input}
           placeholder="User Name"
@@ -82,7 +82,7 @@ export default function LoginPage({ navigation }) {
           <TouchableOpacity style={{ alignItems: "center", position: "relative", alignItems: "left", marginBottom: 10 }} onPress={() => { setVisible(!visible) }}><Text>{visible ? 'Hide' : 'Show'}</Text></TouchableOpacity>
         </View>
         {(failure) && <Text style={styles.title}>Wrong Username or Password!!</Text>}
-        {/* Forgot Password */}
+        {/*Forgot Password */}
         <TouchableOpacity style={styles.small_button} onPress={ForgotPassword}><Text style={styles.small_text}>Forgot Password?</Text></TouchableOpacity>
         {/* Login Button */}
         <TouchableOpacity style={styles.button} onPress={() => HandleLogin(UserName, password)} >
@@ -110,6 +110,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#f3f2',
+
   },
   medium_icon: {
     opacity: 1,
@@ -151,6 +152,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     alignItems: 'center',
     width: '60%'
+
   },
   buttonText: {
     color: 'rgba(255,255,255,1)',

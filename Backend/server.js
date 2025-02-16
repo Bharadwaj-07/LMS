@@ -57,7 +57,7 @@ App.use("/maxmarks", maxMarksRoutes);
 App.use('/api/notices', noticeRoutes);
 App.use('/details',DetailsRoutes);
 const GLOBAL_CONFIG=require("../components/global_config");
-const PORT = GLOBAL_CONFIG.PORT;
+const PORT = 5000;
 App.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });

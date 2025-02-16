@@ -13,20 +13,24 @@ import CreateClass from './CreateClass';
 import LoginPage from './Login/login';
 import Logout from './logout';
 
-// Main App component
 export default function App() {
   const Tab = createBottomTabNavigator();
   const Drawer = createDrawerNavigator();
-
-  // Tab navigator component
+  const handleLogin=()=>{
+    navigation.navigate("Login");
+    navigation.reset({
+      index: 0,  // Index of the screen you want to navigate to (0 means it's the first screen)
+      routes: [{ name: 'Home', params: { UserName: UserName } }], // Set the Home screen as the new root
+    });
+  }
   const TabNavigator = () => {
     return (
       <Tab.Navigator
         screenOptions={{
-          headerStyle: { backgroundColor: '#3C0A6B' }, // Style for the header
-          headerTintColor: 'white', // Color for the header text
-          tabBarActiveTintColor: 'white', // Color for the active tab
-          tabBarActiveBackgroundColor: '#3C0A6B', // Background color for the active tab
+          headerStyle: { backgroundColor: '#3C0A6B' },
+          headerTintColor: 'white',
+          tabBarActiveTintColor: 'white',
+          tabBarActiveBackgroundColor: '#3C0A6B',
         }}
       >
         <Tab.Screen
@@ -34,9 +38,9 @@ export default function App() {
           component={Dashboard}
           options={{
             tabBarIcon: ({ color, size }) => (
-              <Ionicons name="book" color={color} size={size} /> // Icon for the tab
+              <Ionicons name="book" color={color} size={size} />
             ),
-            headerShown: false, // Hide the header
+            headerShown: false,
           }}
         />
         <Tab.Screen
@@ -44,32 +48,31 @@ export default function App() {
           component={CoursesAvailable}
           options={{
             tabBarIcon: ({ color, size }) => (
-              <Ionicons name="reader-outline" color={color} size={size} /> // Icon for the tab
+              <Ionicons name="reader-outline" color={color} size={size} />
             ),
-            headerShown: false, // Hide the header
+            headerShown: false,
           }}
         />
       </Tab.Navigator>
     );
   };
 
-  // Drawer navigator component
   const DrawerNavigator = () => {
     return (
       <Drawer.Navigator
         screenOptions={{
-          headerStyle: { backgroundColor: '#3C0A6B' }, // Style for the header
-          headerTintColor: 'white', // Color for the header text
-          drawerActiveTintColor: "white", // Color for the active drawer item
-          drawerInactiveTintColor: "Black", // Color for the inactive drawer items
-          drawerActiveBackgroundColor: '#3C0A6B', // Background color for the active drawer item
+          headerStyle: { backgroundColor: '#3C0A6B' },
+          headerTintColor: 'white',
+          drawerActiveTintColor: "white",
+          drawerInactiveTintColor: "Black",
+          drawerActiveBackgroundColor: '#3C0A6B',
           drawerStyle: {
-            backgroundColor: '#D4BEE4', // Background color for the drawer
-            width: 300, // Width of the drawer
+            backgroundColor: '#D4BEE4',
+            width: 300,
           },
-          drawerHideStatusBarOnOpen: true, // Hide the status bar when the drawer is open
+          drawerHideStatusBarOnOpen: true,
           drawerLabelStyle: {
-            fontSize: 15, // Font size for the drawer labels
+            fontSize: 15,
           },
         }}
       >
@@ -78,7 +81,7 @@ export default function App() {
           component={TabNavigator}
           options={{
             drawerIcon: ({ color }) => (
-              <Ionicons name="home" size={25} color={color} /> // Icon for the drawer item
+              <Ionicons name="home" size={25} color={color} />
             ),
           }}
         />
@@ -87,7 +90,7 @@ export default function App() {
           component={CreateClass}
           options={{
             drawerIcon: ({ color }) => (
-              <Ionicons name="add-outline" size={25} color={color} /> // Icon for the drawer item
+              <Ionicons name="add-outline" size={25} color={color} />
             ),
           }}
         />
@@ -96,7 +99,7 @@ export default function App() {
           component={JoinClass}
           options={{
             drawerIcon: ({ color }) => (
-              <Ionicons name="return-down-forward-outline" size={25} color={color} /> // Icon for the drawer item
+              <Ionicons name="return-down-forward-outline" size={25} color={color} />
             ),
           }}
         />
@@ -105,7 +108,7 @@ export default function App() {
           component={Logout}
           options={{
             drawerIcon: ({ color }) => (
-              <Ionicons name="log-out-outline" size={25} color={color} /> // Icon for the drawer item
+              <Ionicons name="log-out-outline" size={25} color={color} />
             ),
           }}
         />
@@ -113,31 +116,12 @@ export default function App() {
     );
   };
 
-  // Logout component to clear AsyncStorage and navigate to login screen
-  const Logout = ({ navigation }) => {
-    useEffect(() => {
-      const clearStorageAndLogout = async () => {
-        try {
-          await AsyncStorage.clear(); // Clear AsyncStorage
-          Alert.alert("Logged out", "You have been logged out successfully."); // Show alert
-          navigation.navigate("Login"); // Navigate to the login screen
-        } catch (error) {
-          console.error('Error clearing AsyncStorage:', error); // Log error
-        }
-      };
-
-      clearStorageAndLogout();
-    }, []);
-
-    return null;
-  };
-
   return (
     <>
-      <StatusBar style="light" /> {/* Set the status bar style */}
-      <NavigationContainer>
-        <DrawerNavigator /> {/* Render the drawer navigator */}
-      </NavigationContainer>
+      <StatusBar style="light" />
+      {/* <NavigationContainer> */}
+        <DrawerNavigator />
+      {/* </NavigationContainer>*/}
     </>
   );
 }
