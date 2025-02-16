@@ -84,7 +84,7 @@ exports.QuizStats = async (req, res) => {
   console.log("enyteres studenyquiz");
   const {  courseId,quizNumber } = req.params;
   try {
-    const studentResponse = await StudentResponse.findOne({ quizNumber, courseId });
+    const studentResponse = await StudentResponse.find({ quizNumber, courseId });
 
     res.json({
       data: studentResponse ? studentResponse : [],

@@ -19,8 +19,8 @@ router.post('/join', async (req, res) => {
 
         // Create a new JoinClass instance
         const mark=await JoinClass.findOne({userId,classId});
-        if(mark){
-            return res.json({message:"Already Joined",data:false});
+        if (mark!==null) {  
+            return res.json({ message: "Already Joined", data: false });
         }
         const newJoin = new JoinClass({ userId, classId, username });
         console.log(newJoin);
@@ -33,7 +33,7 @@ router.post('/join', async (req, res) => {
         console.log(classId);
         const marked=await MarksModel.findOne({userId:userId});
         console.log(marked);
-        if(!marked){
+       {
         const marks = new MarksModel({
                     name:username,
                     userId: user,

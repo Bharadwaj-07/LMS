@@ -27,5 +27,5 @@ const classSchema = new mongoose.Schema({
 }, {
     collection: 'classRooms',
 });
-classSchema.index({ userId: 1}, { unique: true });
+// classSchema.index({ userId: 1}, { unique: true });
 module.exports = mongoose.model('Class', classSchema);

@@ -141,7 +141,7 @@ export default function Details({ route, navigation }) {
         {(!ValidUser && Inputs) && <Text style={[styles.text, { color: "red" }]}>Invalid Inputs</Text>}
         {/**Name Input */}
         <TextInput style={[styles.input, { borderColor: ValidName ? 'white' : 'red' }]}
-          placeholder='name'
+          placeholder='Name'
           value={Name}
           onChangeText={setName}>
         </TextInput>
@@ -164,7 +164,7 @@ export default function Details({ route, navigation }) {
 
 
         <TextInput style={[styles.input, { borderColor: ValidCollege ? 'white' : 'red' }]}
-          placeholder='college'
+          placeholder='College'
           value={College}
           onChangeText={setCollege}></TextInput>
         <View style={[styles.input, { borderColor: !error ? 'white' : 'red' }]}>

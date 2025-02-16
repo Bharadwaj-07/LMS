@@ -15,13 +15,15 @@ export default function QuizStats({ navigation, route }) {
 
     const fetchQuizStats = async () => {
         try {
-            const url = `http://${GLOBAL_CONFIG.SYSTEM_IP}:5000/quiz/${courseId}/${quizNumber}`;
+            const url = `http://${GLOBAL_CONFIG.SYSTEM_IP}:${GLOBAL_CONFIG.PORT}/quiz/${courseId}/${quizNumber}`;
             console.log("Fetching Quiz from:", url);
             const response = await axios.get(url);
-            const data = response.data.data;
-            console.log(data);
-            // Ensure data is an array before setting it
-            setQuizStatsData(data ? [data] : []);
+            let data = response.data.data;
+
+            console.log("Fetched Data:", data);
+
+            // Ensure quizStatsData is always an array
+            setQuizStatsData(Array.isArray(data) ? data : data ? [data] : []);
         } catch (error) {
             console.error("Error fetching quiz:", error);
             alert("Failed to load quiz stats.");
@@ -30,13 +32,17 @@ export default function QuizStats({ navigation, route }) {
         }
     };
 
+    useEffect(() => {
+        console.log("Updated quizStatsData:", quizStatsData);
+    }, [quizStatsData]); // Debugging state update
+
     return (
         <SafeAreaView style={styles.safeArea}>
             <Text style={styles.header}>Quiz {quizNumber}</Text>
 
             {loading ? (
                 <ActivityIndicator size="large" color="#007AFF" />
-            ) : quizStatsData ? (
+            ) : quizStatsData.length === 0 ? (
                 <Text style={styles.noDataText}>No attempts found.</Text>
             ) : (
                 <FlatList
@@ -47,7 +53,7 @@ export default function QuizStats({ navigation, route }) {
                             <Text style={styles.studentIdText}>Student : {item.studentId}</Text>
                             <Text style={styles.attemptsText}>Total Attempts : {item.attempts}</Text>
 
-                            {item.responses.map((attempt, index) => (
+                            {item.responses?.map((attempt, index) => (
                                 <View key={index} style={styles.attemptCard}>
                                     <Text style={styles.attemptText}>Attempt : {index + 1}</Text>
                                     <Text style={styles.scoreText}>Score : {attempt.score}</Text>
@@ -78,4 +84,3 @@ const styles = StyleSheet.create({
     refreshButton: { backgroundColor: "#3C0A6B", padding: 12, borderRadius: 8, marginTop: 20, alignItems: "center" },
     refreshButtonText: { color: "#FFF", fontSize: 16, fontWeight: "bold" },
 });
-

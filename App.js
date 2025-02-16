@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { StatusBar ,View} from "react-native";
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import LoginPage from './screens/Login/login'; // Adjust paths to your screens
@@ -23,17 +24,23 @@ import InstructorStudentList from './screens/InstructorStudentList';
 import QuizStats from './screens/QuizStats';
 const Stack = createStackNavigator();
 const App = () => {
-  return (<NavigationContainer>
+  return (
+  <View style={{flex:1}}>
+    <StatusBar barStyle="dark-content" backgroundColor="#3C0A6B" />
+    <NavigationContainer>     
     <Stack.Navigator initialRouteName='Login'
       screenOptions={{
         headerStyle: { backgroundColor: '#3C0A6B' },
         headerTintColor: 'white',
       }}>
+      
+     
+
       <Stack.Screen name='Login' component={LoginPage} options={{ headerShown: false }} />
       <Stack.Screen name="Home" component={Home} options={{ headerShown: false }} />
-      <Stack.Screen name='Signup' component={Signup} />
-      <Stack.Screen name='Details' component={Details} />
-      <Stack.Screen name='Password' component={Password} />
+      <Stack.Screen name='Signup' component={Signup} options={{ headerShown: false }} />
+      <Stack.Screen name='Details' component={Details} options={{ headerShown: false }}  />
+      <Stack.Screen name='Password' component={Password} options={{ headerShown: false }} />
       <Stack.Screen name='Classroom' component={MainWindow} />
       <Stack.Screen name='Dates' component={Dates} options={{ title: "Attendance" }} />
       <Stack.Screen name='Present' component={Present} options={{ title: "Students Present" }} />
@@ -48,8 +55,11 @@ const App = () => {
       <Stack.Screen name="Participants" component={InstructorStudentList} />
       <Stack.Screen name="QuizStats" component={QuizStats} options={{ title: "Quiz Statistics" }} />
     </Stack.Navigator>
-  </NavigationContainer>)
+  </NavigationContainer>
+  </View>
 
+)
+  
 }
 export default App;
 

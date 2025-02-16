@@ -1,9 +1,10 @@
-import React, { useState, useEffect, useRef, } from "react";
+import React, { useState, useCallback, useRef, } from "react";
 import { StyleSheet, View, Text, TouchableOpacity, Image, ScrollView, FlatList } from "react-native";
 import { GLOBAL_CONFIG } from '../../components/global_config';
 import { Alert, Modal, Pressable } from 'react-native';
 import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
 import axios from "axios";
+import { useFocusEffect } from "@react-navigation/native";
 import API from "../../Middleware/API";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 export default function Dates({ navigation, route }) {
@@ -12,7 +13,7 @@ export default function Dates({ navigation, route }) {
   const [dates, setDates] = useState([]);
   const getDates = async () => {
     try {
-      const response = await axios.post(`http://${GLOBAL_CONFIG.SYSTEM_IP}:5000/api/Attendance/dates`, {
+      const response = await axios.post(`http://${GLOBAL_CONFIG.SYSTEM_IP}:${GLOBAL_CONFIG.PORT}/api/Attendance/dates`, {
         course: course
       });
       console.log("Dates:", response.data); // Log actual courses data
@@ -22,9 +23,11 @@ export default function Dates({ navigation, route }) {
       console.log(e);
     }
   }
-  useEffect(() => {
-    getDates();
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      getDates();
+    }, [])
+  );
   return (
     <View style={styles.container}>
       {/* FlatList inside a View with flex: 1 to avoid overlap */}

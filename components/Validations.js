@@ -4,7 +4,8 @@ export function ValidateEmail(email) {
     return (regex.test(email));
 }
 export function ValidateUserName(Uname) {
-    const regex = /^[a-zA-Z0-9]+$/;
+    const regex = /^[a-zA-Z\s]+$/;
+
     return (regex.test(Uname));
 }
 export function ValidatePhoneNumber(phoneNumber) {

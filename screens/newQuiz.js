@@ -4,9 +4,13 @@ import axios from "axios";
 import { GLOBAL_CONFIG } from '../components/global_config';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView } from 'react-native-gesture-handler';
+import { LogBox } from "react-native";
 
 
 export default function QuizCreator({ navigation, route }) {
+  LogBox.ignoreLogs([
+    "Text strings must be rendered within a <Text> component"
+  ]);
   const [questions, setQuestions] = useState([{ questionText: "", options: [], answer: "" }]);
   const [quizzes, setQuizzes] = useState();
   // Change this dynamically if needed
@@ -65,7 +69,7 @@ export default function QuizCreator({ navigation, route }) {
 
       const payload = { courseId, quizNumber, questions: updatedQuestions };
 
-      const response = await axios.post(`http://${GLOBAL_CONFIG.SYSTEM_IP}:5000/quiz`, payload);
+      const response = await axios.post(`http://${GLOBAL_CONFIG.SYSTEM_IP}:${GLOBAL_CONFIG.PORT}/quiz`, payload);
 
       if (response.status === 201 || response.status === 200) {
         Alert.alert("Success", `Quiz ${quizNumber} saved successfully`);
@@ -90,7 +94,7 @@ export default function QuizCreator({ navigation, route }) {
           />
           <TextInput
             style={styles.input}
-            placeholder="Answer"
+            placeholder="Answer ( Option 1 )"
             value={q.answer}
             onChangeText={(text) => updateAnswerText(qIndex, text)}
           />
@@ -98,7 +102,7 @@ export default function QuizCreator({ navigation, route }) {
             <TextInput
               key={oIndex}
               style={styles.input}
-              placeholder={`Option ${oIndex + 1}`}
+              placeholder={`Option ${oIndex + 2}`}
               value={option}
               onChangeText={(text) => updateOptionText(qIndex, oIndex, text)}
             />

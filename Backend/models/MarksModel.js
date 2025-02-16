@@ -32,5 +32,5 @@ const marksSchema = new mongoose.Schema(
         timestamps: true,
     }
 );
-marksSchema.index({ userId: 1, classId: 1 }, { unique: true });
+// marksSchema.index({ userId: 1, classId: 1 }, { unique: true });
 module.exports = mongoose.model('Marks', marksSchema);

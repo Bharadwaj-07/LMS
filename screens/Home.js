@@ -10,12 +10,19 @@ import Dashboard from './CoursesEnrolled';
 import Profile from './Profile';
 import JoinClass from './JoinClass';
 import CreateClass from './CreateClass';
-
+import LoginPage from './Login/login';
+import Logout from './logout';
 
 export default function App() {
   const Tab = createBottomTabNavigator();
   const Drawer = createDrawerNavigator();
-
+  const handleLogin=()=>{
+    navigation.navigate("Login");
+    navigation.reset({
+      index: 0,  // Index of the screen you want to navigate to (0 means it's the first screen)
+      routes: [{ name: 'Home', params: { UserName: UserName } }], // Set the Home screen as the new root
+    });
+  }
   const TabNavigator = () => {
     return (
       <Tab.Navigator
@@ -96,15 +103,15 @@ export default function App() {
             ),
           }}
         />
-        {/* <Drawer.Screen
-          name="Profile"
-          component={Profile}
+        <Drawer.Screen
+          name="Logout"
+          component={Logout}
           options={{
             drawerIcon: ({ color }) => (
-              <Ionicons name="person" size={25} color={color} />
+              <Ionicons name="log-out-outline" size={25} color={color} />
             ),
           }}
-        /> */}
+        />
       </Drawer.Navigator>
     );
   };

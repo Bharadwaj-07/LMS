@@ -56,7 +56,7 @@ App.use('/api/Attendance', AttendanceRoutes)
 App.use("/maxmarks", maxMarksRoutes);
 App.use('/api/notices', noticeRoutes);
 App.use('/details',DetailsRoutes);
-const PORT = 5000;
+const PORT = ${GLOBAL_CONFIG.PORT};
 App.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });

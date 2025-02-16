@@ -63,7 +63,7 @@ router.post('/getmarks', async (req, res) => {
 
     try {
         const marks = await Marks.find({ classId:classId });
-        console.log(marks);
+        console.log(marks,"marks");
         if (!marks || marks.length === 0) {
             return res.status(200).json({ message: 'No marks found for this class',empty:true,data:[] });
         }
