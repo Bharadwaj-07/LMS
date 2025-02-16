@@ -9,8 +9,35 @@ export default function Mark({ navigation, route }) {
   const formattedDate = date.toISOString().split('T')[0];
 
   const [students, setStudents] = useState([]);
+  const [prevAttendance, setPrevAttendance] = useState([]);
   const [selectedStudents, setSelectedStudents] = useState({});
-
+  const getStudents = async () => {
+    try {
+      const response = await axios.get(
+        `http://${GLOBAL_CONFIG.SYSTEM_IP}:5000/api/Attendance/attendance`,
+        { params: { course, date } }
+      );
+      console.log("Students:", response.data);
+      
+      setPrevAttendance(response.data);
+  
+      // Update selectedStudents by adding previous attendance data
+      setSelectedStudents((prevSelected) => {
+        const updatedSelected = { ...prevSelected };
+        response.data.forEach(student => {
+          updatedSelected[student._id] = true; // Mark student as selected
+        });
+        return updatedSelected;
+      });
+  
+    } catch (e) {
+      console.error(e);
+    }
+  };
+  
+  useEffect(() => {
+    getStudents();
+  }, []);
   useEffect(() => {
     const getStudents = async () => {
       try {
@@ -19,7 +46,7 @@ export default function Mark({ navigation, route }) {
           { course }
         );
         setStudents(response.data);
-        console.log(response, "Studnets");
+        console.log(response, "Students");
       } catch (e) {
         console.error(e);
       }
@@ -67,7 +94,7 @@ export default function Mark({ navigation, route }) {
           contentContainerStyle={styles.listContent}
           renderItem={({ item }) => (
             <View style={styles.itemContainer}>
-              <Text style={styles.studentName}>{item.name}</Text>
+              <Text style={styles.studentName}>{`${item.name} (${item.uname})`}</Text>
               <Switch
                 value={!!selectedStudents[item._id]}
                 onValueChange={() => handleToggle(item._id)}

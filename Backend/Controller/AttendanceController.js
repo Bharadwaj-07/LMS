@@ -36,9 +36,14 @@ exports.checkAdmin = async (req, res) => {
 }
 exports.getAttendance = async (req, res) => {
     const { date, course } = req.query;
-    console.log("date", req.query);
+    console.log("date here", req.query);
+
+    const trimmedDate = date ? date.split("T")[0].trim() : "";
+    console.log("Trimmed date:", trimmedDate);
+
+
     try {
-        const Record = await Attendance.find({ date: date, course: course }).populate('attendance');
+        const Record = await Attendance.find({ date:trimmedDate,course }).populate('attendance');
         if (Record.length == 0) {
             return res.status(400).json({ message: "No attendance found" });
         }
@@ -46,9 +51,10 @@ exports.getAttendance = async (req, res) => {
         console.log("UserIds", userIds);
         // Fetch user profiles for the given IDs using Promise.all
         const profiles = await Promise.all(userIds.map(async (id) => {
-            const profile = await Profile.findById(id).select('name');
-            return profile ? profile.name : null;
+            const profile = await Profile.findById(id).select('name uname _id');
+            return profile ? { name: profile.name, uname: profile.uname,_id: profile._id } : null;
         }));
+        
 
         console.log("Names:", profiles);
         

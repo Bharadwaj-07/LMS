@@ -82,13 +82,34 @@ const AdminMarks = ({ navigation, route }) => {
 
     useEffect(() => { if (students.length > 0) calculateStats(students); }, [students]);
 
-    const handleSubmit = async () => {
-        if (!selectedTest) return Alert.alert("Error", "Please select a test.");
+    const handleSubmit = async (selectedTest) => {
+        if (!selectedTest) {
+            return Alert.alert("Error", "Please select a test.");
+        }
+        const validMarks=students.some(student=>student[selectedTest]<=maxMarks[selectedTest]&&student[selectedTest]>=0);
+        if(!validMarks){
+            return Alert.alert("Error", `Some students have invalid entries for ${selectedTest}. Please verify.`);
+ 
+        }
+        // Check if any student has an empty marks field for the selected test
+        const hasEmptyMarks = students.some(student => 
+            !student[selectedTest] || student[selectedTest].trim() === ""
+        );
+    
+        if (hasEmptyMarks) {
+            return Alert.alert("Error", `Some students have empty marks for ${selectedTest}. Please fill in all marks.`);
+        }
+    
         try {
             await axios.post(`http://${GLOBAL_CONFIG.SYSTEM_IP}:5000/marks/setmarks`, { students });
             Alert.alert("Marks updated");
-        } catch (e) { console.log(e); }
+        } catch (e) {
+            console.log(e);
+            Alert.alert("Error", "Failed to update marks. Try again.");
+        }
     };
+    
+    
 
     const renderStudent = ({ item }) => (
         <View style={styles.studentCard}>
@@ -165,7 +186,7 @@ const AdminMarks = ({ navigation, route }) => {
                             {message && <Text style={styles.noStudentsText}>No students joined.</Text>}
 
                             {/* Submit Button */}
-                            <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
+                            <TouchableOpacity style={styles.submitButton} onPress={()=>handleSubmit(selectedTest)}>
                                 <Text style={styles.submitButtonText}>Submit Marks</Text>
                             </TouchableOpacity>
                         </View>

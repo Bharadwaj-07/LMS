@@ -8,21 +8,19 @@ export default function AttendanceDate({ navigation, route }) {
 
   const course = route.params.course;
   const date = route.params.date;
-
+  const getStudents = async () => {
+    try {
+      const response = await axios.get(
+        `http://${GLOBAL_CONFIG.SYSTEM_IP}:5000/api/Attendance/attendance`,
+        { params: { course, date } }
+      );
+      console.log("Students:", response.data);
+      setStudents(response.data);
+    } catch (e) {
+      console.error(e);
+    }
+  };
   useEffect(() => {
-    const getStudents = async () => {
-      try {
-        const response = await axios.get(
-          `http://${GLOBAL_CONFIG.SYSTEM_IP}:5000/api/Attendance/attendance`,
-          { params: { course, date } }
-        );
-        console.log("Students:", response.data);
-        setStudents(response.data);
-      } catch (e) {
-        console.error(e);
-      }
-    };
-
     getStudents();
   }, []);
 
@@ -37,7 +35,7 @@ export default function AttendanceDate({ navigation, route }) {
         <ScrollView contentContainerStyle={styles.listContent}>
           {students.map((student, index) => (
             <View key={index} style={styles.itemContainer}>
-              <Text style={styles.studentName}>{student}</Text>
+              <Text style={styles.studentName}>{`${student.name} (${student.uname})`}</Text>
             </View>
           ))}
         </ScrollView>

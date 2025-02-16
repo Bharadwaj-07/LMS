@@ -18,6 +18,7 @@ router.post('/join', async (req, res) => {
         console.log("hello");
 
         // Create a new JoinClass instance
+        
         const newJoin = new JoinClass({ userId, classId, username });
         console.log(newJoin);
         

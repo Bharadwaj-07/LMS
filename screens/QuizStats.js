@@ -36,7 +36,7 @@ export default function QuizStats({ navigation, route }) {
 
             {loading ? (
                 <ActivityIndicator size="large" color="#007AFF" />
-            ) : quizStatsData.length === 0 ? (
+            ) : quizStatsData ? (
                 <Text style={styles.noDataText}>No attempts found.</Text>
             ) : (
                 <FlatList
