@@ -18,7 +18,8 @@ export default function Mark({ navigation, route }) {
         { params: { course, date } }
       );
       console.log("Students:", response.data);
-      
+      if(response.status===300)
+        return;
       setPrevAttendance(response.data);
   
       // Update selectedStudents by adding previous attendance data
@@ -39,7 +40,7 @@ export default function Mark({ navigation, route }) {
     getStudents();
   }, []);
   useEffect(() => {
-    const getStudents = async () => {
+    const getStudent = async () => {
       try {
         const response = await axios.post(
           `http://${GLOBAL_CONFIG.SYSTEM_IP}:5000/api/Attendance/students`,
@@ -52,7 +53,7 @@ export default function Mark({ navigation, route }) {
       }
     };
 
-    getStudents();
+    getStudent();
   }, []);
 
   const handleToggle = (studentId) => {

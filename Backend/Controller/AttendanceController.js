@@ -44,8 +44,8 @@ exports.getAttendance = async (req, res) => {
 
     try {
         const Record = await Attendance.find({ date:trimmedDate,course }).populate('attendance');
-        if (Record.length == 0) {
-            return res.status(400).json({ message: "No attendance found" });
+        if (!Record) {
+            return res.status(400).json({ message: "No attendance found" ,data:false});
         }
         const userIds = Record[0].attendance.map((item) => item);
         console.log("UserIds", userIds);
