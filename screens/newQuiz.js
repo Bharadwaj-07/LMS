@@ -43,21 +43,26 @@ export default function QuizCreator({ navigation, route }) {
   const addQuestion = () => {
     setQuestions([...questions, { questionText: "", options: [], answer: "" }]);
   };
-
+  const deleteQuestion = (qIndex) => {
+    setQuestions(questions.filter((_, index) => index !== qIndex));
+  };
+  
   // Submit the quiz to the server
   const submitQuiz = async () => {
+    // Validation: Check if any question or answer is empty
+    for (let i = 0; i < questions.length; i++) {
+      if (questions[i].questionText.trim() === "" || questions[i].answer.trim() === "") {
+        Alert.alert("Error", `Question ${i + 1} or its answer is empty.`);
+        return;
+      }
+    }
+
     try {
       const updatedQuestions = questions.map((q) => ({
         ...q,
         options: [...q.options, q.answer], // Ensure the answer is added to the options
       }));
 
-      // Determine quiz number (fetch last quiz and increment)
-      // const quizListResponse = await axios.get(`http://${GLOBAL_CONFIG.SYSTEM_IP}:5000/quiz?courseId=${courseId}`);
-      // setQuizzes(quizListResponse.data);
-      // const quizzes = quizListResponse.data;
-      // const quizNumber = quizzes.length + 1; // Increment from last quiz
-      // const QuizNumber=quizNumber+1;
       const payload = { courseId, quizNumber, questions: updatedQuestions };
 
       const response = await axios.post(`http://${GLOBAL_CONFIG.SYSTEM_IP}:5000/quiz`, payload);
@@ -70,7 +75,7 @@ export default function QuizCreator({ navigation, route }) {
       console.error("Error submitting quiz:", error);
       Alert.alert("Error", "Failed to save quiz. Try again.");
     }
-  };
+  };  
 
   return (
     <SafeAreaView>  <ScrollView><View style={styles.container}>
@@ -100,6 +105,9 @@ export default function QuizCreator({ navigation, route }) {
           ))}
           <TouchableOpacity style={styles.small_button} onPress={() => addOption(qIndex)}>
             <Text style={styles.buttonText}>Add Option</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.small_button} onPress={() => deleteQuestion(qIndex)}>
+            <Text style={styles.buttonText}>Delete Question</Text>
           </TouchableOpacity>
         </View>
       ))}
