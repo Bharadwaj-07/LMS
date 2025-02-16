@@ -2,11 +2,11 @@ import React, { useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet, FlatList, ActivityIndicator, Alert } from "react-native";
 import axios from "axios";
 import { GLOBAL_CONFIG } from '../components/global_config';
- // Replace with your backend URL
- import { SafeAreaView } from 'react-native-safe-area-context';
- import { ScrollView } from 'react-native-gesture-handler';
-const QuizList = ({ route,navigation }) => {
-  const {courseId,userId,admin}=route.params; // Get courseId from navigation params
+// Replace with your backend URL
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { ScrollView } from 'react-native-gesture-handler';
+const QuizList = ({ route, navigation }) => {
+  const { courseId, userId, admin } = route.params; // Get courseId from navigation params
   const [quizzes, setQuizzes] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -33,7 +33,7 @@ const QuizList = ({ route,navigation }) => {
   // Function to navigate to the quiz creation screen
   const handleAddQuiz = () => {
     const newQuizNumber = quizzes.length + 1; // Increment quiz number
-    navigation.navigate("CreateQuiz", { quizNumber: newQuizNumber, courseId,userId});
+    navigation.navigate("CreateQuiz", { quizNumber: newQuizNumber, courseId, userId });
   };
 
   return (
@@ -48,14 +48,15 @@ const QuizList = ({ route,navigation }) => {
           <FlatList
             data={quizzes}
             keyExtractor={(item) => item._id}
+            style={{ flex: 1, width: '80%' }}
             renderItem={({ item }) => (
               <TouchableOpacity
                 style={styles.quizButton}
-                onPress={() => navigation.navigate("Quiz", { 
-                  quizNumber: item.quizNumber, 
-                  courseId: courseId, 
-                  admin: admin, 
-                  userId: userId 
+                onPress={() => navigation.navigate("Quiz", {
+                  quizNumber: item.quizNumber,
+                  courseId: courseId,
+                  admin: admin,
+                  userId: userId
                 })}
               >
                 <Text style={styles.quizText}>{`Quiz ${item.quizNumber}`}</Text>
@@ -64,7 +65,7 @@ const QuizList = ({ route,navigation }) => {
           />
         </>
       )}
-  
+
       {/* Button to add a new quiz */}
       {admin && (
         <TouchableOpacity style={styles.addButton} onPress={handleAddQuiz}>
@@ -73,7 +74,7 @@ const QuizList = ({ route,navigation }) => {
       )}
     </View>
   );
-  
+
 };
 
 export default QuizList;
@@ -90,23 +91,25 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "bold",
     marginBottom: 20,
+    color: '#3C0A6B'
   },
   quizButton: {
-    backgroundColor: "#007bff",
-    padding: 15,
+    flex: 1,
+    backgroundColor: "#3C0A6B",
+    padding: 18,
     marginVertical: 10,
     borderRadius: 5,
-    width: "80%",
+    width: "100%",
     alignItems: "center",
   },
   quizText: {
     color: "white",
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: "bold",
   },
   addButton: {
     marginTop: 20,
-    backgroundColor: "#28a745",
+    backgroundColor: "#3C0A6B",
     padding: 15,
     borderRadius: 5,
     width: "80%",

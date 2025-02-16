@@ -74,7 +74,7 @@ export default function QuizCreator({ navigation, route }) {
 
   return (
     <SafeAreaView>  <ScrollView><View style={styles.container}>
-      <Text style={styles.title}>Quiz Creator</Text>
+      <Text style={styles.title}>Quiz </Text>
       {questions.map((q, qIndex) => (
         <View key={qIndex} style={styles.rectangle}>
           <TextInput
@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#f3f2",
+    backgroundColor: "#E9DFF3",
     padding: 20,
   },
   title: {
@@ -128,14 +128,15 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginBottom: 20,
     textAlign: "center",
+    color: '#3C0A6B'
   },
   rectangle: {
-    width: "80%",
+    width: "90%",
     padding: 20,
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 10,
-    backgroundColor: "rgba(255,255,255,0.7)",
+    backgroundColor: "#D4BEE4",
     marginBottom: 15,
   },
   input: {
@@ -150,7 +151,7 @@ const styles = StyleSheet.create({
     opacity: 0.6,
   },
   small_button: {
-    backgroundColor: "#007bff",
+    backgroundColor: "#3C0A6B",
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 5,
@@ -158,7 +159,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   button: {
-    backgroundColor: "#007bff",
+    backgroundColor: "#3C0A6B",
     paddingVertical: 15,
     borderRadius: 5,
     alignItems: "center",

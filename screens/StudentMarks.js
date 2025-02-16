@@ -4,8 +4,12 @@ import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { GLOBAL_CONFIG } from "../components/global_config";
+import { LogBox } from 'react-native';
+
+
 
 const StudentMarks = ({ navigation, route }) => {
+
     const course = route.params.course;
     const [marks, setMarks] = useState(null);
     const [stats, setStats] = useState({});
@@ -23,6 +27,9 @@ const StudentMarks = ({ navigation, route }) => {
             console.error("Error fetching max marks:", e);
         }
     };
+    LogBox.ignoreLogs([
+        'VirtualizedLists should never be nested',
+    ]);
     const getStudents = async () => {
         try {
             let user = await AsyncStorage.getItem("uname");
@@ -108,11 +115,11 @@ const StudentMarks = ({ navigation, route }) => {
             <Text style={styles.markValue}>{item.value}</Text>
             {stats[item.key] && (
                 <View style={styles.statsContainer}>
-                    <Text style={styles.statsText}>🎯 Total Marks: {maxMarks[item.key]}</Text>
-                    <Text style={styles.statsText}>📊 Highest: {stats[item.key]?.highest}</Text>
-                    <Text style={styles.statsText}>📉 Lowest: {stats[item.key]?.minimum}</Text>
-                    <Text style={styles.statsText}>📈 Average: {stats[item.key]?.average}</Text>
-                    
+                    <Text style={styles.statsText}>🎯 Total Marks : {maxMarks[item.key]}</Text>
+                    <Text style={styles.statsText}>📊 Highest : {stats[item.key]?.highest}</Text>
+                    <Text style={styles.statsText}>📉 Lowest : {stats[item.key]?.minimum}</Text>
+                    <Text style={styles.statsText}>📈 Average : {stats[item.key]?.average}</Text>
+
                 </View>
             )}
         </View>
@@ -174,13 +181,14 @@ const styles = StyleSheet.create({
         elevation: 3,
     },
     markLabel: {
-        fontSize: 18,
+        fontSize: 20,
         fontWeight: "bold",
         color: "#3C0A6B",
     },
     markValue: {
-        fontSize: 18,
+        fontSize: 19,
         color: "#3C0A6B",
+        fontWeight: 'bold'
     },
     border: {
         borderWidth: 1,
@@ -191,14 +199,15 @@ const styles = StyleSheet.create({
     statsContainer: {
         marginTop: 10,
         padding: 10,
-        backgroundColor: "#D5C4E0",
+        backgroundColor: "#D4BEE4",
         borderRadius: 8,
         alignItems: "center",
         width: "100%",
     },
     statsText: {
-        fontSize: 16,
+        fontSize: 17,
         fontWeight: "bold",
         color: "#3C0A6B",
+        paddingBottom: 3
     },
 });

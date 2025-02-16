@@ -91,7 +91,7 @@ const Quiz = ({ route, navigation }) => {
 
                     <TouchableOpacity
                         style={{
-                            backgroundColor: "#007bff",
+                            backgroundColor: "#3C0A6B",
                             padding: 15,
                             borderRadius: 5,
                             marginTop: 20,
@@ -103,11 +103,11 @@ const Quiz = ({ route, navigation }) => {
 
                     {previousAttempts.length > 0 && (
                         <View style={{ marginBottom: 20 }}>
-                            <Text style={{ fontSize: 18, marginBottom: 10 }}>Total Attempts: {totalAttempts}</Text>
-                            <Text style={{ fontSize: 18, fontWeight: "bold" }}>Previous Scores:</Text>
+                            <Text style={{ fontSize: 18, marginBottom: 10 }}>Total Attempts : {totalAttempts}</Text>
+                            <Text style={{ fontSize: 18, fontWeight: "bold" }}>Previous Scores :</Text>
                             {previousAttempts.map((attempt, index) => (
                                 <Text key={index} style={{ fontSize: 16, color: "green" }}>
-                                    Attempt {index + 1}: {attempt.score} / {quiz.questions.length}
+                                    Attempt {index + 1} : {attempt.score} / {quiz.questions.length}
                                 </Text>
                             ))}
                         </View>
@@ -125,7 +125,7 @@ const Quiz = ({ route, navigation }) => {
                             }}
                         >
                             <Text style={{ fontSize: 18, fontWeight: "bold" }}>
-                                Question.{index + 1}
+                                Question : {index + 1}
                                 {"\n\n"}
                                 {question.questionText}
                             </Text>
@@ -164,8 +164,8 @@ const Quiz = ({ route, navigation }) => {
 
                             {/* Show correct answer if admin OR quiz has been submitted */}
                             {(admin || submitted) && (
-                                <Text style={{ fontSize: 16, color: "green", marginTop: 5 }}>
-                                    Correct Answer: {question.answer}
+                                <Text style={{ fontSize: 16, color: "green", marginTop: 5, paddingTop: 3 }}>
+                                    Correct Answer : {question.answer}
                                 </Text>
                             )}
                         </View>
@@ -175,7 +175,7 @@ const Quiz = ({ route, navigation }) => {
                         <TouchableOpacity
                             onPress={submitQuiz}
                             style={{
-                                backgroundColor: "#007bff",
+                                backgroundColor: "#3C0A6B",
                                 padding: 15,
                                 borderRadius: 5,
                                 marginTop: 20,

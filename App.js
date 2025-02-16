@@ -41,12 +41,12 @@ const App = () => {
       <Stack.Screen name='UserDates' component={UserDates} options={{ title: "Attendance" }} />
       <Stack.Screen name='AdminMarks' component={AdminMarks} options={{ title: "Admin Marks" }} />
       <Stack.Screen name='StudentMarks' component={StudentMarks} options={{ title: "Student Marks" }} />
-      <Stack.Screen name='QuizList' component={QuizList} />
-      <Stack.Screen name='CreateQuiz' component={QuizCreator} />
+      <Stack.Screen name='QuizList' component={QuizList} options={{ title: "All Quizzes" }} />
+      <Stack.Screen name='CreateQuiz' component={QuizCreator} options={{ title: "Create Quiz" }} />
       <Stack.Screen name='Quiz' component={Quiz} />
       <Stack.Screen name="NoticeBoard" component={NoticeBoard} options={{ title: "Discussion Board" }} />
       <Stack.Screen name="Participants" component={InstructorStudentList} />
-      <Stack.Screen name="QuizStats" component={QuizStats}/>
+      <Stack.Screen name="QuizStats" component={QuizStats} options={{ title: "Quiz Statistics" }} />
     </Stack.Navigator>
   </NavigationContainer>)
 

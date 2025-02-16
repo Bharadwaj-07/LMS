@@ -32,7 +32,7 @@ export default function QuizStats({ navigation, route }) {
 
     return (
         <SafeAreaView style={styles.safeArea}>
-            <Text style={styles.header}>Quiz {quizNumber} Stats</Text>
+            <Text style={styles.header}>Quiz {quizNumber}</Text>
 
             {loading ? (
                 <ActivityIndicator size="large" color="#007AFF" />
@@ -44,13 +44,13 @@ export default function QuizStats({ navigation, route }) {
                     keyExtractor={(item, index) => item._id || index.toString()}
                     renderItem={({ item }) => (
                         <View style={styles.card}>
-                            <Text style={styles.studentIdText}>Student: {item.studentId}</Text>
-                            <Text style={styles.attemptsText}>Total Attempts: {item.attempts}</Text>
+                            <Text style={styles.studentIdText}>Student : {item.studentId}</Text>
+                            <Text style={styles.attemptsText}>Total Attempts : {item.attempts}</Text>
 
                             {item.responses.map((attempt, index) => (
                                 <View key={index} style={styles.attemptCard}>
-                                    <Text style={styles.attemptText}>Attempt {index + 1}</Text>
-                                    <Text style={styles.scoreText}>Score: {attempt.score}</Text>
+                                    <Text style={styles.attemptText}>Attempt : {index + 1}</Text>
+                                    <Text style={styles.scoreText}>Score : {attempt.score}</Text>
                                 </View>
                             ))}
                         </View>
@@ -67,15 +67,15 @@ export default function QuizStats({ navigation, route }) {
 
 const styles = StyleSheet.create({
     safeArea: { flex: 1, backgroundColor: "#F5F5F5", padding: 20 },
-    header: { fontSize: 24, fontWeight: "bold", textAlign: "center", marginBottom: 20 },
+    header: { fontSize: 24, fontWeight: "bold", textAlign: "center", marginBottom: 20, color: '#3C0A6B' },
     card: { backgroundColor: "#FFF", padding: 15, borderRadius: 10, marginVertical: 10, elevation: 3 },
-    studentIdText: { fontSize: 18, fontWeight: "bold", color: "#333" },
+    studentIdText: { fontSize: 18, fontWeight: "bold", color: "#3C0A6B" },
     attemptsText: { fontSize: 16, color: "#555", marginTop: 5 },
-    attemptCard: { backgroundColor: "#E8F0FE", padding: 10, borderRadius: 8, marginTop: 8 },
-    attemptText: { fontSize: 16, fontWeight: "bold", color: "#007AFF" },
-    scoreText: { fontSize: 16, color: "#333" },
+    attemptCard: { backgroundColor: "#D4BEE4", padding: 10, borderRadius: 8, marginTop: 8 },
+    attemptText: { fontSize: 16, fontWeight: "bold", color: "#3C0A6B" },
+    scoreText: { fontSize: 16, color: "#3C0A6B", fontWeight: "bold" },
     noDataText: { fontSize: 16, color: "#888", textAlign: "center", marginTop: 20 },
-    refreshButton: { backgroundColor: "#007AFF", padding: 12, borderRadius: 8, marginTop: 20, alignItems: "center" },
+    refreshButton: { backgroundColor: "#3C0A6B", padding: 12, borderRadius: 8, marginTop: 20, alignItems: "center" },
     refreshButtonText: { color: "#FFF", fontSize: 16, fontWeight: "bold" },
 });
 
